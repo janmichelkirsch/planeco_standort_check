@@ -89,39 +89,42 @@ export function AddressSearch({ query, onQueryChange, onSelect, onManual, error,
     <div>
       <Label htmlFor={id}>Adresse des Grundstücks suchen</Label>
       <div className="relative">
-        <Search className="pointer-events-none absolute top-1/2 left-4 size-5 -translate-y-1/2 text-forest-soft" />
-        <input
-          id={id}
-          type="text"
-          role="combobox"
-          autoComplete="off"
-          disabled={disabled}
-          aria-expanded={showPanel}
-          aria-controls={listId}
-          aria-autocomplete="list"
-          aria-activedescendant={showPanel && visibleStatus === "results" && active >= 0 ? `${listId}-${active}` : undefined}
-          aria-invalid={error ? true : undefined}
-          aria-describedby={error ? `${id}-error` : undefined}
-          aria-required
-          placeholder="z. B. Osterstraße 88, Hamburg"
-          value={query}
-          onChange={(e) => {
-            onQueryChange(e.target.value);
-            setOpen(true);
-          }}
-          onFocus={(e) => {
-            setOpen(true);
-            // Feld nach oben holen, damit die Vorschläge über der Tastatur sichtbar bleiben.
-            if (inline) setTimeout(() => e.target.scrollIntoView({ block: "start", behavior: "smooth" }), 250);
-          }}
-          onBlur={() => setTimeout(() => setOpen(false), 120)}
-          onKeyDown={onKeyDown}
-          enterKeyHint="search"
-          className={`${inputBase} ${inputBorder(error)} scroll-mt-4 pr-11 pl-12 ${inline ? "h-14 rounded-2xl" : ""}`}
-        />
-        {visibleStatus === "loading" && (
-          <Spinner className="absolute top-1/2 right-4 size-5 -translate-y-1/2 text-forest-soft" />
-        )}
+        {/* Eigener Positionsrahmen fürs Eingabefeld: Icons bleiben mittig, auch wenn darunter die Liste aufgeht. */}
+        <div className="relative">
+          <Search className="pointer-events-none absolute top-1/2 left-4 size-5 -translate-y-1/2 text-forest-soft" />
+          <input
+            id={id}
+            type="text"
+            role="combobox"
+            autoComplete="off"
+            disabled={disabled}
+            aria-expanded={showPanel}
+            aria-controls={listId}
+            aria-autocomplete="list"
+            aria-activedescendant={showPanel && visibleStatus === "results" && active >= 0 ? `${listId}-${active}` : undefined}
+            aria-invalid={error ? true : undefined}
+            aria-describedby={error ? `${id}-error` : undefined}
+            aria-required
+            placeholder="z. B. Osterstraße 88, Hamburg"
+            value={query}
+            onChange={(e) => {
+              onQueryChange(e.target.value);
+              setOpen(true);
+            }}
+            onFocus={(e) => {
+              setOpen(true);
+              // Feld nach oben holen, damit die Vorschläge über der Tastatur sichtbar bleiben.
+              if (inline) setTimeout(() => e.target.scrollIntoView({ block: "start", behavior: "smooth" }), 250);
+            }}
+            onBlur={() => setTimeout(() => setOpen(false), 120)}
+            onKeyDown={onKeyDown}
+            enterKeyHint="search"
+            className={`${inputBase} ${inputBorder(error)} scroll-mt-4 pr-11 pl-12 ${inline ? "h-14 rounded-2xl" : ""}`}
+          />
+          {visibleStatus === "loading" && (
+            <Spinner className="absolute top-1/2 right-4 size-5 -translate-y-1/2 text-forest-soft" />
+          )}
+        </div>
 
         {showPanel && (
           <div

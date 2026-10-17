@@ -112,8 +112,10 @@ export function useLeadForm() {
     const value = e.target.value;
     setLead((prev) => {
       const next = { ...prev, [field]: value };
-      // Wer eine übernommene Adresse ändert, hat sie manuell eingegeben: Koordinaten passen dann nicht mehr.
-      const isAddressField = (PROPERTY_FIELDS as readonly string[]).includes(field);
+      // Wer Straße, PLZ oder Ort einer übernommenen Adresse ändert, hat sie manuell eingegeben:
+      // Bundesland und Koordinaten passen dann nicht mehr. Die Hausnummer ist ausgenommen – Photon liefert
+      // oft nur die Straße, und Bundesland/Koordinaten (Straßenebene) bleiben beim Ergänzen gültig.
+      const isAddressField = (PROPERTY_FIELDS as readonly string[]).includes(field) && field !== "houseNumber";
       if (isAddressField && prev.addressSource === "photon") {
         return { ...next, addressSource: "manual", state: null, latitude: null, longitude: null };
       }

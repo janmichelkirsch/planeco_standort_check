@@ -7,3 +7,4 @@ Zusätzlich lässt die Datenbank per RLS nur eingeloggte Nutzer lesen (`supabase
 
 - `page.tsx` – Übersicht. Dynamische Teile (Login-Prüfung, Daten) liegen in `<Suspense>` (Cache Components).
 - `actions.ts` – Server Action `logout`.
+- `export/route.ts` – `GET /admin/export`: alle Anfragen als CSV (seitenweise geladen, also auch über 1000), in der aktuellen Sortierung. Ohne Login `401`.

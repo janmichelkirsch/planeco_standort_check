@@ -8,3 +8,4 @@ Logik und Anbindung externer Dienste, ohne UI.
 - `auth.ts` – `requireSalesUser()`: prüft den Login serverseitig und leitet sonst zu `/login` um.
 - `leads.ts` – Lesen der Anfragen: `fetchLeadsPage` (eine Seite à 1000 Zeilen) und `fetchAllLeads` (alle, seitenweise). Enthält die erlaubten Sortierspalten.
 - `format.ts` – Anzeige-Formate: Zeitstempel in deutscher Zeit (Europe/Berlin), Labels für die Adressquelle.
+- `csv.ts` – CSV-Export: Semikolon, UTF-8 mit BOM (Umlaute in Excel), Schutz gegen Formel-Injection (`'` vor = + - @).

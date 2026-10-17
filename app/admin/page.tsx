@@ -27,6 +27,10 @@ async function AdminContent({ searchParams }: { searchParams: SearchParams }) {
     <div className="flex flex-col gap-4">
       <div className="flex items-center justify-between gap-4">
         <p className="text-sm text-zinc-600">Eingeloggt als {email}</p>
+        {/* Normaler Link statt <Link>, damit der Browser die Datei herunterlädt. */}
+        <a href={`/admin/export?sort=${sort.column}&dir=${sort.direction}`} className="rounded bg-zinc-900 px-3 py-2 text-sm font-semibold text-white">
+          CSV exportieren
+        </a>
         <form action={logout}>
           <button type="submit" className="text-sm underline">
             Abmelden

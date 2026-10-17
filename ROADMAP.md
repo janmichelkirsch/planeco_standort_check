@@ -39,6 +39,8 @@ Ziel: einmal die ganze Strecke Formular → Supabase → Vercel funktionierend s
 - ⬜ Kampagnen-Tracking: UTM-Parameter, gclid, fbclid, Referrer, Landingpage
 - ✅ Bestätigungsmail über Brevo (erst speichern, dann per `after()` senden, Mailstatus im Dashboard)
 - ✅ SQL `003` ausführen, Brevo-Variablen in Vercel, Live-Test der Mail
+- ✅ Mails im Planeco-Design (gemeinsames Layout mit Signatur, Logo, Fußzeile)
+- ⬜ `MAIL_FROM_NAME` in Vercel ändern, Live-Test der neuen Mail in Gmail und Outlook
 - ⬜ Dashboard an neues Datenmodell anpassen (Dubletten-Hinweis, Kampagne)
 - ⬜ Status und Zuständigkeit pro Lead (doppelte Bearbeitung vermeiden)
 - ⬜ Datenschutz-Checkbox / Hinweis

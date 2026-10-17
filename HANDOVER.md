@@ -4,6 +4,18 @@ Laufendes Log für alle, die am Projekt arbeiten (Menschen und Agents). Neueste 
 
 ## Änderungslog
 
+### 2026-10-17 – Mails im Planeco-Design
+- `lib/mail/layout.ts`: gemeinsamer Rahmen nach Planecos echter Mail-Signatur (Arial-Text, „Liebe Grüße,“, Name groß, Rolle klein,
+  Telefon, grün unterstrichene Website, Logo, graue Fußzeile mit Firmendaten). Die Bestätigungsmail nutzt ihn.
+- Entscheidungen mit Michel: Team-Signatur „Ihr Planeco-Team / Standort-Check“ statt einer echten Person; keine E-Mail-Zeile
+  (es gibt keine echte Adresse, Antworten gehen an den Absender); Telefon `+49 40 66969 123` ist **fiktiv** (BNetzA-Block für Film/Fiktion,
+  damit niemand Echtes angerufen wird); ganz unten „Demo im Rahmen einer Case Study“.
+- Logo per absoluter URL (Mailprogramme laden keine Anhänge-Pfade): `MAIL_ASSET_BASE_URL` oder automatisch `VERCEL_PROJECT_PRODUCTION_URL`.
+- Absendername neu: „Planeco Standort-Check (Demo)“ (`.env.example`; **in Vercel von Hand zu ändern**).
+- Im Browser geprüft (gerenderte HTML-Vorschau mit Logo, HTML-Escaping im Namen). Noch **nicht** als echte Mail getestet.
+- **Aufgefallen:** Vercel-Deployment antwortete am 2026-10-17 mit `503 DEPLOYMENT_PAUSED`. Solange es pausiert ist,
+  erscheint das Logo in Mails als defektes Bild, und die App ist nicht erreichbar.
+
 ### 2026-10-17 – Bestätigungsmail live getestet
 - Anfrage über das neue Formular → Mail kam im **Gmail-Posteingang** an (nicht Spam), Dashboard zeigt „✓ gesendet“.
 - Die ältere Testanfrage zeigt „ausstehend“: Sie stammt von vor der Mail-Funktion und hat den Default `pending` bekommen.

@@ -4,6 +4,15 @@ Laufendes Log für alle, die am Projekt arbeiten (Menschen und Agents). Neueste 
 
 ## Änderungslog
 
+### 2026-10-17 – Schritt 4: API auf neues Datenmodell
+- `/api/lead` schreibt nicht mehr in `leads`, sondern in `incoming_submissions` (`lib/intake.ts`, `lib/intake-row.ts`).
+  Ablauf: prüfen (400/422) → normalisieren → Eingang speichern → Antwort → per `after()` Bestätigungsmail und `process_intake`, unabhängig voneinander.
+- Gleiche `client_request_id`: kein zweiter Eingang, keine zweite Mail, Antwort `200` mit derselben ID (neu: `201`). `process_intake` läuft trotzdem
+  erneut an (no-op, falls schon verarbeitet; holt einen abgebrochenen Eingang nach).
+- Fehlt die ID (Aufruf nicht über unser Formular), erzeugt der Server eine; dann gibt es keine Idempotenz, aber keinen Verlust.
+- Mailstatus steht jetzt an `incoming_submissions.confirmation_*` (`lib/mail/send-confirmation.ts`).
+- **Folge auf dem Branch:** Das alte Dashboard (liest `leads`) zeigt neue Anfragen nicht mehr. Erst Schritt 6 stellt es um. Live (`main`) ist nicht betroffen.
+
 ### 2026-10-17 – Schritt 3: Formular (Telefon, Tracking, clientRequestId)
 - Telefon: `components/PhoneField.tsx` + `lib/phone-input.ts`. Dropdown mit Flagge und Vorwahl (DE, AT, CH oben, dann alle Länder alphabetisch,
   deutsche Namen), Nummer ohne Vorwahl, Formatierung beim Tippen („0170 5551234“). Rücktaste hinter einem Leerzeichen löscht die Ziffer davor;

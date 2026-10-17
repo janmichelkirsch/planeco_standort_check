@@ -8,4 +8,4 @@ Mailversand. Nur serverseitig.
   (schlichter Text, Team-Signatur, fiktive Telefonnummer aus dem Film-/Fiktionsblock 040 66969, Website, Logo, Firmen-Fußzeile, Demo-Hinweis).
   Logo-URL: `MAIL_ASSET_BASE_URL`, sonst `https://${VERCEL_PROJECT_PRODUCTION_URL}`, sonst Text „planeco“. Neue Mails liefern nur ihren Inhalt.
 - `confirmation.ts` – Bestätigungsmail (Betreff, HTML- und Textversion). Nutzereingaben werden im HTML per `escapeHtml()` entschärft.
-- `send-confirmation.ts` – `sendConfirmation()`: verschickt die Mail und speichert `sent`/`failed` (+ Grund) an der Anfrage. Wirft nie.
+- `send-confirmation.ts` – `sendConfirmation()`: verschickt die Mail und speichert `sent`/`failed` (+ Grund) am Eingang (`incoming_submissions`). Wirft nie.

@@ -1,4 +1,4 @@
-import { leadSchema } from "@/lib/lead-schema";
+import { leadSchema, toFieldErrors } from "@/lib/lead-schema";
 import { getSupabaseAdmin } from "@/lib/supabase/admin";
 
 /** Nimmt eine Standort-Check-Anfrage entgegen: prüfen → speichern → Antwort. */
@@ -12,7 +12,7 @@ export async function POST(request: Request) {
 
   const parsed = leadSchema.safeParse(body);
   if (!parsed.success) {
-    const fieldErrors = parsed.error.issues.map((issue) => issue.message);
+    const fieldErrors = toFieldErrors(parsed.error.issues);
     return Response.json({ ok: false, error: "Eingaben unvollständig", fieldErrors }, { status: 422 });
   }
 

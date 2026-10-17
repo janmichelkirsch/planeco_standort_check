@@ -184,3 +184,14 @@ export function summarizeIntakes(intakes: IntakeRef[], now: Date, staleAfterMs =
   ).length;
   return { needsReview, unprocessed };
 }
+
+/** Adressen, die noch nachgeschlagen werden müssen: Photon war nicht erreichbar, oder nach 5 Minuten noch offen. */
+export function countOpenGeocoding(
+  submissions: Pick<SubmissionRow, "geocode_status" | "created_at">[],
+  now: Date,
+  staleAfterMs = 5 * 60_000,
+): number {
+  return submissions.filter(
+    (s) => s.geocode_status === "failed" || (s.geocode_status === "pending" && now.getTime() - Date.parse(s.created_at) > staleAfterMs),
+  ).length;
+}

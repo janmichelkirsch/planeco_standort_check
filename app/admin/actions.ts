@@ -11,6 +11,7 @@ import {
   returnUrl,
   type DashboardResult,
 } from "@/lib/dashboard-forms";
+import { geocodePending } from "@/lib/geocode";
 import { processIntake } from "@/lib/intake";
 import { getSupabaseAdmin } from "@/lib/supabase/admin";
 import { getSupabaseSession } from "@/lib/supabase/session";
@@ -25,7 +26,8 @@ export async function logout() {
 }
 
 /**
- * „Erneut verarbeiten“: holt Eingänge nach, deren Zuordnung abgebrochen ist (`failed` oder noch `received`).
+ * „Erneut verarbeiten“: holt Eingänge nach, deren Zuordnung abgebrochen ist (`failed` oder noch `received`),
+ * und schlägt Adressen nach, bei denen Photon nicht erreichbar war.
  * Nur mit Login. Die Zuordnung selbst darf nur der Server (`process_intake` ist für eingeloggte Nutzer gesperrt),
  * daher hier mit dem Secret Key. Doppelte Verarbeitung ist ausgeschlossen (Sperre in `process_intake`).
  */
@@ -39,6 +41,7 @@ export async function reprocessIntakes() {
   for (const { id } of data) {
     await processIntake(id);
   }
+  await geocodePending();
   refresh();
 }
 

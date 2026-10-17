@@ -2,6 +2,7 @@
 
 import { redirect } from "next/navigation";
 import { requireSalesUser } from "@/lib/auth";
+import { geocodeForIntake } from "@/lib/geocode";
 import { parseResolveForm, resultForErrorCode, type ResultKey } from "@/lib/review";
 
 /**
@@ -31,6 +32,8 @@ export async function resolveReview(formData: FormData) {
     );
     if (error) console.error("[admin/review] Entscheidung nicht gespeichert", error.code, error.message);
     result = error ? resultForErrorCode(error.code) : request.action === "create_new" ? "created" : "attached";
+    // Manuell eingegebene Adresse jetzt nachschlagen (mit Secret Key: eingeloggte Nutzer dürfen submissions nicht direkt ändern).
+    if (!error) await geocodeForIntake(request.intakeId);
   }
   redirect(`/admin/review?result=${result}`);
 }

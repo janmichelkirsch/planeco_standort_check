@@ -36,6 +36,15 @@ describe("toSuggestion", () => {
     expect(s?.label).toBe("Hauptstraße 14, 01067 Dresden (Innere Altstadt)");
   });
 
+  it.each([
+    ["Hamburg", "Hamburg"],
+    ["Berlin", "Berlin"],
+    ["Bremerhaven", "Bremen"],
+  ])("ergänzt das fehlende Bundesland beim Stadtstaat %s", (city, state) => {
+    const s = toSuggestion(feature({ street: "Osterstraße", housenumber: "88", postcode: "20259", city }));
+    expect(s?.state).toBe(state);
+  });
+
   it("setzt fehlende Angaben auf null", () => {
     const s = toSuggestion(feature({ street: "Lindenweg", housenumber: "3", city: "Neustadt" }));
     expect(s).toMatchObject({ county: null, state: null, district: null });

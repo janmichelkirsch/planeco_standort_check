@@ -52,7 +52,7 @@ export function SubmissionCard({ submission: s, contact, members, view, sort }: 
           </span>
           <span className="block text-zinc-500">
             {ADDRESS_SOURCE_LABEL[s.address_source]}
-            {s.geocode_status === "geocoded" && " · nachgeschlagen"}
+            {s.geocode_status === "geocoded" && (s.latitude === null ? " · nur Ort ermittelt, Adresse nicht gefunden" : " · nachgeschlagen")}
             {s.latitude !== null && s.longitude !== null && (
               <>
                 {" · "}

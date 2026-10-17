@@ -6,12 +6,15 @@ Logik und Anbindung externer Dienste, ohne UI.
   Enthält Vorwahl-Land, `clientRequestId` (noch optional), Kreis/Gemeinde und die Tracking-Felder (`TRACKING_FIELDS`; zu lang → gekürzt, nie ein Ablehnungsgrund).
 - `phone-input.ts` – Logik des Telefonfelds: Länderliste, Formatierung beim Tippen (`AsYouType`), Erkennen von `+…`/`00…`, Löschen über Leerzeichen hinweg, Cursor-Position.
 - `tracking.ts` – Kampagnen-Herkunft (UTM, `gclid`, `fbclid`, Landingpage, Referrer) beim Laden lesen und in `sessionStorage` merken; neuer Kampagnen-Klick ersetzt die gemerkte.
+- `geocode-match.ts` – passender Photon-Treffer für eine manuelle Adresse: nur gleiche PLZ; gleiche Straße → mit Koordinaten, andere Straße → nur Ort; Felder fürs Update.
+- `geocode.ts` – Nachschlagen manueller Adressen nach dem Anlegen der Anfrage (Timeout 5 s, Rückfall „PLZ Ort“, `failed` bei Photon-Ausfall). Nur serverseitig, wirft nie.
 - `intake-row.ts` – `toIntakeRow()`: baut aus einer geprüften Anfrage die Zeile für `incoming_submissions` (normalisierte Mail/Telefon, Request-ID, Payload).
 - `intake.ts` – `storeIntake()` (idempotent über `client_request_id`) und `processIntake()` (ruft `process_intake`, bei Fehler `mark_intake_failed`; wirft nie). Nur serverseitig.
 - `normalize.ts` – Telefon → E.164 (`libphonenumber-js`, Standardland DE) und E-Mail → getrimmt/kleingeschrieben. Grundlage fürs Matching.
 - `*.test.ts` – Unit-Tests (Vitest), Aufruf `npm test`.
 - `use-lead-form.ts` – gemeinsamer Formular-Zustand für Mobile und Desktop: Adresssuche/-felder, Telefon (`updatePhone`), Prüfung pro Schritt, Fokus auf den ersten Fehler, Absenden an `/api/lead` mit Tracking und `clientRequestId` (gleiche ID bei unverändertem erneutem Versuch).
 - `photon.ts` – Adresssuche über Photon (kostenlos, kein Key). Wandelt Treffer in unsere Adressfelder um (nur DE, nur Häuser und Straßen), inkl. Kreis (`county`) und Gemeinde (`municipality`).
+  Ergänzt das Bundesland bei Stadtstaaten (Photon liefert für Hamburg/Berlin keins).
 - `mail/` – Mailversand (Brevo, Vorlagen), siehe `mail/README.md`.
 - `supabase/` – Supabase-Clients, getrennt nach Zweck (siehe `supabase/README.md`).
 - `auth.ts` – `requireSalesUser()`: prüft den Login serverseitig und leitet sonst zu `/login` um. Liefert Client, E-Mail und Auth-ID.

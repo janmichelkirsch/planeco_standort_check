@@ -43,7 +43,8 @@ Ziel: einmal die ganze Strecke Formular → Supabase → Vercel funktionierend s
   - ✅ Schritt 6: Dashboard auf neues Modell (Kontakte mit aufklappbaren Anfragen, Reiter, Hinweise, „Erneut verarbeiten“, CSV-Export)
   - ✅ Schritt 7: Prüfliste `/admin/review` (nur vorgeschlagene Kandidaten, Name behalten/übernehmen, neuer Kontakt)
   - ✅ Schritt 8: Bearbeiten (Übernehmen, Zuständig ändern/freigeben, Status, Ergebnis, Bearbeiter, Kontaktname)
-  - ⬜ Schritt 5: Geocoding manueller Adressen
+  - ✅ Schritt 5: Geocoding manueller Adressen (nur gleiche PLZ, sonst nur Ort; Stadtstaaten-Bundesland ergänzt)
+  - ⬜ Schritt 9: Gesamtprüfung durch Michel, dann Merge auf `main`, danach `005_drop_leads.sql`
 - ⬜ Normalisierung Telefon (E.164) und E-Mail
 - ⬜ Dubletten-Matching über Telefon und E-Mail (Regeln: Spezifikation §7, Prüfliste für Teiltreffer)
 - ⬜ Kampagnen-Tracking: UTM-Parameter, gclid, fbclid, Referrer, Landingpage
@@ -57,8 +58,8 @@ Ziel: einmal die ganze Strecke Formular → Supabase → Vercel funktionierend s
 
 ## Iteration 3 – Erweiterung und Robustheit
 
-- ⬜ Anreicherung: Gemeinde, Bundesland, Koordinaten auch für manuell eingegebene Adressen
-- ⬜ Einzugsgebiet-Markierung: alle 16 Bundesländer, als Liste im Code einschränkbar
+- ✅ Anreicherung: Gemeinde, Bundesland, Koordinaten auch für manuell eingegebene Adressen
+- ✅ Einzugsgebiet-Markierung: alle 16 Bundesländer, als Liste im Code einschränkbar
 - ⬜ Schutz vor doppeltem Absenden (`client_request_id`, Teil des neuen Datenmodells)
 - ⬜ Spam-Schutz (Honeypot, ggf. Rate-Limit)
 - ✅ Automatische Tests (Vitest): Schema, Normalisierung, Telefonfeld, Tracking, Photon-Mapping

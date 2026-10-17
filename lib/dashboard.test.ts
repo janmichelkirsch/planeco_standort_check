@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
+  countOpenGeocoding,
   groupByContact,
   matchesView,
   parseDashboardParams,
@@ -186,6 +187,24 @@ describe("summarizeIntakes", () => {
         now,
       ),
     ).toEqual({ needsReview: 1, unprocessed: 2 });
+  });
+});
+
+describe("countOpenGeocoding", () => {
+  it("zählt fehlgeschlagene und hängende Adressen, nicht frische oder erledigte", () => {
+    const now = new Date("2026-10-17T10:00:00Z");
+    expect(
+      countOpenGeocoding(
+        [
+          { geocode_status: "failed", created_at: "2026-10-17T09:59:00Z" },
+          { geocode_status: "pending", created_at: "2026-10-17T09:50:00Z" },
+          { geocode_status: "pending", created_at: "2026-10-17T09:59:00Z" },
+          { geocode_status: "geocoded", created_at: "2026-10-17T08:00:00Z" },
+          { geocode_status: "not_found", created_at: "2026-10-17T08:00:00Z" },
+        ],
+        now,
+      ),
+    ).toBe(2);
   });
 });
 

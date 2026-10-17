@@ -4,7 +4,7 @@ import { ContactList } from "@/components/ContactList";
 import { DashboardTabs } from "@/components/DashboardTabs";
 import { IntakeNotices } from "@/components/IntakeNotices";
 import { requireSalesUser } from "@/lib/auth";
-import { VIEWS, groupByContact, matchesView, parseDashboardParams, sortGroups, summarizeIntakes, type View } from "@/lib/dashboard";
+import { VIEWS, countOpenGeocoding, groupByContact, matchesView, parseDashboardParams, sortGroups, summarizeIntakes, type View } from "@/lib/dashboard";
 import { fetchOpenIntakes, fetchSubmissions, fetchTeamMembers } from "@/lib/dashboard-data";
 import { DASHBOARD_RESULTS, type DashboardResult } from "@/lib/dashboard-forms";
 
@@ -87,7 +87,7 @@ async function AdminContent({ searchParams }: { searchParams: SearchParams }) {
           Dein Login ist noch keinem Team-Mitglied zugeordnet. „Meine“ bleibt leer, bis es in <code>team_members</code> eingetragen ist.
         </p>
       )}
-      <IntakeNotices {...summarizeIntakes(data.intakes, new Date())} />
+      <IntakeNotices {...summarizeIntakes(data.intakes, new Date())} geocodeOpen={countOpenGeocoding(data.submissions, new Date())} />
       <DashboardTabs current={view} counts={counts} sort={sort} />
       <ContactList groups={visible} members={data.members} sort={sort} view={view} openContactId={openContactId} />
     </div>

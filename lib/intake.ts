@@ -1,4 +1,5 @@
 import "server-only";
+import { geocodeForIntake } from "@/lib/geocode";
 import type { IntakeRow } from "@/lib/intake-row";
 import { getSupabaseAdmin } from "@/lib/supabase/admin";
 
@@ -39,6 +40,7 @@ export async function processIntake(intakeId: string): Promise<void> {
     const { data, error } = await supabase.rpc("process_intake", { p_intake_id: intakeId });
     if (error) throw error;
     console.info(`[intake] ${intakeId} → ${data}`);
+    if (data === "processed") await geocodeForIntake(intakeId);
   } catch (error) {
     // Supabase liefert Fehler als Objekt mit `message`, nicht immer als Error-Instanz.
     const reason =

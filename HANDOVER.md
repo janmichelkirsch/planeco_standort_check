@@ -4,6 +4,20 @@ Laufendes Log für alle, die am Projekt arbeiten (Menschen und Agents). Neueste 
 
 ## Änderungslog
 
+### 2026-10-17 – Schritt 5: Geocoding manueller Adressen
+- `lib/geocode.ts`: Nach dem Anlegen einer Anfrage mit manueller Adresse (`geocode_status = pending`) Photon-Suche „Straße Nr, PLZ Ort“, Timeout 5 s.
+  Läuft nach `process_intake` (in `after()`), nach dem Zuordnen in der Prüfliste und bei „Erneut verarbeiten“ (dann alle `pending`/`failed`, max. 200).
+- Treffer-Regel (`lib/geocode-match.ts`): nur gleiche PLZ. Gleiche Straße → Gemeinde/Kreis/Bundesland **und** Koordinaten. Nur andere Straße derselben PLZ
+  oder Rückfall-Suche „PLZ Ort“ → nur Gemeinde/Kreis/Bundesland, **keine Koordinaten** (Dashboard: „nur Ort ermittelt, Adresse nicht gefunden“).
+  Nichts → `not_found`. Photon-Fehler → `failed`, Hinweis im Dashboard mit „Erneut verarbeiten“.
+- Live gegen Photon geprüft mit den Case-Adressen: „Hauptstraße 14, 01067 Dresden“ (echte PLZ wäre 01097) → nur Ort Dresden/Sachsen;
+  „Osterstraße 88, 22765 Hamburg“ (echte PLZ 20259) → nur Ort Hamburg; „Am Mühlenteich 7, 23627 Groß Grönau“ → nur Ort (Straße fehlt in OSM);
+  „Weidengrund 48, 33154 Salzkotten“ → genau; Fantasieadresse → nicht gefunden.
+- **Gefunden und behoben (bestand schon vorher):** Photon liefert für Hamburg und Berlin kein Bundesland. Auch Vorschläge aus dem Formular hätten dort
+  „Gebiet unbekannt“ gezeigt. `lib/photon.ts` ergänzt das Bundesland bei Stadtstaaten (Hamburg, Berlin, Bremen, Bremerhaven).
+  **Hinweis:** Die Case-Beispiele haben teils PLZ, die nicht zur Straße passen – im Interview erwähnenswert.
+- Tests: 127. **Nicht geprüft:** gegen Supabase (Vorschau).
+
 ### 2026-10-17 – Schritt 8: Bearbeiten im Dashboard
 - Pro Kontakt (aufgeklappt): „Übernehmen“, solange niemand zuständig ist (`claim_contact`; wer verliert, sieht „Jemand anderes war schneller“).
   „Kontakt bearbeiten“: Zuständigen ändern oder freigeben (`set_contact_owner`), Namen korrigieren (`update_contact_name`).

@@ -4,6 +4,16 @@ Laufendes Log für alle, die am Projekt arbeiten (Menschen und Agents). Neueste 
 
 ## Änderungslog
 
+### 2026-10-17 – Vorschau-Test des neuen Datenmodells
+- Vercel-Projekt war pausiert (Live 503 `DEPLOYMENT_PAUSED`, Deployments „blocked“); von Michel fortgesetzt. Branch-Build per leerem Commit angestoßen.
+- Vorschau: `planeco-standort-check-git-feat-contact-data-model-michel-5238.vercel.app` (hinter Vercel-Login / Deployment Protection).
+- Drei Anfragen über die Vorschau, Ergebnis in Supabase wie erwartet: 1. `processed` / `new_contact_created`, 2. `processed` / `auto_matched` (selber Kontakt),
+  3. gleiche Nummer, anderer Name → `needs_review` ohne Submission. Mail bei allen drei `sent`; `utm_source=test`, `utm_campaign=branchtest` an den Submissions.
+  Damit sind die Preview-Variablen für Supabase und Brevo gesetzt.
+- **Falle:** Die erste Testrunde lief versehentlich über die Live-URL (alter Code → `leads`). Live und Vorschau sehen gleich aus;
+  erkennbar am neuen Telefonfeld mit Flagge.
+- **Noch nicht getestet:** manuelle Adresse (`geocode_status = pending`, Nachschlagen folgt mit Schritt 5), Doppelklick/Retry auf der Vorschau.
+
 ### 2026-10-17 – Schritt 4: API auf neues Datenmodell
 - `/api/lead` schreibt nicht mehr in `leads`, sondern in `incoming_submissions` (`lib/intake.ts`, `lib/intake-row.ts`).
   Ablauf: prüfen (400/422) → normalisieren → Eingang speichern → Antwort → per `after()` Bestätigungsmail und `process_intake`, unabhängig voneinander.

@@ -39,7 +39,7 @@ Ziel: einmal die ganze Strecke Formular → Supabase → Vercel funktionierend s
   - ✅ Schritt 2: Normalisierung (`libphonenumber-js`) + Schema um Tracking, Vorwahl-Land, `clientRequestId`; Vitest eingerichtet
   - ✅ Schritt 3: Formular (Vorwahl-Dropdown mit Formatierung beim Tippen, Tracking aus der URL, `clientRequestId`, Kreis/Gemeinde aus Photon)
   - ✅ Schritt 4: API schreibt in `incoming_submissions`, `after()` mit Mail + `process_intake`
-  - ⬜ Branch pushen, auf der Vercel-Vorschau testen (neuer Kontakt, Dublette, Prüffall)
+  - ✅ Branch gepusht, auf der Vercel-Vorschau getestet: neuer Kontakt, Auto-Match, Prüffall, Mail jeweils `sent`, Tracking übernommen
   - ⬜ Schritt 6: Dashboard auf neues Modell
 - ⬜ Normalisierung Telefon (E.164) und E-Mail
 - ⬜ Dubletten-Matching über Telefon und E-Mail (Regeln: Spezifikation §7, Prüfliste für Teiltreffer)

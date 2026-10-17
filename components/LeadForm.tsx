@@ -1,8 +1,9 @@
 "use client";
 
 import type { FormEvent } from "react";
+import { AddressFields } from "@/components/AddressFields";
 import { AddressSearch } from "@/components/AddressSearch";
-import { Field, FieldError } from "@/components/Field";
+import { Field } from "@/components/Field";
 import { useLeadForm } from "@/lib/use-lead-form";
 
 /** Übergangsversion: nutzt den gemeinsamen Hook, Optik wird in den nächsten Schritten ersetzt. */
@@ -29,17 +30,15 @@ export function LeadForm() {
       <fieldset className="flex flex-col gap-3">
         <legend className="mb-2 text-lg font-semibold">Grundstück</legend>
         {f.addressMode === "search" ? (
-          <>
-            <AddressSearch onSelect={f.selectSuggestion} onManual={f.enterManual} />
-            <FieldError id="address-error" message={errors.address} />
-          </>
+          <AddressSearch
+            query={f.query}
+            onQueryChange={f.setQuery}
+            onSelect={f.selectSuggestion}
+            onManual={f.enterManual}
+            error={errors.address}
+          />
         ) : (
-          <div className="grid grid-cols-3 gap-3">
-            <Field id="street" label="Straße" className="col-span-2" value={lead.street} onChange={f.updateField("street")} error={errors.street} />
-            <Field id="houseNumber" label="Nr." value={lead.houseNumber} onChange={f.updateField("houseNumber")} error={errors.houseNumber} />
-            <Field id="postalCode" label="PLZ" value={lead.postalCode} onChange={f.updateField("postalCode")} error={errors.postalCode} />
-            <Field id="city" label="Ort" className="col-span-2" value={lead.city} onChange={f.updateField("city")} error={errors.city} />
-          </div>
+          <AddressFields form={f} />
         )}
       </fieldset>
 

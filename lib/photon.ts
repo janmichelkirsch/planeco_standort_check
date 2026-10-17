@@ -15,6 +15,8 @@ export type AddressSuggestion = {
   houseNumber: string;
   postalCode: string;
   city: string;
+  /** Ortsteil, falls von der Stadt verschieden – hilft bei mehrfach vorkommenden Straßen. */
+  district: string | null;
   state: string | null;
   latitude: number;
   longitude: number;
@@ -53,8 +55,8 @@ export function toSuggestion(feature: PhotonFeature): AddressSuggestion | null {
 
   // Ortsteil mit anzeigen: Es gibt z. B. mehrere "Hauptstraße 14" innerhalb Dresdens.
   const place = [postalCode, city].filter(Boolean).join(" ");
-  const district = p.district && p.district !== city ? ` (${p.district})` : "";
-  const label = `${[street, houseNumber].filter(Boolean).join(" ")}, ${place}${district}`;
+  const district = p.district && p.district !== city ? p.district : null;
+  const label = `${[street, houseNumber].filter(Boolean).join(" ")}, ${place}${district ? ` (${district})` : ""}`;
 
   return {
     id: `${p.osm_type ?? ""}${p.osm_id ?? label}`,
@@ -63,6 +65,7 @@ export function toSuggestion(feature: PhotonFeature): AddressSuggestion | null {
     houseNumber,
     postalCode,
     city,
+    district,
     state: p.state ?? null,
     latitude,
     longitude,

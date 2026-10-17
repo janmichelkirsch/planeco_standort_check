@@ -4,6 +4,14 @@ Laufendes Log für alle, die am Projekt arbeiten (Menschen und Agents). Neueste 
 
 ## Änderungslog
 
+### 2026-10-17 – Speed-Dashboard
+- `/login` (Server Action, Supabase Auth), `/admin` (Tabelle, Sortierung über `?sort=&dir=`), `/admin/export` (CSV).
+- Schutz in drei Schichten: `proxy.ts` (Umleitung), `lib/auth.ts` (Prüfung beim Laden), RLS-Policy in der DB.
+- Dashboard liest mit dem **Publishable Key + Session** (RLS greift), nicht mit dem Secret Key.
+- Neue Env-Variable `SUPABASE_PUBLISHABLE_KEY` (ohne `NEXT_PUBLIC_`, wird nur serverseitig genutzt).
+- `lib/supabase-server.ts` → `lib/supabase/admin.ts` verschoben.
+- Nur Build/Lint geprüft. Login und Tabelle sind **noch nicht** mit echtem Nutzer getestet (fehlende Env-Variable lokal und auf Vercel).
+
 ### 2026-10-17 – Durchstich live
 - Deployt auf Vercel: **https://planeco-standort-check-two.vercel.app** (Auto-Deploy bei Push auf `main`).
 - Env-Variablen in Vercel: `SUPABASE_URL`, `SUPABASE_SECRET_KEY` (sensitive).
@@ -25,6 +33,13 @@ Laufendes Log für alle, die am Projekt arbeiten (Menschen und Agents). Neueste 
 
 ## Offene Punkte / Probleme
 
+- **Ohne `SUPABASE_PUBLISHABLE_KEY` liefern `/login` und `/admin` einen 500er** (Proxy bricht ab). Startseite und Formular sind nicht betroffen.
+- **Jeder Supabase-Auth-Nutzer sieht alle Anfragen.** Das ist nur sicher, solange die Selbstregistrierung aus ist. Rollen fehlen noch.
+- **Tabelle zeigt max. 1000 Zeilen** (Hinweis wird angezeigt), der Export lädt alle seitenweise.
+- **CSV:** Werte mit = + - @ am Anfang bekommen ein `'` (Formel-Schutz), betrifft auch `+49…`-Telefonnummern.
+  Telefonnummern ohne Leerzeichen mit führender 0 könnte Excel als Zahl lesen (0 fällt weg). Löst sich mit E.164-Normalisierung.
+- Kein Passwort-Reset, kein Rate-Limit auf Login (Supabase hat ein eigenes Basis-Limit).
+
 - **Zeitzone:** `created_at` wird in UTC gespeichert (korrekt). Dashboard und CSV-Export müssen in Europe/Berlin anzeigen.
 
 - **Datenbank-Region London statt Frankfurt.** Bewusst für den Test so belassen. Region lässt sich bei Supabase nicht umstellen,
@@ -44,5 +59,5 @@ Laufendes Log für alle, die am Projekt arbeiten (Menschen und Agents). Neueste 
 
 ## Setup-Notizen
 
-- Umgebungsvariablen siehe `.env.example`. Lokal in `.env.local`, auf Vercel unter Project Settings → Environment Variables.
+- Umgebungsvariablen siehe `.env.example` (`SUPABASE_URL`, `SUPABASE_SECRET_KEY`, `SUPABASE_PUBLISHABLE_KEY`). Lokal in `.env.local`, auf Vercel unter Project Settings → Environment Variables.
 - Dev-Server: `npm run dev` im Projektordner.

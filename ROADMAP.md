@@ -15,6 +15,15 @@ Ziel: einmal die ganze Strecke Formular → Supabase → Vercel funktionierend s
 - ✅ SQL ausführen
 - ✅ Deployment auf Vercel und Test auf echtem Handy (https://planeco-standort-check-two.vercel.app)
 
+## Iteration 1b – Speed-Dashboard
+
+- ✅ Login (Supabase Auth, E-Mail + Passwort), Logout, Zugangsschutz `/admin`
+- ✅ Leserecht per RLS nur für eingeloggte Nutzer (`002_dashboard_read.sql`)
+- ✅ Tabelle aller Anfragen, deutsche Zeit
+- ✅ Sortierung per Spaltenklick
+- ✅ CSV-Export (Excel-tauglich, alle Zeilen)
+- ⬜ SQL `002` ausführen, `SUPABASE_PUBLISHABLE_KEY` in Vercel, Live-Test mit Testnutzer
+
 ## Iteration 2 – Pflichtteil vervollständigen
 
 - ⬜ Datenmodell normalisieren (Kontakt ↔ Anfrage), vorher gemeinsam besprechen
@@ -22,7 +31,7 @@ Ziel: einmal die ganze Strecke Formular → Supabase → Vercel funktionierend s
 - ⬜ Dubletten-Matching über Telefon und E-Mail, Merge-Strategie vorher besprechen
 - ⬜ Kampagnen-Tracking: UTM-Parameter, gclid, fbclid, Referrer, Landingpage
 - ⬜ Bestätigungsmail über Brevo (erst speichern, dann senden, Mailstatus speichern)
-- ⬜ Admin-Dashboard: Login, Tabelle, Sortierung, CSV-Export (Excel-tauglich, UTF-8-BOM), Zeiten in deutscher Zeit
+- ⬜ Dashboard an neues Datenmodell anpassen (Dubletten-Hinweis, Kampagne)
 - ⬜ Status und Zuständigkeit pro Lead (doppelte Bearbeitung vermeiden)
 - ⬜ Datenschutz-Checkbox / Hinweis
 

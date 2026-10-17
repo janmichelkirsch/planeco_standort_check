@@ -4,6 +4,17 @@ Laufendes Log für alle, die am Projekt arbeiten (Menschen und Agents). Neueste 
 
 ## Änderungslog
 
+### 2026-10-17 – Schritt 8: Bearbeiten im Dashboard
+- Pro Kontakt (aufgeklappt): „Übernehmen“, solange niemand zuständig ist (`claim_contact`; wer verliert, sieht „Jemand anderes war schneller“).
+  „Kontakt bearbeiten“: Zuständigen ändern oder freigeben (`set_contact_owner`), Namen korrigieren (`update_contact_name`).
+- Pro Anfrage: Status (offen/kontaktiert/abgeschlossen), Ergebnis (noch offen/qualifiziert/nicht qualifiziert/nicht erreicht),
+  Bearbeiter („wie Zuständig“ = kein Override). Gespeichert werden nur geänderte Felder.
+- Alles als Server Actions mit dem Session-Client über die Funktionen aus `004` (Team-Member-Prüfung in der Datenbank). Ohne JavaScript bedienbar;
+  nach dem Speichern zurück in dieselbe Ansicht, Kontakt aufgeklappt, Rückmeldung oben. Rücksprung-URL nur aus geprüften Werten (kein offener Redirect).
+- Bewusst: Wird die letzte offene Anfrage abgeschlossen, verschwindet der Kontakt aus „Offen“ (Rückmeldung „Gespeichert.“ bleibt sichtbar).
+- `ContactList.tsx` aufgeteilt in `ContactActions`, `SubmissionCard`, `DashboardParts`.
+- Tests: 114 (neu: Formular-Prüfung, Rücksprung-URL). Optik lokal mit Beispieldaten geprüft. **Nicht geprüft:** Speichern gegen Supabase (Vorschau).
+
 ### 2026-10-17 – Schritt 7: Prüfliste
 - `/admin/review`: Eingänge mit `needs_review`. Pro Fall die Eingabe (Name, Telefon, Mail, Grundstück, Kampagne) und die möglichen Kontakte, bei jedem Aufruf
   neu berechnet (`intake_candidates`), mit „Telefon/Mail/Name gleich/anders“, Zuständigem und bisherigen Anfragen (Anzahl, letzte Adresse).

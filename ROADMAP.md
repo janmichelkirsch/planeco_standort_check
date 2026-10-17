@@ -42,7 +42,7 @@ Ziel: einmal die ganze Strecke Formular → Supabase → Vercel funktionierend s
   - ✅ Branch gepusht, auf der Vercel-Vorschau getestet: neuer Kontakt, Auto-Match, Prüffall, Mail jeweils `sent`, Tracking übernommen
   - ✅ Schritt 6: Dashboard auf neues Modell (Kontakte mit aufklappbaren Anfragen, Reiter, Hinweise, „Erneut verarbeiten“, CSV-Export)
   - ✅ Schritt 7: Prüfliste `/admin/review` (nur vorgeschlagene Kandidaten, Name behalten/übernehmen, neuer Kontakt)
-  - ⬜ Schritt 8: Bearbeiten (Übernehmen, Status, Ergebnis, Override, Kontaktname)
+  - ✅ Schritt 8: Bearbeiten (Übernehmen, Zuständig ändern/freigeben, Status, Ergebnis, Bearbeiter, Kontaktname)
   - ⬜ Schritt 5: Geocoding manueller Adressen
 - ⬜ Normalisierung Telefon (E.164) und E-Mail
 - ⬜ Dubletten-Matching über Telefon und E-Mail (Regeln: Spezifikation §7, Prüfliste für Teiltreffer)
@@ -52,7 +52,7 @@ Ziel: einmal die ganze Strecke Formular → Supabase → Vercel funktionierend s
 - ✅ Mails im Planeco-Design (gemeinsames Layout mit Signatur, Logo, Fußzeile)
 - ⬜ `MAIL_FROM_NAME` in Vercel ändern, Live-Test der neuen Mail in Gmail und Outlook
 - ✅ Dashboard an neues Datenmodell anpassen (Dubletten-Hinweis, Kampagne)
-- ⬜ Status, Ergebnis (`outcome`) und Zuständigkeit pro Anfrage (doppelte Bearbeitung vermeiden)
+- ✅ Status, Ergebnis (`outcome`) und Zuständigkeit pro Anfrage (doppelte Bearbeitung vermeiden)
 - ⬜ Datenschutz-Checkbox / Hinweis
 
 ## Iteration 3 – Erweiterung und Robustheit

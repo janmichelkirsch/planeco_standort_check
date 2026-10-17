@@ -29,3 +29,10 @@ export const INTAKE_STATUS_LABEL: Record<string, string> = {
   needs_review: "in Prüfung",
   processed: "zugeordnet",
 };
+
+/** Hinweis, solange Gemeinde/Bundesland fehlen. */
+export const GEOCODE_STATUS_LABEL: Record<string, string> = {
+  pending: "Adresse wird nachgeschlagen …",
+  not_found: "Adresse nicht gefunden – Gemeinde/Bundesland unbekannt",
+  failed: "Nachschlagen fehlgeschlagen – wird erneut versucht",
+};

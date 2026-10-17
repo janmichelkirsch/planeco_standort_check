@@ -10,7 +10,11 @@ UI-Komponenten (Client Components).
 - `AddressFields.tsx` – bearbeitbare Adressfelder (Straße, Nr., PLZ, Ort), vorausgefüllt nach Vorschlag mit Prüfhinweis oder leer für die manuelle Eingabe.
 - `LoginForm.tsx` – Login-Formular für `/login` (E-Mail, Passwort, Fehlermeldung).
 - `ContactList.tsx` – Dashboard: ein Eintrag pro Kontakt (Name, Zuständig + „auch …“, Fortschritt, neueste Anfrage, Hinweis „automatisch zugeordnet“),
-  aufklappbar per `<details>` zu den Anfragen (Grundstück mit Gemeinde/Kreis/Bundesland, Einzugsgebiet, Karte, genutzte Nummer/Mail, Kampagne, Status, Ergebnis, Bearbeiter, Mailstatus).
+  aufklappbar per `<details>` zu Kontakt-Bearbeitung und Anfragen. Nach dem Speichern ist der Kontakt wieder aufgeklappt.
+- `ContactActions.tsx` – „Übernehmen“ (nur ohne Zuständigen), Zuständigen ändern/freigeben, Kontaktnamen korrigieren.
+- `SubmissionCard.tsx` – eine Anfrage: Grundstück (Gemeinde/Kreis/Bundesland, Einzugsgebiet, Karte, Hinweis zum Nachschlagen), genutzte Nummer/Mail, Kampagne, Mailstatus;
+  Formular für Status, Ergebnis und abweichenden Bearbeiter.
+- `DashboardParts.tsx` – kleine Bausteine: `Badge`, `Item`, `ReturnFields` (Ansicht/Sortierung nach dem Speichern), Klassen für Auswahl und Knöpfe.
 - `DashboardTabs.tsx` – Reiter Offen / Nicht zugewiesen / Meine / Alle mit Anzahl Kontakte.
 - `IntakeNotices.tsx` – Hinweise auf Prüffälle (Link „Jetzt prüfen“) und nicht verarbeitete Eingänge, Knopf „Erneut verarbeiten“ (Server Action).
 - `ReviewCaseCard.tsx` – ein Prüffall: Eingabe, Kandidaten mit „Telefon/Mail/Name gleich/anders“, Zuständigem und bisherigen Anfragen, Namenswahl bei abweichendem Namen, Knöpfe zuordnen / neu anlegen.

@@ -6,8 +6,21 @@ import { IntakeNotices } from "@/components/IntakeNotices";
 import { requireSalesUser } from "@/lib/auth";
 import { VIEWS, groupByContact, matchesView, parseDashboardParams, sortGroups, summarizeIntakes, type View } from "@/lib/dashboard";
 import { fetchOpenIntakes, fetchSubmissions, fetchTeamMembers } from "@/lib/dashboard-data";
+import { DASHBOARD_RESULTS, type DashboardResult } from "@/lib/dashboard-forms";
 
-type SearchParams = Promise<{ view?: string | string[]; sort?: string | string[]; dir?: string | string[] }>;
+const RESULT_TONE = {
+  ok: "border-green-300 bg-green-50 text-green-900",
+  warn: "border-amber-300 bg-amber-50 text-amber-900",
+  error: "border-red-300 bg-red-50 text-red-900",
+} as const;
+
+type SearchParams = Promise<{
+  view?: string | string[];
+  sort?: string | string[];
+  dir?: string | string[];
+  result?: string | string[];
+  open?: string | string[];
+}>;
 type SessionClient = Awaited<ReturnType<typeof requireSalesUser>>["supabase"];
 
 /** Lädt alles für das Dashboard und fängt Fehler ab, damit die Seite eine Meldung statt eines Absturzes zeigt. */
@@ -27,7 +40,10 @@ async function loadDashboard(supabase: SessionClient) {
 
 async function AdminContent({ searchParams }: { searchParams: SearchParams }) {
   const { supabase, email, userId } = await requireSalesUser();
-  const { view, sort } = parseDashboardParams(await searchParams);
+  const params = await searchParams;
+  const { view, sort } = parseDashboardParams(params);
+  const message = typeof params.result === "string" && params.result in DASHBOARD_RESULTS ? DASHBOARD_RESULTS[params.result as DashboardResult] : null;
+  const openContactId = typeof params.open === "string" ? params.open : null;
   const data = await loadDashboard(supabase);
 
   const header = (
@@ -65,6 +81,7 @@ async function AdminContent({ searchParams }: { searchParams: SearchParams }) {
   return (
     <div className="flex flex-col gap-4">
       {header}
+      {message && <p className={`rounded border px-3 py-2 text-sm ${RESULT_TONE[message.tone]}`}>{message.text}</p>}
       {me === null && (
         <p className="rounded border border-amber-300 bg-amber-50 px-3 py-2 text-sm text-amber-900">
           Dein Login ist noch keinem Team-Mitglied zugeordnet. „Meine“ bleibt leer, bis es in <code>team_members</code> eingetragen ist.
@@ -72,7 +89,7 @@ async function AdminContent({ searchParams }: { searchParams: SearchParams }) {
       )}
       <IntakeNotices {...summarizeIntakes(data.intakes, new Date())} />
       <DashboardTabs current={view} counts={counts} sort={sort} />
-      <ContactList groups={visible} members={data.members} sort={sort} view={view} />
+      <ContactList groups={visible} members={data.members} sort={sort} view={view} openContactId={openContactId} />
     </div>
   );
 }

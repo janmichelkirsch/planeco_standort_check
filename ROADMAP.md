@@ -38,7 +38,7 @@ Ziel: einmal die ganze Strecke Formular → Supabase → Vercel funktionierend s
 - ⬜ Dubletten-Matching über Telefon und E-Mail, Merge-Strategie vorher besprechen
 - ⬜ Kampagnen-Tracking: UTM-Parameter, gclid, fbclid, Referrer, Landingpage
 - ✅ Bestätigungsmail über Brevo (erst speichern, dann per `after()` senden, Mailstatus im Dashboard)
-- ⬜ SQL `003` ausführen, Brevo-Variablen in Vercel, Live-Test der Mail
+- ✅ SQL `003` ausführen, Brevo-Variablen in Vercel, Live-Test der Mail
 - ⬜ Dashboard an neues Datenmodell anpassen (Dubletten-Hinweis, Kampagne)
 - ⬜ Status und Zuständigkeit pro Lead (doppelte Bearbeitung vermeiden)
 - ⬜ Datenschutz-Checkbox / Hinweis

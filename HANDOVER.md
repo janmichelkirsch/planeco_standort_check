@@ -4,6 +4,13 @@ Laufendes Log für alle, die am Projekt arbeiten (Menschen und Agents). Neueste 
 
 ## Änderungslog
 
+### 2026-10-17 – Bestätigungsmail live getestet
+- Anfrage über das neue Formular → Mail kam im **Gmail-Posteingang** an (nicht Spam), Dashboard zeigt „✓ gesendet“.
+- Die ältere Testanfrage zeigt „ausstehend“: Sie stammt von vor der Mail-Funktion und hat den Default `pending` bekommen.
+- Gmail blendet „Unsubscribe“ ein (List-Unsubscribe von Brevo). Bei einer Bestätigungsmail unnötig, aber harmlos.
+- Echtes Dubletten-Beispiel entstanden: gleiche Telefonnummer und Adresse, aber andere E-Mail und anderer Name
+  („Jan Michel Kirsch“ / „Michel Kirsch“). Guter Testfall für das Matching im neuen Datenmodell.
+
 ### 2026-10-17 – Bestätigungsmail
 - `lib/mail/`: Brevo-Client (Timeout 10 s), Vorlage (HTML + Text, HTML-Escaping), `sendConfirmation()`.
 - `/api/lead` speichert zuerst, antwortet, und verschickt die Mail danach per `after()`. Mailfehler ändern die Antwort nie.

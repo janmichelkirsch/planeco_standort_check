@@ -11,7 +11,8 @@ Ziel: einmal die ganze Strecke Formular → Supabase → Vercel funktionierend s
 - ✅ Formular, mobile-first: erst Grundstücksadresse, dann Kontaktdaten
 - ✅ Adresssuche mit Photon + „Manuell eingeben“ als Fallback
 - ✅ Server-Route `POST /api/lead` mit Validierung und Insert
-- ⬜ Supabase-Projekt anlegen und SQL ausführen
+- ✅ Supabase-Projekt anlegen (Region London)
+- ⬜ SQL ausführen
 - ⬜ Deployment auf Vercel und Test auf echtem Handy
 
 ## Iteration 2 – Pflichtteil vervollständigen
@@ -33,6 +34,10 @@ Ziel: einmal die ganze Strecke Formular → Supabase → Vercel funktionierend s
 - ⬜ Spam-Schutz (Honeypot, ggf. Rate-Limit)
 - ⬜ Automatische Tests (Vitest) für Photon-Mapping und Schema
 - ⬜ UI-Design
+
+## Vor dem Livegang
+
+- ⬜ Supabase-Projekt nach Frankfurt umziehen (DSGVO-sauberer, Region nicht nachträglich änderbar)
 
 ## Abgabe
 

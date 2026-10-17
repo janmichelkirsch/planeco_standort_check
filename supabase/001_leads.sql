@@ -27,3 +27,7 @@ create table if not exists public.leads (
 -- RLS an, aber keine Policies: Der öffentliche (anon/publishable) Key kann weder lesen noch schreiben.
 -- Geschrieben wird ausschließlich serverseitig mit dem Secret Key, der RLS umgeht.
 alter table public.leads enable row level security;
+
+-- "Automatically expose new tables" ist im Projekt aus: Neue Tabellen haben dann keine Rechte.
+-- Nur die Server-Rolle (Secret Key) bekommt Zugriff, anon/authenticated bleiben ausgesperrt.
+grant select, insert, update, delete on public.leads to service_role;

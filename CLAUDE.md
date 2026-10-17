@@ -5,7 +5,7 @@
 Case Study für Planeco Building (Position Tech & Automation): Interessenten geben über ein mobiles Formular
 Grundstücksadresse und Kontaktdaten an, das Sales-Team arbeitet die Anfragen in einem Dashboard ab.
 
-- **Stack:** Next.js 16 (App Router, Cache Components: dynamische Teile in `<Suspense>`) · Supabase (Postgres, später Auth) · Vercel (Hosting) · Brevo (Mail, geplant) · Photon (Adresssuche)
+- **Stack:** Next.js 16 (App Router, Cache Components: dynamische Teile in `<Suspense>`) · Supabase (Postgres, Auth) · Vercel (Hosting) · Brevo (Mail, geplant) · Photon (Adresssuche)
 - **Kosten:** Nur kostenlose Dienste.
 - **Priorität:** Korrekte, verlustfreie Erfassung der Anfragen geht vor Dashboard und UI-Design.
 - **Zielgerät:** Mobile-first (Traffic kommt über Meta/Google-Kampagnen).

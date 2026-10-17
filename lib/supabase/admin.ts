@@ -1,5 +1,6 @@
 import "server-only";
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
+import { requireSupabaseEnv } from "@/lib/supabase/env";
 
 let client: SupabaseClient | null = null;
 
@@ -7,13 +8,7 @@ let client: SupabaseClient | null = null;
 export function getSupabaseAdmin(): SupabaseClient {
   if (client) return client;
 
-  const url = process.env.SUPABASE_URL;
-  const secretKey = process.env.SUPABASE_SECRET_KEY;
-  if (!url || !secretKey) {
-    throw new Error("SUPABASE_URL oder SUPABASE_SECRET_KEY ist nicht gesetzt");
-  }
-
-  client = createClient(url, secretKey, {
+  client = createClient(requireSupabaseEnv("SUPABASE_URL"), requireSupabaseEnv("SUPABASE_SECRET_KEY"), {
     auth: { persistSession: false, autoRefreshToken: false },
   });
   return client;

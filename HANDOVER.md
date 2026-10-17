@@ -4,6 +4,11 @@ Laufendes Log für alle, die am Projekt arbeiten (Menschen und Agents). Neueste 
 
 ## Änderungslog
 
+### 2026-10-17 – Schritt 9 vorbereitet (nicht ausgeführt)
+- `supabase/005_drop_leads.sql` liegt bereit, **nicht ausgeführt**. Kein Code liest oder schreibt `leads` mehr (geprüft per Suche).
+- `main` hat sich seit dem Abzweigen nicht bewegt, der Merge geht ohne Konflikte (Fast-Forward).
+- Offen bis zur Prüfung durch Michel: Merge auf `main` (= Live-Deployment), danach Live-Test, danach `005`.
+
 ### 2026-10-17 – Schritt 5: Geocoding manueller Adressen
 - `lib/geocode.ts`: Nach dem Anlegen einer Anfrage mit manueller Adresse (`geocode_status = pending`) Photon-Suche „Straße Nr, PLZ Ort“, Timeout 5 s.
   Läuft nach `process_intake` (in `after()`), nach dem Zuordnen in der Prüfliste und bei „Erneut verarbeiten“ (dann alle `pending`/`failed`, max. 200).

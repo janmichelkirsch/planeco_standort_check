@@ -3,6 +3,7 @@
 SQL-Dateien für die Datenbank, nummeriert in Ausführungsreihenfolge.
 Ausführen: Supabase-Dashboard → SQL Editor → Inhalt einfügen → Run.
 
+- `001`–`003` gehören zum Speed-MVP (Tabelle `leads`). Seit `004` liest und schreibt der Code `leads` nicht mehr; `005` löscht sie nach dem Merge.
 - `001_leads.sql` – Tabelle `leads` (Speed-MVP, flach). RLS aktiv ohne Policies: nur der Server mit Secret Key schreibt und liest.
   Enthält ein `grant` für `service_role`, weil „Automatically expose new tables“ im Projekt aus ist.
 - `002_dashboard_read.sql` – Leserecht für eingeloggte Nutzer (`authenticated`) per RLS-Policy. Voraussetzung: Selbstregistrierung ist aus.
@@ -12,4 +13,5 @@ Ausführen: Supabase-Dashboard → SQL Editor → Inhalt einfügen → Run.
   (nur `service_role`), Dashboard-Funktionen mit Team-Member-Prüfung (`claim_contact`, `resolve_intake_review`, `set_*` …),
   RLS: eingeloggte Nutzer lesen, schreiben nur über Funktionen.
   **Vor dem Ausführen** im letzten Block die drei Login-E-Mails (Emily, Björn, Michel) eintragen; die Abfrage am Ende muss drei Zeilen zeigen.
+- `005_drop_leads.sql` – löscht `leads`. **Erst nach Merge und erfolgreichem Live-Test ausführen** (Bedingungen stehen in der Datei).
 - `tests/` – lokale Tests für `004` (siehe `tests/README.md`).

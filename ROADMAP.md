@@ -22,7 +22,7 @@ Ziel: einmal die ganze Strecke Formular → Supabase → Vercel funktionierend s
 - ✅ Tabelle aller Anfragen, deutsche Zeit
 - ✅ Sortierung per Spaltenklick
 - ✅ CSV-Export (Excel-tauglich, alle Zeilen)
-- ⬜ SQL `002` ausführen, `SUPABASE_PUBLISHABLE_KEY` in Vercel, Live-Test mit Testnutzer
+- ✅ SQL `002` ausführen, `SUPABASE_PUBLISHABLE_KEY` in Vercel, Live-Test mit Testnutzer
 
 ## Iteration 2 – Pflichtteil vervollständigen
 

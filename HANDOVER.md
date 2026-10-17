@@ -4,13 +4,16 @@ Laufendes Log für alle, die am Projekt arbeiten (Menschen und Agents). Neueste 
 
 ## Änderungslog
 
+### 2026-10-17 – Dashboard live getestet
+- Live mit Testnutzer geprüft: Login, Tabelle (deutsche Zeit korrekt), Sortierung, CSV-Export, Abmelden + Umleitung.
+- Selbstregistrierung in Supabase deaktiviert, `002_dashboard_read.sql` ausgeführt, `SUPABASE_PUBLISHABLE_KEY` in Vercel (Production + Preview).
+
 ### 2026-10-17 – Speed-Dashboard
 - `/login` (Server Action, Supabase Auth), `/admin` (Tabelle, Sortierung über `?sort=&dir=`), `/admin/export` (CSV).
 - Schutz in drei Schichten: `proxy.ts` (Umleitung), `lib/auth.ts` (Prüfung beim Laden), RLS-Policy in der DB.
 - Dashboard liest mit dem **Publishable Key + Session** (RLS greift), nicht mit dem Secret Key.
 - Neue Env-Variable `SUPABASE_PUBLISHABLE_KEY` (ohne `NEXT_PUBLIC_`, wird nur serverseitig genutzt).
 - `lib/supabase-server.ts` → `lib/supabase/admin.ts` verschoben.
-- Nur Build/Lint geprüft. Login und Tabelle sind **noch nicht** mit echtem Nutzer getestet (fehlende Env-Variable lokal und auf Vercel).
 
 ### 2026-10-17 – Durchstich live
 - Deployt auf Vercel: **https://planeco-standort-check-two.vercel.app** (Auto-Deploy bei Push auf `main`).
@@ -33,11 +36,13 @@ Laufendes Log für alle, die am Projekt arbeiten (Menschen und Agents). Neueste 
 
 ## Offene Punkte / Probleme
 
-- **Ohne `SUPABASE_PUBLISHABLE_KEY` liefern `/login` und `/admin` einen 500er** (Proxy bricht ab). Startseite und Formular sind nicht betroffen.
+- Ohne `SUPABASE_PUBLISHABLE_KEY` liefern `/login` und `/admin` einen 500er (Proxy bricht ab). Bei neuen Umgebungen daran denken.
 - **Jeder Supabase-Auth-Nutzer sieht alle Anfragen.** Das ist nur sicher, solange die Selbstregistrierung aus ist. Rollen fehlen noch.
 - **Tabelle zeigt max. 1000 Zeilen** (Hinweis wird angezeigt), der Export lädt alle seitenweise.
 - **CSV:** Werte mit = + - @ am Anfang bekommen ein `'` (Formel-Schutz), betrifft auch `+49…`-Telefonnummern.
   Telefonnummern ohne Leerzeichen mit führender 0 könnte Excel als Zahl lesen (0 fällt weg). Löst sich mit E.164-Normalisierung.
+- **CSV-Formate für deutsches Excel noch nicht optimal:** Koordinaten mit Punkt (`51.672678`) liest deutsches Excel ggf. als Text/Datum,
+  Datum mit zweistelligem Jahr (`17.10.26, 16:47`). Ideen: Dezimalkomma, `17.10.2026 16:47`.
 - Kein Passwort-Reset, kein Rate-Limit auf Login (Supabase hat ein eigenes Basis-Limit).
 
 - **Zeitzone:** `created_at` wird in UTC gespeichert (korrekt). Dashboard und CSV-Export müssen in Europe/Berlin anzeigen.

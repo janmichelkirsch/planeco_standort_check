@@ -35,7 +35,7 @@ Ziel: einmal die ganze Strecke Formular → Supabase → Vercel funktionierend s
 
 - 🔄 Datenmodell normalisieren (Kontakt ↔ Anfrage): Spezifikation [`docs/spezifikation_v3.md`](docs/spezifikation_v3.md) abgestimmt, Umsetzung auf Branch `feat/contact-data-model` (Schritte §11)
   - ✅ Schritt 1: SQL `004` (Tabellen, Trigger, Funktionen, RLS) + lokale Tests (`supabase/tests/run.sh`)
-  - ⬜ `004` in Supabase ausführen (vorher Login-E-Mails eintragen), Team Members prüfen
+  - ✅ `004` in Supabase ausgeführt, Team Members Emily, Björn, Michel angelegt
   - ⬜ Schritt 2: Normalisierung (`libphonenumber-js`) + Schema um Tracking und `clientRequestId`
 - ⬜ Normalisierung Telefon (E.164) und E-Mail
 - ⬜ Dubletten-Matching über Telefon und E-Mail (Regeln: Spezifikation §7, Prüfliste für Teiltreffer)

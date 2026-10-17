@@ -5,7 +5,8 @@ Laufendes Log für alle, die am Projekt arbeiten (Menschen und Agents). Neueste 
 ## Änderungslog
 
 ### 2026-10-17 – SQL 004: Datenmodell Kontakt ↔ Anfrage
-- `supabase/004_contact_model.sql`: Tabellen, Trigger, Funktionen und Rechte nach Spezifikation v3. **Noch nicht in Supabase ausgeführt.**
+- `supabase/004_contact_model.sql`: Tabellen, Trigger, Funktionen und Rechte nach Spezifikation v3.
+  **In Supabase ausgeführt** (2026-10-17, ohne Fehler); `team_members`: Emily, Björn, Michel.
 - Am Code entschieden: Fehlercodes `P0401` (kein Team Member), `P0404`, `P0409` (schon bearbeitet / Konflikt), `P0422` für die UI;
   `normalized_phone` per Check auf E.164; `mark_intake_failed` zählt Versuche (ein Fehler in `process_intake` rollt dessen Zähler zurück);
   zusätzlich `set_contact_owner` (Owner wechseln/freigeben); `completed_at` bleibt beim erneuten Setzen von `completed` erhalten.

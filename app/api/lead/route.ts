@@ -1,7 +1,12 @@
+import { after } from "next/server";
 import { leadSchema, toFieldErrors } from "@/lib/lead-schema";
+import { sendConfirmation } from "@/lib/mail/send-confirmation";
 import { getSupabaseAdmin } from "@/lib/supabase/admin";
 
-/** Nimmt eine Standort-Check-Anfrage entgegen: prüfen → speichern → Antwort. */
+/**
+ * Nimmt eine Standort-Check-Anfrage entgegen: prüfen → speichern → Antwort → Bestätigungsmail.
+ * Die Mail läuft per after() erst nach der Antwort, der Nutzer wartet also nicht auf Brevo.
+ */
 export async function POST(request: Request) {
   let body: unknown;
   try {
@@ -38,7 +43,10 @@ export async function POST(request: Request) {
       .single();
 
     if (error) throw error;
-    return Response.json({ ok: true, id: data.id }, { status: 201 });
+
+    const leadId: string = data.id;
+    after(() => sendConfirmation(leadId, lead));
+    return Response.json({ ok: true, id: leadId }, { status: 201 });
   } catch (error) {
     console.error("[api/lead] Speichern fehlgeschlagen", error);
     return Response.json({ ok: false, error: "Speichern fehlgeschlagen" }, { status: 500 });

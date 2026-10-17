@@ -12,6 +12,8 @@ die Anfrage wird in Supabase gespeichert.
 | `lib/` | Logik und Anbindung externer Dienste (Photon, Supabase, Validierung) |
 | `supabase/` | SQL für die Datenbank |
 
+`proxy.ts` im Hauptordner schützt `/admin` (Login-Pflicht) und erneuert die Session.
+
 Planung: [`ROADMAP.md`](ROADMAP.md) · Änderungen und offene Punkte: [`HANDOVER.md`](HANDOVER.md) · Regeln für Agents: [`CLAUDE.md`](CLAUDE.md)
 
 ## Lokal starten

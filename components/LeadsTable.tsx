@@ -16,7 +16,9 @@ export function LeadsTable({ rows, hasMore, sort }: Props) {
 
   return (
     <div className="flex flex-col gap-2">
-      <p className="text-sm text-zinc-600">{rows.length} Anfragen</p>
+      <p className="text-sm text-zinc-600">
+        {rows.length} {rows.length === 1 ? "Anfrage" : "Anfragen"}
+      </p>
       <div className="overflow-x-auto rounded border border-zinc-300">
         <table className="w-full text-left text-sm">
           <thead className="bg-zinc-100">

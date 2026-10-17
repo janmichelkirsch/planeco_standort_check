@@ -1,26 +1,28 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/*
+ * Planeco-Design-Tokens aus dem Figma-Make-Entwurf („Formular im Planeko Design“).
+ * Laut Entwurf von der öffentlichen Website abgeleitet – Näherungswerte, keine offizielle Markenvorgabe.
+ */
+@theme {
+  --font-sans: var(--font-poppins), ui-sans-serif, system-ui, sans-serif;
+
+  --color-sage: #f2f5ea;
+  --color-sage-deep: #e6ebdc;
+  --color-forest: #22403b;
+  --color-forest-soft: #556b66;
+  --color-forest-muted: #7a8b86;
+  --color-coral: #e0805f;
+  --color-coral-dark: #c96a4a;
+  --color-line: #869791;
+  --color-line-soft: #dde3da;
+  --color-danger: #b42318;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
+/* Bewusst kein Dark Mode: Das Formular folgt dem hellen Planeco-Design. */
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: #ffffff;
+  color: var(--color-forest);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
 }

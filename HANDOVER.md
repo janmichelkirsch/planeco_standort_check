@@ -4,6 +4,13 @@ Laufendes Log für alle, die am Projekt arbeiten (Menschen und Agents). Neueste 
 
 ## Änderungslog
 
+### 2026-10-17 – Bestätigungsmail
+- `lib/mail/`: Brevo-Client (Timeout 10 s), Vorlage (HTML + Text, HTML-Escaping), `sendConfirmation()`.
+- `/api/lead` speichert zuerst, antwortet, und verschickt die Mail danach per `after()`. Mailfehler ändern die Antwort nie.
+- `supabase/003_confirmation_mail.sql`: `confirmation_status` (`pending`/`sent`/`failed`), `confirmation_sent_at`, `confirmation_error`.
+- Dashboard: Spalte „Mail“ (sortierbar, Grund als Tooltip). CSV: Status, Zeitpunkt, Fehler.
+- Absender: `michelkirsch@icloud.com` (in Brevo verifiziert). Brevo-API-Key mit Rechten **nur** für Transactional Email.
+
 ### 2026-10-17 – Formular im Planeco-Design
 - Quelle: Figma-Make-Export „Formular im Planeko Design“ (lag unter `~/Downloads`, nicht im Repo). Übernommen: Tokens, Poppins, Icons, `Field`, Mobile-/Desktop-Layout, Texte, Logo, Bild.
   Nicht übernommen: Vorschau-Leiste/Handy-Rahmen, Demo-Adressliste, simuliertes Absenden.
@@ -48,6 +55,15 @@ Laufendes Log für alle, die am Projekt arbeiten (Menschen und Agents). Neueste 
 
 ## Offene Punkte / Probleme
 
+- **Zustellbarkeit:** Absender ist eine Freemail-Adresse (iCloud), Brevo warnt: kein eigenes DKIM, DMARC nicht erfüllbar.
+  Mails können im Spam landen oder abgelehnt werden. Für den Livegang: eigene Domain mit SPF/DKIM/DMARC.
+- **Brevo-Key läuft ab** nach 1 Jahr oder 90 Tagen ohne Nutzung. Folge: Mails `failed`, sichtbar im Dashboard.
+- **Kein automatischer Retry** für fehlgeschlagene Mails. Idee: „Erneut senden“-Button im Dashboard oder Cron, der `failed`/alte `pending` nachholt.
+- **Textversion der Mail** enthält Namen roh. Manche Mailprogramme machen URLs in Text klickbar.
+  Idee: Namen mit `<`, `>` oder `://` schon im Formular ablehnen.
+- **Jeder kann eine fremde E-Mail eintragen** und so eine Bestätigung an Dritte auslösen (Hinweis in der Mail: „nicht gestellt? ignorieren“). Gegenmittel später: Rate-Limit, Captcha.
+- Ohne SQL `003` zeigt das Dashboard keinen sinnvollen Mailstatus, und das Speichern des Status scheitert (nur geloggt, Anfrage bleibt gespeichert).
+
 - **Photon schlägt oft nur die Straße vor** (z. B. „Osterstraße 88 Hamburg“ → Straße ohne Nr., erster Treffer sogar „Heußweg“). Das Nr.-Feld fängt das ab, der Prüfhinweis bleibt wichtig.
 - Bis die Bildschirmbreite feststeht, zeigt die Startseite kurz nur die Hintergrundfläche (kein Server-Rendering des Formulars).
 - Der lokale Dev-Server einer anderen Session (Port 3000) lieferte veraltetes CSS. Zum Prüfen wurde ein Produktions-Build auf Port 3101 genutzt.
@@ -80,5 +96,5 @@ Laufendes Log für alle, die am Projekt arbeiten (Menschen und Agents). Neueste 
 
 ## Setup-Notizen
 
-- Umgebungsvariablen siehe `.env.example` (`SUPABASE_URL`, `SUPABASE_SECRET_KEY`, `SUPABASE_PUBLISHABLE_KEY`). Lokal in `.env.local`, auf Vercel unter Project Settings → Environment Variables.
+- Umgebungsvariablen siehe `.env.example` (`SUPABASE_URL`, `SUPABASE_SECRET_KEY`, `SUPABASE_PUBLISHABLE_KEY`, `BREVO_API_KEY`, `MAIL_FROM_EMAIL`, `MAIL_FROM_NAME`). Lokal in `.env.local`, auf Vercel unter Project Settings → Environment Variables.
 - Dev-Server: `npm run dev` im Projektordner.

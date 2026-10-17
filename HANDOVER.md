@@ -4,6 +4,19 @@ Laufendes Log für alle, die am Projekt arbeiten (Menschen und Agents). Neueste 
 
 ## Änderungslog
 
+### 2026-10-17 – Schritt 2: Normalisierung, Schema, Vitest
+- `lib/normalize.ts`: `normalizePhone` (E.164 über `libphonenumber-js`, Standardland DE, `+…`/`00…` werden erkannt) und `normalizeEmail`.
+- `lib/lead-schema.ts`: Telefon wird jetzt per `libphonenumber-js` gegen das Land geprüft (statt Regex); neue Felder `phoneCountry` (Standard DE),
+  `clientRequestId` (vorerst optional), `county`, `municipality`, 9 Tracking-Felder. Tracking kann eine Anfrage nie scheitern lassen
+  (zu lang → auf 500 Zeichen gekürzt, falscher Typ/leer → `null`).
+- Vitest 4.1 (`npm test`, nur `lib/**/*.test.ts`, Umgebung node): 31 Tests, alle grün, inkl. der fünf Case-Telefonnummern.
+  Vitest 5 hätte `@types/node` ≥ 22 verlangt; das Projekt hat 20, daher Vitest 4.1 statt Typen-Upgrade.
+- `CLAUDE.md`: vor jedem Commit zusätzlich `npm test`.
+- `npm audit`: 5 „high“ in `eslint-config-next` → `@next/eslint-plugin-next` → `fast-glob` → `micromatch` (nur Dev-Werkzeug, nicht von dieser Änderung).
+  `npm audit fix --force` würde ESLint brechen, daher nicht ausgeführt.
+- **Nicht im Browser geprüft:** Das Formular nutzt das neue Schema bereits (gleiche Fehlermeldung, nur genauere Prüfung). Sichtbar getestet wird mit Schritt 3.
+- `libphonenumber-js` landet im Client-Bundle (Formular-Prüfung), Standard-Metadaten („min“).
+
 ### 2026-10-17 – SQL 004: Datenmodell Kontakt ↔ Anfrage
 - `supabase/004_contact_model.sql`: Tabellen, Trigger, Funktionen und Rechte nach Spezifikation v3.
   **In Supabase ausgeführt** (2026-10-17, ohne Fehler); `team_members`: Emily, Björn, Michel.

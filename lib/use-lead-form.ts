@@ -32,6 +32,7 @@ const EMPTY_LEAD: LeadInput = {
   firstName: "",
   lastName: "",
   email: "",
+  phoneCountry: "DE",
   phone: "",
 };
 

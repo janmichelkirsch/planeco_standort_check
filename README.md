@@ -24,3 +24,5 @@ cp .env.example .env.local   # Werte eintragen
 npm install
 npm run dev
 ```
+
+Tests: `npm test` (Vitest, Unit-Tests in `lib/`) · Datenbank-Tests: `supabase/tests/run.sh`

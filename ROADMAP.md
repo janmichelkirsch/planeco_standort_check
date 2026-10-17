@@ -33,23 +33,23 @@ Ziel: einmal die ganze Strecke Formular → Supabase → Vercel funktionierend s
 
 ## Iteration 2 – Pflichtteil vervollständigen
 
-- ⬜ Datenmodell normalisieren (Kontakt ↔ Anfrage), vorher gemeinsam besprechen
+- 🔄 Datenmodell normalisieren (Kontakt ↔ Anfrage): Spezifikation [`docs/spezifikation_v3.md`](docs/spezifikation_v3.md) abgestimmt, Umsetzung auf Branch `feat/contact-data-model` (Schritte §11)
 - ⬜ Normalisierung Telefon (E.164) und E-Mail
-- ⬜ Dubletten-Matching über Telefon und E-Mail, Merge-Strategie vorher besprechen
+- ⬜ Dubletten-Matching über Telefon und E-Mail (Regeln: Spezifikation §7, Prüfliste für Teiltreffer)
 - ⬜ Kampagnen-Tracking: UTM-Parameter, gclid, fbclid, Referrer, Landingpage
 - ✅ Bestätigungsmail über Brevo (erst speichern, dann per `after()` senden, Mailstatus im Dashboard)
 - ✅ SQL `003` ausführen, Brevo-Variablen in Vercel, Live-Test der Mail
 - ✅ Mails im Planeco-Design (gemeinsames Layout mit Signatur, Logo, Fußzeile)
 - ⬜ `MAIL_FROM_NAME` in Vercel ändern, Live-Test der neuen Mail in Gmail und Outlook
 - ⬜ Dashboard an neues Datenmodell anpassen (Dubletten-Hinweis, Kampagne)
-- ⬜ Status und Zuständigkeit pro Lead (doppelte Bearbeitung vermeiden)
+- ⬜ Status, Ergebnis (`outcome`) und Zuständigkeit pro Anfrage (doppelte Bearbeitung vermeiden)
 - ⬜ Datenschutz-Checkbox / Hinweis
 
 ## Iteration 3 – Erweiterung und Robustheit
 
 - ⬜ Anreicherung: Gemeinde, Bundesland, Koordinaten auch für manuell eingegebene Adressen
-- ⬜ Einzugsgebiet-Markierung (vermutlich über Bundesland/Gemeinde, konfigurierbar)
-- ⬜ Schutz vor doppeltem Absenden (Idempotenz-Key)
+- ⬜ Einzugsgebiet-Markierung: alle 16 Bundesländer, als Liste im Code einschränkbar
+- ⬜ Schutz vor doppeltem Absenden (`client_request_id`, Teil des neuen Datenmodells)
 - ⬜ Spam-Schutz (Honeypot, ggf. Rate-Limit)
 - ⬜ Automatische Tests (Vitest) für Photon-Mapping und Schema
 - ⬜ Login und Dashboard im Planeco-Design

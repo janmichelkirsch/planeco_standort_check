@@ -4,6 +4,17 @@ Laufendes Log für alle, die am Projekt arbeiten (Menschen und Agents). Neueste 
 
 ## Änderungslog
 
+### 2026-10-17 – Spezifikation Datenmodell v3
+- `docs/spezifikation_v3.md` auf Branch `feat/contact-data-model`: fünf Tabellen (`team_members`, `contacts`, `contact_methods`,
+  `incoming_submissions`, `submissions`), konservatives Matching mit Prüfliste, kontaktorientiertes Dashboard. Noch **nichts umgesetzt**.
+- Entscheidungen mit Michel gegenüber v2: Mailstatus am Eingang; Tracking (5 × UTM, gclid, fbclid, Landingpage, Referrer) und `outcome`
+  an der Submission; Gemeinde/Kreis + Geocoding manueller Adressen; Einzugsgebiet = alle Bundesländer (Liste im Code);
+  Prüffälle nur in `incoming_submissions`, aber Hinweis im Dashboard und im Export; kein Worker, sondern `after()` + „Erneut verarbeiten“;
+  Advisory Lock gegen doppelte Kontakte; Telefon-Dropdown mit `libphonenumber-js`; alte `leads`-Daten werden nicht übernommen.
+- Am Code entschieden: `text` + `check` statt Enums, kein Status `processing`, kein `country_code`, Methoden-IDs Pflicht,
+  kein `is_primary`/`is_active`, Matching als SQL-Funktion (Supabase-JS kann keine Transaktionen).
+- **Achtung:** Vercel-Vorschau und Live nutzen dieselbe Supabase-DB. Migrationen bis zum Merge nur additiv, `leads` bleibt bis dahin.
+
 ### 2026-10-17 – Mails im Planeco-Design
 - `lib/mail/layout.ts`: gemeinsamer Rahmen nach Planecos echter Mail-Signatur (Arial-Text, „Liebe Grüße,“, Name groß, Rolle klein,
   Telefon, grün unterstrichene Website, Logo, graue Fußzeile mit Firmendaten). Die Bestätigungsmail nutzt ihn.

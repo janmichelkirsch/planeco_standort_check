@@ -42,3 +42,6 @@ next-env.d.ts
 
 # Vorlage ohne Werte darf ins Repo
 !.env.example
+
+# Lokale Claude-Code-Einstellungen (Dev-Server-Konfiguration)
+.claude/

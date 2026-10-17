@@ -12,8 +12,8 @@ Ziel: einmal die ganze Strecke Formular → Supabase → Vercel funktionierend s
 - ✅ Adresssuche mit Photon + „Manuell eingeben“ als Fallback
 - ✅ Server-Route `POST /api/lead` mit Validierung und Insert
 - ✅ Supabase-Projekt anlegen (Region London)
-- ⬜ SQL ausführen
-- ⬜ Deployment auf Vercel und Test auf echtem Handy
+- ✅ SQL ausführen
+- ✅ Deployment auf Vercel und Test auf echtem Handy (https://planeco-standort-check-two.vercel.app)
 
 ## Iteration 2 – Pflichtteil vervollständigen
 
@@ -22,7 +22,7 @@ Ziel: einmal die ganze Strecke Formular → Supabase → Vercel funktionierend s
 - ⬜ Dubletten-Matching über Telefon und E-Mail, Merge-Strategie vorher besprechen
 - ⬜ Kampagnen-Tracking: UTM-Parameter, gclid, fbclid, Referrer, Landingpage
 - ⬜ Bestätigungsmail über Brevo (erst speichern, dann senden, Mailstatus speichern)
-- ⬜ Admin-Dashboard: Login, Tabelle, Sortierung, CSV-Export (Excel-tauglich, UTF-8-BOM)
+- ⬜ Admin-Dashboard: Login, Tabelle, Sortierung, CSV-Export (Excel-tauglich, UTF-8-BOM), Zeiten in deutscher Zeit
 - ⬜ Status und Zuständigkeit pro Lead (doppelte Bearbeitung vermeiden)
 - ⬜ Datenschutz-Checkbox / Hinweis
 

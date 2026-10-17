@@ -1,4 +1,5 @@
 import { ADDRESS_SOURCE_LABEL, formatBerlinDateTime } from "@/lib/format";
+import { MailStatus } from "@/components/MailStatus";
 import { SortableHeader } from "@/components/SortableHeader";
 import type { LeadRow, SortColumn, SortDirection } from "@/lib/leads";
 
@@ -30,6 +31,7 @@ export function LeadsTable({ rows, hasMore, sort }: Props) {
               <SortableHeader label="Adresse (PLZ)" column="postal_code" current={sort} />
               <SortableHeader label="Bundesland" column="state" current={sort} />
               <SortableHeader label="Adressquelle" column="address_source" current={sort} />
+              <SortableHeader label="Mail" column="confirmation_status" current={sort} />
             </tr>
           </thead>
           <tbody>
@@ -52,6 +54,9 @@ export function LeadsTable({ rows, hasMore, sort }: Props) {
                 </td>
                 <td className="px-3 py-2">{lead.state ?? "–"}</td>
                 <td className="px-3 py-2">{ADDRESS_SOURCE_LABEL[lead.address_source]}</td>
+                <td className="whitespace-nowrap px-3 py-2">
+                  <MailStatus lead={lead} />
+                </td>
               </tr>
             ))}
           </tbody>

@@ -9,4 +9,6 @@ export function formatBerlinDateTime(isoTimestamp: string): string {
   return berlinDateTime.format(new Date(isoTimestamp));
 }
 
+export const CONFIRMATION_STATUS_LABEL = { pending: "ausstehend", sent: "gesendet", failed: "fehlgeschlagen" } as const;
+
 export const ADDRESS_SOURCE_LABEL = { photon: "Vorschlag", manual: "Manuell" } as const;

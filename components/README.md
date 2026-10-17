@@ -13,3 +13,4 @@ UI-Komponenten (Client Components).
 - `SortableHeader.tsx` – klickbare Spaltenüberschrift: setzt `?sort=…&dir=…` in der URL, zweiter Klick dreht die Richtung um.
 - `icons.tsx` – Linien-Icons aus dem Figma-Entwurf (Pfeile, Lupe, Pin, Häkchen, Warnung, Stift, Spinner).
 - `Field.tsx` – Formular-Bausteine im Planeco-Design: `Field` (Label + Eingabe + Hinweis + Fehler), `Label`, `FieldError`, Klassen `inputBase`/`inputBorder`.
+- `MailStatus.tsx` – Versandstatus der Bestätigungsmail im Dashboard (✓ gesendet / ✗ fehlgeschlagen / … ausstehend), Details als Tooltip.

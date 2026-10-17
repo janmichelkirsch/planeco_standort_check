@@ -17,12 +17,17 @@ export type LeadRow = {
   last_name: string;
   email: string;
   phone: string | null;
+  confirmation_status: ConfirmationStatus;
+  confirmation_sent_at: string | null;
+  confirmation_error: string | null;
 };
+
+export type ConfirmationStatus = "pending" | "sent" | "failed";
 
 export type SortDirection = "asc" | "desc";
 
 /** Spalten, nach denen im Dashboard sortiert werden darf (Whitelist gegen beliebige Eingaben aus der URL). */
-export const SORTABLE_COLUMNS = ["created_at", "last_name", "email", "postal_code", "state", "address_source"] as const;
+export const SORTABLE_COLUMNS = ["created_at", "last_name", "email", "postal_code", "state", "address_source", "confirmation_status"] as const;
 export type SortColumn = (typeof SORTABLE_COLUMNS)[number];
 
 export const DEFAULT_SORT: { column: SortColumn; direction: SortDirection } = { column: "created_at", direction: "desc" };

@@ -1,5 +1,5 @@
 import { leadSchema } from "@/lib/lead-schema";
-import { getSupabaseServer } from "@/lib/supabase-server";
+import { getSupabaseAdmin } from "@/lib/supabase/admin";
 
 /** Nimmt eine Standort-Check-Anfrage entgegen: prüfen → speichern → Antwort. */
 export async function POST(request: Request) {
@@ -18,7 +18,7 @@ export async function POST(request: Request) {
 
   const lead = parsed.data;
   try {
-    const { data, error } = await getSupabaseServer()
+    const { data, error } = await getSupabaseAdmin()
       .from("leads")
       .insert({
         street: lead.street,

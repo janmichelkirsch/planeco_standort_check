@@ -4,7 +4,7 @@ import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 let client: SupabaseClient | null = null;
 
 /** Supabase-Client mit Secret Key. Nur auf dem Server verwenden – der Key umgeht RLS. */
-export function getSupabaseServer(): SupabaseClient {
+export function getSupabaseAdmin(): SupabaseClient {
   if (client) return client;
 
   const url = process.env.SUPABASE_URL;

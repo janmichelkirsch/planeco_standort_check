@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { reprocessIntakes } from "@/app/admin/actions";
 
 /**
@@ -9,11 +10,16 @@ export function IntakeNotices({ needsReview, unprocessed }: { needsReview: numbe
   return (
     <div className="flex flex-col gap-2">
       {needsReview > 0 && (
-        <p className="rounded border border-amber-300 bg-amber-50 px-3 py-2 text-sm text-amber-900">
-          <strong>
-            {needsReview} {needsReview === 1 ? "Anfrage wartet" : "Anfragen warten"} auf Prüfung.
-          </strong>{" "}
-          Unklar, ob die Person schon bekannt ist (z. B. gleiche Nummer, anderer Name). Die Prüfliste folgt; bis dahin stehen sie im CSV-Export.
+        <p className="flex flex-wrap items-center gap-3 rounded border border-amber-300 bg-amber-50 px-3 py-2 text-sm text-amber-900">
+          <span>
+            <strong>
+              {needsReview} {needsReview === 1 ? "Anfrage wartet" : "Anfragen warten"} auf Prüfung.
+            </strong>{" "}
+            Unklar, ob die Person schon bekannt ist (z. B. gleiche Nummer, anderer Name).
+          </span>
+          <Link href="/admin/review" className="rounded bg-amber-800 px-3 py-1.5 font-semibold text-white">
+            Jetzt prüfen
+          </Link>
         </p>
       )}
       {unprocessed > 0 && (

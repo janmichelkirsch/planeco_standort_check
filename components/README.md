@@ -12,7 +12,8 @@ UI-Komponenten (Client Components).
 - `ContactList.tsx` – Dashboard: ein Eintrag pro Kontakt (Name, Zuständig + „auch …“, Fortschritt, neueste Anfrage, Hinweis „automatisch zugeordnet“),
   aufklappbar per `<details>` zu den Anfragen (Grundstück mit Gemeinde/Kreis/Bundesland, Einzugsgebiet, Karte, genutzte Nummer/Mail, Kampagne, Status, Ergebnis, Bearbeiter, Mailstatus).
 - `DashboardTabs.tsx` – Reiter Offen / Nicht zugewiesen / Meine / Alle mit Anzahl Kontakte.
-- `IntakeNotices.tsx` – Hinweise auf Prüffälle und nicht verarbeitete Eingänge, Knopf „Erneut verarbeiten“ (Server Action).
+- `IntakeNotices.tsx` – Hinweise auf Prüffälle (Link „Jetzt prüfen“) und nicht verarbeitete Eingänge, Knopf „Erneut verarbeiten“ (Server Action).
+- `ReviewCaseCard.tsx` – ein Prüffall: Eingabe, Kandidaten mit „Telefon/Mail/Name gleich/anders“, Zuständigem und bisherigen Anfragen, Namenswahl bei abweichendem Namen, Knöpfe zuordnen / neu anlegen.
 - `SortableHeader.tsx` – klickbare Spaltenüberschrift im Dashboard: setzt `?view=…&sort=…&dir=…`, zweiter Klick dreht die Richtung um.
 - `icons.tsx` – Linien-Icons aus dem Figma-Entwurf (Pfeile, Lupe, Pin, Häkchen, Warnung, Stift, Spinner).
 - `PhoneField.tsx` – Telefon mit Vorwahl-Dropdown (Flagge + Vorwahl, darunter native Länderliste: DE/AT/CH oben, dann alle alphabetisch) und Nummernfeld mit Formatierung beim Tippen. Eingefügte Nummern mit `+…`/`00…` ersetzen den Inhalt und stellen das Land um. Logik in `lib/phone-input.ts`.

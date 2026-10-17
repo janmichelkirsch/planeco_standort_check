@@ -41,7 +41,7 @@ Ziel: einmal die ganze Strecke Formular → Supabase → Vercel funktionierend s
   - ✅ Schritt 4: API schreibt in `incoming_submissions`, `after()` mit Mail + `process_intake`
   - ✅ Branch gepusht, auf der Vercel-Vorschau getestet: neuer Kontakt, Auto-Match, Prüffall, Mail jeweils `sent`, Tracking übernommen
   - ✅ Schritt 6: Dashboard auf neues Modell (Kontakte mit aufklappbaren Anfragen, Reiter, Hinweise, „Erneut verarbeiten“, CSV-Export)
-  - ⬜ Schritt 7: Prüfliste `/admin/review`
+  - ✅ Schritt 7: Prüfliste `/admin/review` (nur vorgeschlagene Kandidaten, Name behalten/übernehmen, neuer Kontakt)
   - ⬜ Schritt 8: Bearbeiten (Übernehmen, Status, Ergebnis, Override, Kontaktname)
   - ⬜ Schritt 5: Geocoding manueller Adressen
 - ⬜ Normalisierung Telefon (E.164) und E-Mail
@@ -63,6 +63,10 @@ Ziel: einmal die ganze Strecke Formular → Supabase → Vercel funktionierend s
 - ⬜ Spam-Schutz (Honeypot, ggf. Rate-Limit)
 - ✅ Automatische Tests (Vitest): Schema, Normalisierung, Telefonfeld, Tracking, Photon-Mapping
 - ⬜ Login und Dashboard im Planeco-Design
+
+## Backlog
+
+- ⬜ Freie Kontaktsuche in der Prüfliste (Zuordnen zu nicht vorgeschlagenem Kontakt)
 
 ## Vor dem Livegang
 

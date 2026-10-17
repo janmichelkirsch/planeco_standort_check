@@ -4,6 +4,17 @@ Laufendes Log für alle, die am Projekt arbeiten (Menschen und Agents). Neueste 
 
 ## Änderungslog
 
+### 2026-10-17 – Schritt 7: Prüfliste
+- `/admin/review`: Eingänge mit `needs_review`. Pro Fall die Eingabe (Name, Telefon, Mail, Grundstück, Kampagne) und die möglichen Kontakte, bei jedem Aufruf
+  neu berechnet (`intake_candidates`), mit „Telefon/Mail/Name gleich/anders“, Zuständigem und bisherigen Anfragen (Anzahl, letzte Adresse).
+- Entscheidungen mit Michel: Zuordnen nur an vorgeschlagene Kandidaten (freie Suche → Backlog). Bei abweichendem Namen „behalten“ (Standard) oder „übernehmen“;
+  der eingegebene Name bleibt an der Anfrage.
+- Server Action `resolveReview` → `resolve_intake_review` mit dem Session-Client (Team-Member-Prüfung, Sperre, kein `reviewed_by`).
+  Rückmeldung per `?result=attached|created|conflict|forbidden|invalid|error`, ohne JavaScript.
+- Dashboard-Hinweis „N Anfragen warten auf Prüfung“ hat jetzt den Knopf „Jetzt prüfen“.
+- Tests: 102. Optik lokal mit Beispieldaten geprüft (Fall Anna Kirsch); behoben: Abstände in der Namenswahl.
+- **Nicht geprüft:** echtes Zuordnen gegen Supabase (folgt auf der Vorschau). Geocoding nach dem Zuordnen folgt mit Schritt 5.
+
 ### 2026-10-17 – Schritt 6: Dashboard auf neues Datenmodell
 - `/admin` zeigt einen Eintrag pro Kontakt statt pro Anfrage: Name, Zuständig („Nicht zugewiesen“ / „Emily · auch Björn“), Fortschritt „x von y abgeschlossen“,
   neueste Anfrage, Hinweis „automatisch zugeordnet“. Aufklappbar (`<details>`, ohne JS) zu den Anfragen mit Grundstück, Gemeinde/Kreis/Bundesland,

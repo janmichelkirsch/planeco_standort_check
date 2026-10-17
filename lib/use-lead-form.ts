@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import type { CountryCode } from "libphonenumber-js";
 import {
   CONTACT_FIELDS,
   PROPERTY_FIELDS,
@@ -11,6 +12,7 @@ import {
   type LeadInput,
 } from "@/lib/lead-schema";
 import type { AddressSuggestion } from "@/lib/photon";
+import { loadTracking, type Tracking } from "@/lib/tracking";
 
 /** Fehler-Schlüssel: alle Formularfelder plus `address` für das Suchfeld. */
 export type ErrorKey = LeadField | "address";
@@ -27,6 +29,8 @@ const EMPTY_LEAD: LeadInput = {
   city: "",
   addressSource: "manual",
   state: null,
+  county: null,
+  municipality: null,
   latitude: null,
   longitude: null,
   firstName: "",
@@ -43,6 +47,16 @@ function focusField(key: ErrorKey) {
   requestAnimationFrame(() => document.getElementById(key)?.focus());
 }
 
+/** UUID v4; `crypto.randomUUID` fehlt in älteren Browsern (Safari < 15.4). */
+function newRequestId(): string {
+  if (typeof crypto.randomUUID === "function") return crypto.randomUUID();
+  const b = crypto.getRandomValues(new Uint8Array(16));
+  b[6] = (b[6] & 0x0f) | 0x40;
+  b[8] = (b[8] & 0x3f) | 0x80;
+  const h = [...b].map((x) => x.toString(16).padStart(2, "0")).join("");
+  return `${h.slice(0, 8)}-${h.slice(8, 12)}-${h.slice(12, 16)}-${h.slice(16, 20)}-${h.slice(20)}`;
+}
+
 /**
  * Gemeinsamer Zustand für Mobile- und Desktop-Formular: Adresse (Suche oder Felder), Kontakt,
  * Prüfung pro Schritt mit Fehlern am Feld und das Absenden an `/api/lead`.
@@ -55,6 +69,14 @@ export function useLeadForm() {
   const [errors, setErrors] = useState<FormErrors>({});
   const [status, setStatus] = useState<Status>("idle");
   const [submitError, setSubmitError] = useState<string | null>(null);
+  // Kampagnen-Herkunft der Sitzung; bleibt auch bei „Weiteres Grundstück prüfen“ erhalten.
+  const tracking = useRef<Tracking>({});
+  // Idempotenz: Ein erneuter Versuch mit unveränderten Daten (z. B. nach Netzfehler) nutzt dieselbe ID.
+  const lastAttempt = useRef<{ body: string; requestId: string } | null>(null);
+
+  useEffect(() => {
+    tracking.current = loadTracking();
+  }, []);
 
   const clearErrors = (...keys: ErrorKey[]) =>
     setErrors((prev) => {
@@ -77,6 +99,8 @@ export function useLeadForm() {
       city: s.city,
       addressSource: "photon",
       state: s.state,
+      county: s.county,
+      municipality: s.municipality,
       latitude: s.latitude,
       longitude: s.longitude,
     }));
@@ -101,6 +125,8 @@ export function useLeadForm() {
       city: "",
       addressSource: "manual",
       state: null,
+      county: null,
+      municipality: null,
       latitude: null,
       longitude: null,
     }));
@@ -118,11 +144,16 @@ export function useLeadForm() {
       // oft nur die Straße, und Bundesland/Koordinaten (Straßenebene) bleiben beim Ergänzen gültig.
       const isAddressField = (PROPERTY_FIELDS as readonly string[]).includes(field) && field !== "houseNumber";
       if (isAddressField && prev.addressSource === "photon") {
-        return { ...next, addressSource: "manual", state: null, latitude: null, longitude: null };
+        return { ...next, addressSource: "manual", state: null, county: null, municipality: null, latitude: null, longitude: null };
       }
       return next;
     });
     clearErrors(field);
+  };
+
+  const updatePhone = (next: { value: string; country: CountryCode }) => {
+    setLead((prev) => ({ ...prev, phone: next.value, phoneCountry: next.country }));
+    clearErrors("phone");
   };
 
   const computeErrors = (): FormErrors => {
@@ -167,14 +198,18 @@ export function useLeadForm() {
     if (first) return first;
 
     setStatus("submitting");
+    const body = JSON.stringify({ ...lead, ...tracking.current });
+    const requestId = lastAttempt.current?.body === body ? lastAttempt.current.requestId : newRequestId();
+    lastAttempt.current = { body, requestId };
     try {
       const response = await fetch("/api/lead", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(lead),
+        body: JSON.stringify({ ...lead, ...tracking.current, clientRequestId: requestId }),
       });
       const result = await response.json().catch(() => null);
       if (response.ok && result?.ok) {
+        lastAttempt.current = null;
         setStatus("success");
         return null;
       }
@@ -219,6 +254,7 @@ export function useLeadForm() {
     enterManual,
     backToSearch,
     updateField,
+    updatePhone,
     validate,
     submit,
     reset,

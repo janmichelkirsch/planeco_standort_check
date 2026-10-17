@@ -12,5 +12,6 @@ UI-Komponenten (Client Components).
 - `LeadsTable.tsx` – Tabelle aller Anfragen im Dashboard. Zeiten in deutscher Zeit, Telefon und E-Mail klickbar, auf dem Handy seitlich scrollbar.
 - `SortableHeader.tsx` – klickbare Spaltenüberschrift: setzt `?sort=…&dir=…` in der URL, zweiter Klick dreht die Richtung um.
 - `icons.tsx` – Linien-Icons aus dem Figma-Entwurf (Pfeile, Lupe, Pin, Häkchen, Warnung, Stift, Spinner).
+- `PhoneField.tsx` – Telefon mit Vorwahl-Dropdown (Flagge + Vorwahl, darunter native Länderliste: DE/AT/CH oben, dann alle alphabetisch) und Nummernfeld mit Formatierung beim Tippen. Eingefügte Nummern mit `+…`/`00…` ersetzen den Inhalt und stellen das Land um. Logik in `lib/phone-input.ts`.
 - `Field.tsx` – Formular-Bausteine im Planeco-Design: `Field` (Label + Eingabe + Hinweis + Fehler), `Label`, `FieldError`, Klassen `inputBase`/`inputBorder`.
 - `MailStatus.tsx` – Versandstatus der Bestätigungsmail im Dashboard (✓ gesendet / ✗ fehlgeschlagen / … ausstehend), Details als Tooltip.

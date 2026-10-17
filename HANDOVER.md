@@ -4,6 +4,23 @@ Laufendes Log für alle, die am Projekt arbeiten (Menschen und Agents). Neueste 
 
 ## Änderungslog
 
+### 2026-10-17 – Schritt 3: Formular (Telefon, Tracking, clientRequestId)
+- Telefon: `components/PhoneField.tsx` + `lib/phone-input.ts`. Dropdown mit Flagge und Vorwahl (DE, AT, CH oben, dann alle Länder alphabetisch,
+  deutsche Namen), Nummer ohne Vorwahl, Formatierung beim Tippen („0170 5551234“). Rücktaste hinter einem Leerzeichen löscht die Ziffer davor;
+  Cursor bleibt hinter derselben Ziffer. `+…`/`00…` stellt das Land um und wird national geschrieben, sobald gültig; Einfügen ersetzt den Inhalt.
+  Entscheidung mit Michel: Vorwahl steht nur im Dropdown. Die führende 0 bleibt im Feld (üblich, `libphonenumber-js` versteht beides).
+- Tracking: `lib/tracking.ts` liest UTM, `gclid`, `fbclid`, Landingpage, Referrer beim Laden und merkt sie in `sessionStorage`
+  (Neuladen ohne Parameter behält die Kampagne, neuer Kampagnen-Klick ersetzt sie). Wird beim Absenden angehängt.
+- `clientRequestId`: pro Absenden neu, bei unverändertem erneutem Versuch (z. B. nach Netzfehler) dieselbe. Im Schema weiter optional;
+  die API (Schritt 4) erzeugt bei fehlender ID eine eigene.
+- Photon: `county` und `municipality` (= Photon `city`) werden aus dem Vorschlag übernommen, bei manueller Änderung verworfen.
+- Tests: 65 (neu: Telefonfeld, Tracking, Photon-Mapping). Im Browser geprüft (Desktop 800 px, Mobile 375 px): Formatierung, Löschen, Einfügen von
+  AT/CH/DE-Nummern, Fehler „Bitte prüfen Sie die Telefonnummer.“ mit Fokus, nichts gesendet; gesendete Daten enthalten Land, Tracking, Kreis/Gemeinde,
+  gleiche ID beim zweiten Versuch. Speichern lokal mangels Supabase-Keys mit 500 (erwartet), Server-Prüfung hat die Felder akzeptiert.
+- **Aufgefallen:** Für die Case-Adresse „Am Mühlenteich 7, Groß Grönau“ schlägt Photon zuerst „Am Mühlenteich 7, 31028 Gronau (Leine)“ vor, also einen
+  falschen Ort. Die Straße gibt es in Groß Grönau in OSM offenbar nicht. Nutzer müssen dann „Manuell eingeben“. Kandidat für die Notizen.
+- **Nicht geprüft:** echtes iPhone/Android (native Länderliste), Screenreader.
+
 ### 2026-10-17 – Schritt 2: Normalisierung, Schema, Vitest
 - `lib/normalize.ts`: `normalizePhone` (E.164 über `libphonenumber-js`, Standardland DE, `+…`/`00…` werden erkannt) und `normalizeEmail`.
 - `lib/lead-schema.ts`: Telefon wird jetzt per `libphonenumber-js` gegen das Land geprüft (statt Regex); neue Felder `phoneCountry` (Standard DE),

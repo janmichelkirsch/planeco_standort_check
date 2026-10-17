@@ -18,6 +18,10 @@ export type AddressSuggestion = {
   /** Ortsteil, falls von der Stadt verschieden – hilft bei mehrfach vorkommenden Straßen. */
   district: string | null;
   state: string | null;
+  /** Landkreis bzw. kreisfreie Stadt. */
+  county: string | null;
+  /** Gemeinde laut Photon (unabhängig vom bearbeitbaren Feld „Ort“). */
+  municipality: string | null;
   latitude: number;
   longitude: number;
 };
@@ -34,6 +38,7 @@ type PhotonFeature = {
     postcode?: string;
     city?: string;
     district?: string;
+    county?: string;
     state?: string;
     countrycode?: string;
   };
@@ -67,6 +72,8 @@ export function toSuggestion(feature: PhotonFeature): AddressSuggestion | null {
     city,
     district,
     state: p.state ?? null,
+    county: p.county ?? null,
+    municipality: p.city ?? null,
     latitude,
     longitude,
   };

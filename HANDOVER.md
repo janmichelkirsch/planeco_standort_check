@@ -4,6 +4,20 @@ Laufendes Log für alle, die am Projekt arbeiten (Menschen und Agents). Neueste 
 
 ## Änderungslog
 
+### 2026-10-17 – Schritt 6: Dashboard auf neues Datenmodell
+- `/admin` zeigt einen Eintrag pro Kontakt statt pro Anfrage: Name, Zuständig („Nicht zugewiesen“ / „Emily · auch Björn“), Fortschritt „x von y abgeschlossen“,
+  neueste Anfrage, Hinweis „automatisch zugeordnet“. Aufklappbar (`<details>`, ohne JS) zu den Anfragen mit Grundstück, Gemeinde/Kreis/Bundesland,
+  „im Einzugsgebiet“, OSM-Kartenlink, genutzter Nummer/Mail, eingegebenem Namen (falls abweichend), Kampagne, Status, Ergebnis, Bearbeiter, Mailstatus.
+- Reiter Offen (Standard, mit Michel entschieden) / Nicht zugewiesen / Meine / Alle; Sortierung neueste Anfrage / Name / Zuständig. Gruppieren, Filtern, Sortieren
+  passiert in TS (`lib/dashboard.ts`), weil Kontakte aus mehreren Anfragen bestehen; bei vielen tausend Anfragen wäre eine View/RPC besser.
+- Hinweise oben: Prüffälle (Link zur Prüfliste folgt mit Schritt 7) und nicht verarbeitete Eingänge (`failed` oder > 5 Min. `received`) mit „Erneut verarbeiten“.
+- CSV-Export neu: eine Zeile pro Anfrage (37 Spalten inkl. Tracking, Einzugsgebiet, Zuständig/Bearbeiter, Mail), plus Eingänge in Prüfung / nicht verarbeitet aus dem Payload.
+- Entfernt: `lib/leads.ts`, `components/LeadsTable.tsx` (Tabelle `leads` bleibt bis zum Merge, Live braucht sie).
+- Einzugsgebiet: `lib/service-area.ts`, alle 16 Bundesländer (mit Michel entschieden, Hinweis wird angezeigt).
+- Tests: 91. Optik lokal mit Beispieldaten geprüft (Desktop 800 px, Mobile 375 px, kein seitliches Scrollen); behoben: „Hamburg · Hamburg“ doppelt.
+- **Nicht geprüft:** mit echten Daten. Die Abfrage nutzt PostgREST-Einbettung über Constraint-Namen (`contact_methods!submissions_email_same_contact_fk`);
+  ob Supabase das genau so auflöst, zeigt erst die Vorschau.
+
 ### 2026-10-17 – Vorschau-Test des neuen Datenmodells
 - Vercel-Projekt war pausiert (Live 503 `DEPLOYMENT_PAUSED`, Deployments „blocked“); von Michel fortgesetzt. Branch-Build per leerem Commit angestoßen.
 - Vorschau: `planeco-standort-check-git-feat-contact-data-model-michel-5238.vercel.app` (hinter Vercel-Login / Deployment Protection).

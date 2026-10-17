@@ -40,7 +40,10 @@ Ziel: einmal die ganze Strecke Formular → Supabase → Vercel funktionierend s
   - ✅ Schritt 3: Formular (Vorwahl-Dropdown mit Formatierung beim Tippen, Tracking aus der URL, `clientRequestId`, Kreis/Gemeinde aus Photon)
   - ✅ Schritt 4: API schreibt in `incoming_submissions`, `after()` mit Mail + `process_intake`
   - ✅ Branch gepusht, auf der Vercel-Vorschau getestet: neuer Kontakt, Auto-Match, Prüffall, Mail jeweils `sent`, Tracking übernommen
-  - ⬜ Schritt 6: Dashboard auf neues Modell
+  - ✅ Schritt 6: Dashboard auf neues Modell (Kontakte mit aufklappbaren Anfragen, Reiter, Hinweise, „Erneut verarbeiten“, CSV-Export)
+  - ⬜ Schritt 7: Prüfliste `/admin/review`
+  - ⬜ Schritt 8: Bearbeiten (Übernehmen, Status, Ergebnis, Override, Kontaktname)
+  - ⬜ Schritt 5: Geocoding manueller Adressen
 - ⬜ Normalisierung Telefon (E.164) und E-Mail
 - ⬜ Dubletten-Matching über Telefon und E-Mail (Regeln: Spezifikation §7, Prüfliste für Teiltreffer)
 - ⬜ Kampagnen-Tracking: UTM-Parameter, gclid, fbclid, Referrer, Landingpage
@@ -48,7 +51,7 @@ Ziel: einmal die ganze Strecke Formular → Supabase → Vercel funktionierend s
 - ✅ SQL `003` ausführen, Brevo-Variablen in Vercel, Live-Test der Mail
 - ✅ Mails im Planeco-Design (gemeinsames Layout mit Signatur, Logo, Fußzeile)
 - ⬜ `MAIL_FROM_NAME` in Vercel ändern, Live-Test der neuen Mail in Gmail und Outlook
-- ⬜ Dashboard an neues Datenmodell anpassen (Dubletten-Hinweis, Kampagne)
+- ✅ Dashboard an neues Datenmodell anpassen (Dubletten-Hinweis, Kampagne)
 - ⬜ Status, Ergebnis (`outcome`) und Zuständigkeit pro Anfrage (doppelte Bearbeitung vermeiden)
 - ⬜ Datenschutz-Checkbox / Hinweis
 

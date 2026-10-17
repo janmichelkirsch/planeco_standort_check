@@ -1,47 +1,78 @@
 import { Suspense } from "react";
 import { logout } from "@/app/admin/actions";
-import { LeadsTable } from "@/components/LeadsTable";
+import { ContactList } from "@/components/ContactList";
+import { DashboardTabs } from "@/components/DashboardTabs";
+import { IntakeNotices } from "@/components/IntakeNotices";
 import { requireSalesUser } from "@/lib/auth";
-import { fetchLeadsPage, parseSort, type SortColumn, type SortDirection } from "@/lib/leads";
+import { VIEWS, groupByContact, matchesView, parseDashboardParams, sortGroups, summarizeIntakes, type View } from "@/lib/dashboard";
+import { fetchOpenIntakes, fetchSubmissions, fetchTeamMembers } from "@/lib/dashboard-data";
 
-type SearchParams = Promise<{ sort?: string | string[]; dir?: string | string[] }>;
+type SearchParams = Promise<{ view?: string | string[]; sort?: string | string[]; dir?: string | string[] }>;
 type SessionClient = Awaited<ReturnType<typeof requireSalesUser>>["supabase"];
 
-/** Lädt die Anfragen und fängt Fehler ab, damit die Seite eine Meldung statt eines Absturzes zeigt. */
-async function loadLeads(supabase: SessionClient, sort: { column: SortColumn; direction: SortDirection }) {
+/** Lädt alles für das Dashboard und fängt Fehler ab, damit die Seite eine Meldung statt eines Absturzes zeigt. */
+async function loadDashboard(supabase: SessionClient) {
   try {
-    const { rows, hasMore } = await fetchLeadsPage(supabase, sort);
-    return { ok: true as const, rows, hasMore };
+    const [submissions, members, intakes] = await Promise.all([
+      fetchSubmissions(supabase),
+      fetchTeamMembers(supabase),
+      fetchOpenIntakes(supabase),
+    ]);
+    return { ok: true as const, submissions, members, intakes };
   } catch (error) {
-    console.error("[admin] Anfragen konnten nicht geladen werden", error);
+    console.error("[admin] Dashboard-Daten konnten nicht geladen werden", error);
     return { ok: false as const };
   }
 }
 
 async function AdminContent({ searchParams }: { searchParams: SearchParams }) {
-  const { supabase, email } = await requireSalesUser();
-  const sort = parseSort(await searchParams);
-  const result = await loadLeads(supabase, sort);
+  const { supabase, email, userId } = await requireSalesUser();
+  const { view, sort } = parseDashboardParams(await searchParams);
+  const data = await loadDashboard(supabase);
+
+  const header = (
+    <div className="flex items-center justify-between gap-4">
+      <p className="text-sm text-zinc-600">Eingeloggt als {email}</p>
+      {/* Normaler Link statt <Link>, damit der Browser die Datei herunterlädt. */}
+      <a href="/admin/export" className="rounded bg-zinc-900 px-3 py-2 text-sm font-semibold text-white">
+        CSV exportieren
+      </a>
+      <form action={logout}>
+        <button type="submit" className="text-sm underline">
+          Abmelden
+        </button>
+      </form>
+    </div>
+  );
+
+  if (!data.ok) {
+    return (
+      <div className="flex flex-col gap-4">
+        {header}
+        <p className="text-red-700">Anfragen konnten nicht geladen werden. Bitte Seite neu laden.</p>
+      </div>
+    );
+  }
+
+  const me = data.members.find((m) => m.auth_user_id === userId)?.id ?? null;
+  const groups = groupByContact(data.submissions, data.members);
+  const counts = Object.fromEntries(VIEWS.map((v) => [v, groups.filter((g) => matchesView(g, v, me)).length])) as Record<View, number>;
+  const visible = sortGroups(
+    groups.filter((g) => matchesView(g, view, me)),
+    sort,
+  );
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex items-center justify-between gap-4">
-        <p className="text-sm text-zinc-600">Eingeloggt als {email}</p>
-        {/* Normaler Link statt <Link>, damit der Browser die Datei herunterlädt. */}
-        <a href={`/admin/export?sort=${sort.column}&dir=${sort.direction}`} className="rounded bg-zinc-900 px-3 py-2 text-sm font-semibold text-white">
-          CSV exportieren
-        </a>
-        <form action={logout}>
-          <button type="submit" className="text-sm underline">
-            Abmelden
-          </button>
-        </form>
-      </div>
-      {result.ok ? (
-        <LeadsTable rows={result.rows} hasMore={result.hasMore} sort={sort} />
-      ) : (
-        <p className="text-red-700">Anfragen konnten nicht geladen werden. Bitte Seite neu laden.</p>
+      {header}
+      {me === null && (
+        <p className="rounded border border-amber-300 bg-amber-50 px-3 py-2 text-sm text-amber-900">
+          Dein Login ist noch keinem Team-Mitglied zugeordnet. „Meine“ bleibt leer, bis es in <code>team_members</code> eingetragen ist.
+        </p>
       )}
+      <IntakeNotices {...summarizeIntakes(data.intakes, new Date())} />
+      <DashboardTabs current={view} counts={counts} sort={sort} />
+      <ContactList groups={visible} members={data.members} sort={sort} view={view} />
     </div>
   );
 }

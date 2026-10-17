@@ -1,5 +1,5 @@
 import { CONFIRMATION_STATUS_LABEL, formatBerlinDateTime } from "@/lib/format";
-import type { LeadRow } from "@/lib/leads";
+import type { ConfirmationStatus } from "@/lib/dashboard";
 
 const STYLE = {
   sent: "text-green-700",
@@ -9,14 +9,16 @@ const STYLE = {
 
 const ICON = { sent: "✓", failed: "✗", pending: "…" } as const;
 
+type Confirmation = { confirmation_status: ConfirmationStatus; confirmation_sent_at: string | null; confirmation_error: string | null };
+
 /** Versandstatus der Bestätigungsmail. Details (Zeitpunkt bzw. Fehlergrund) als Tooltip. */
-export function MailStatus({ lead }: { lead: Pick<LeadRow, "confirmation_status" | "confirmation_sent_at" | "confirmation_error"> }) {
-  const status = lead.confirmation_status;
+export function MailStatus({ intake }: { intake: Confirmation }) {
+  const status = intake.confirmation_status;
   const detail =
-    status === "sent" && lead.confirmation_sent_at
-      ? `gesendet am ${formatBerlinDateTime(lead.confirmation_sent_at)}`
+    status === "sent" && intake.confirmation_sent_at
+      ? `gesendet am ${formatBerlinDateTime(intake.confirmation_sent_at)}`
       : status === "failed"
-        ? (lead.confirmation_error ?? "unbekannter Fehler")
+        ? (intake.confirmation_error ?? "unbekannter Fehler")
         : "Versand noch nicht abgeschlossen";
 
   return (

@@ -1,13 +1,15 @@
 import { ADDRESS_SOURCE_LABEL, formatBerlinDateTime } from "@/lib/format";
-import type { LeadRow } from "@/lib/leads";
+import { SortableHeader } from "@/components/SortableHeader";
+import type { LeadRow, SortColumn, SortDirection } from "@/lib/leads";
 
 type Props = {
   rows: LeadRow[];
   hasMore: boolean;
+  sort: { column: SortColumn; direction: SortDirection };
 };
 
 /** Tabelle aller Anfragen. Auf schmalen Bildschirmen seitlich scrollbar. */
-export function LeadsTable({ rows, hasMore }: Props) {
+export function LeadsTable({ rows, hasMore, sort }: Props) {
   if (rows.length === 0) {
     return <p className="text-zinc-600">Noch keine Anfragen eingegangen.</p>;
   }
@@ -19,13 +21,13 @@ export function LeadsTable({ rows, hasMore }: Props) {
         <table className="w-full text-left text-sm">
           <thead className="bg-zinc-100">
             <tr>
-              <th className="px-3 py-2">Eingang</th>
-              <th className="px-3 py-2">Name</th>
+              <SortableHeader label="Eingang" column="created_at" current={sort} />
+              <SortableHeader label="Name" column="last_name" current={sort} />
               <th className="px-3 py-2">Telefon</th>
-              <th className="px-3 py-2">E-Mail</th>
-              <th className="px-3 py-2">Adresse</th>
-              <th className="px-3 py-2">Bundesland</th>
-              <th className="px-3 py-2">Adressquelle</th>
+              <SortableHeader label="E-Mail" column="email" current={sort} />
+              <SortableHeader label="Adresse (PLZ)" column="postal_code" current={sort} />
+              <SortableHeader label="Bundesland" column="state" current={sort} />
+              <SortableHeader label="Adressquelle" column="address_source" current={sort} />
             </tr>
           </thead>
           <tbody>

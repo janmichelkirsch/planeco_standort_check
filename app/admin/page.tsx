@@ -2,14 +2,15 @@ import { Suspense } from "react";
 import { logout } from "@/app/admin/actions";
 import { LeadsTable } from "@/components/LeadsTable";
 import { requireSalesUser } from "@/lib/auth";
-import { DEFAULT_SORT, fetchLeadsPage } from "@/lib/leads";
+import { fetchLeadsPage, parseSort, type SortColumn, type SortDirection } from "@/lib/leads";
 
+type SearchParams = Promise<{ sort?: string | string[]; dir?: string | string[] }>;
 type SessionClient = Awaited<ReturnType<typeof requireSalesUser>>["supabase"];
 
 /** Lädt die Anfragen und fängt Fehler ab, damit die Seite eine Meldung statt eines Absturzes zeigt. */
-async function loadLeads(supabase: SessionClient) {
+async function loadLeads(supabase: SessionClient, sort: { column: SortColumn; direction: SortDirection }) {
   try {
-    const { rows, hasMore } = await fetchLeadsPage(supabase, DEFAULT_SORT);
+    const { rows, hasMore } = await fetchLeadsPage(supabase, sort);
     return { ok: true as const, rows, hasMore };
   } catch (error) {
     console.error("[admin] Anfragen konnten nicht geladen werden", error);
@@ -17,10 +18,10 @@ async function loadLeads(supabase: SessionClient) {
   }
 }
 
-async function AdminContent() {
+async function AdminContent({ searchParams }: { searchParams: SearchParams }) {
   const { supabase, email } = await requireSalesUser();
-
-  const result = await loadLeads(supabase);
+  const sort = parseSort(await searchParams);
+  const result = await loadLeads(supabase, sort);
 
   return (
     <div className="flex flex-col gap-4">
@@ -33,7 +34,7 @@ async function AdminContent() {
         </form>
       </div>
       {result.ok ? (
-        <LeadsTable rows={result.rows} hasMore={result.hasMore} />
+        <LeadsTable rows={result.rows} hasMore={result.hasMore} sort={sort} />
       ) : (
         <p className="text-red-700">Anfragen konnten nicht geladen werden. Bitte Seite neu laden.</p>
       )}
@@ -41,12 +42,12 @@ async function AdminContent() {
   );
 }
 
-export default function AdminPage() {
+export default function AdminPage({ searchParams }: { searchParams: SearchParams }) {
   return (
     <main className="mx-auto w-full max-w-6xl px-4 py-8">
       <h1 className="mb-4 text-2xl font-bold">Standort-Check – Anfragen</h1>
       <Suspense fallback={<p className="text-sm text-zinc-500">Lade …</p>}>
-        <AdminContent />
+        <AdminContent searchParams={searchParams} />
       </Suspense>
     </main>
   );

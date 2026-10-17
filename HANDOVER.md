@@ -4,6 +4,18 @@ Laufendes Log für alle, die am Projekt arbeiten (Menschen und Agents). Neueste 
 
 ## Änderungslog
 
+### 2026-10-17 – Formular im Planeco-Design
+- Quelle: Figma-Make-Export „Formular im Planeko Design“ (lag unter `~/Downloads`, nicht im Repo). Übernommen: Tokens, Poppins, Icons, `Field`, Mobile-/Desktop-Layout, Texte, Logo, Bild.
+  Nicht übernommen: Vorschau-Leiste/Handy-Rahmen, Demo-Adressliste, simuliertes Absenden.
+- `lib/use-lead-form.ts`: gemeinsamer Zustand für beide Varianten, Prüfung pro Schritt mit dem zod-Schema, Fokus auf den ersten Fehler.
+- Schema: deutsche Meldungen aus dem Design, **Telefon Pflicht**, PLZ genau 5 Ziffern. API liefert `fieldErrors` als Objekt pro Feld.
+- Entscheidungen mit Michel: Straße und Hausnummer getrennt; nach Auswahl eines Vorschlags bleiben die Adressfelder bearbeitbar (statt Karte im Design);
+  Datenschutz-Link vorerst auf planecobuilding.de; Unsplash-Bild lokal abgelegt; Poppins über `next/font` (keine Google-Anfrage, DSGVO).
+- Gefunden und behoben: Such-Icon/Spinner rutschten bei offener Vorschlagsliste unter das Feld (auch im Figma-Code);
+  Ergänzen der Hausnummer verwarf Bundesland/Koordinaten; Sendefehler auf Mobile lag außerhalb des sichtbaren Bereichs.
+- Im Browser geprüft (Produktions-Build lokal, 390 px und 1440 px): Schritt-Prüfung, Vorschlag ohne Hausnummer, manuelle Eingabe mit Umlauten,
+  Sendefehler ohne DB, Wechsel Desktop ↔ Mobile ohne Datenverlust. **Nicht geprüft:** echtes Speichern über das neue Formular (lokal keine Supabase-Keys).
+
 ### 2026-10-17 – Dashboard live getestet
 - Live mit Testnutzer geprüft: Login, Tabelle (deutsche Zeit korrekt), Sortierung, CSV-Export, Abmelden + Umleitung.
 - Selbstregistrierung in Supabase deaktiviert, `002_dashboard_read.sql` ausgeführt, `SUPABASE_PUBLISHABLE_KEY` in Vercel (Production + Preview).
@@ -36,6 +48,10 @@ Laufendes Log für alle, die am Projekt arbeiten (Menschen und Agents). Neueste 
 
 ## Offene Punkte / Probleme
 
+- **Photon schlägt oft nur die Straße vor** (z. B. „Osterstraße 88 Hamburg“ → Straße ohne Nr., erster Treffer sogar „Heußweg“). Das Nr.-Feld fängt das ab, der Prüfhinweis bleibt wichtig.
+- Bis die Bildschirmbreite feststeht, zeigt die Startseite kurz nur die Hintergrundfläche (kein Server-Rendering des Formulars).
+- Der lokale Dev-Server einer anderen Session (Port 3000) lieferte veraltetes CSS. Zum Prüfen wurde ein Produktions-Build auf Port 3101 genutzt.
+
 - Ohne `SUPABASE_PUBLISHABLE_KEY` liefern `/login` und `/admin` einen 500er (Proxy bricht ab). Bei neuen Umgebungen daran denken.
 - **Jeder Supabase-Auth-Nutzer sieht alle Anfragen.** Das ist nur sicher, solange die Selbstregistrierung aus ist. Rollen fehlen noch.
 - **Tabelle zeigt max. 1000 Zeilen** (Hinweis wird angezeigt), der Export lädt alle seitenweise.
@@ -54,7 +70,7 @@ Laufendes Log für alle, die am Projekt arbeiten (Menschen und Agents). Neueste 
 - **Mehrdeutige Adressen:** „Hauptstraße 14“ existiert mehrfach in Dresden, mit unterschiedlichen PLZ. Die PLZ 01067 aus Beispiel #1 taucht in den Photon-Treffern nicht auf.
   Darum zeigt das Label den Ortsteil. Die Felder bleiben editierbar.
 - Photon ist ein öffentlicher Fair-Use-Dienst ohne SLA. Bei Ausfall bleibt die manuelle Eingabe (getestet über Fehleranzeige).
-- Noch keine Prüfung, ob PLZ fünfstellig ist, und kein Format für Telefonnummern (bewusst verschoben, siehe Roadmap).
+- Telefonnummern werden nur grob geprüft, die E.164-Normalisierung folgt mit dem neuen Datenmodell.
 - Kein Schutz vor Doppelklick/Doppel-Submit (Button ist während des Sendens deaktiviert, sonst nichts).
 
 ## Feature Requests / Ideen

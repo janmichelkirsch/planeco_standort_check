@@ -24,6 +24,13 @@ Ziel: einmal die ganze Strecke Formular → Supabase → Vercel funktionierend s
 - ✅ CSV-Export (Excel-tauglich, alle Zeilen)
 - ✅ SQL `002` ausführen, `SUPABASE_PUBLISHABLE_KEY` in Vercel, Live-Test mit Testnutzer
 
+## Iteration 1c – Formular im Planeco-Design
+
+- ✅ Design aus Figma Make übernommen (nur Optik, Logik bleibt bei uns)
+- ✅ Mobile zweistufig (Grundstück → Kontakt), Desktop zweispaltig mit Formular-Karte
+- ✅ Fehler direkt am Feld, Prüfung pro Schritt, Telefon Pflicht, PLZ 5-stellig
+- ⬜ Datenschutz-Link auf die echte Datenschutzerklärung umstellen (aktuell planecobuilding.de)
+
 ## Iteration 2 – Pflichtteil vervollständigen
 
 - ⬜ Datenmodell normalisieren (Kontakt ↔ Anfrage), vorher gemeinsam besprechen
@@ -42,7 +49,7 @@ Ziel: einmal die ganze Strecke Formular → Supabase → Vercel funktionierend s
 - ⬜ Schutz vor doppeltem Absenden (Idempotenz-Key)
 - ⬜ Spam-Schutz (Honeypot, ggf. Rate-Limit)
 - ⬜ Automatische Tests (Vitest) für Photon-Mapping und Schema
-- ⬜ UI-Design
+- ⬜ Login und Dashboard im Planeco-Design
 
 ## Vor dem Livegang
 

@@ -63,7 +63,11 @@ Ziel: einmal die ganze Strecke Formular → Supabase → Vercel funktionierend s
 - ⬜ Schutz vor doppeltem Absenden (`client_request_id`, Teil des neuen Datenmodells)
 - ⬜ Spam-Schutz (Honeypot, ggf. Rate-Limit)
 - ✅ Automatische Tests (Vitest): Schema, Normalisierung, Telefonfeld, Tracking, Photon-Mapping
-- ⬜ Login und Dashboard im Planeco-Design
+- 🔄 Login und Dashboard im Planeco-Design (Branch `feat/dashboard-redesign`)
+  - ✅ Inbox, Kontaktliste, Anfragekarte (sofort speichern), Prüfliste
+  - ✅ Analyse: Kacheln und Vergleichstabelle Kanal → Kampagne mit Quote
+  - ⬜ Analyse-Diagramme
+  - ⬜ Login-Seite
 
 ## Backlog
 

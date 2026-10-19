@@ -4,6 +4,16 @@ Laufendes Log für alle, die am Projekt arbeiten (Menschen und Agents). Neueste 
 
 ## Änderungslog
 
+### 2026-10-19 – Dashboard-Redesign, Schritt 7: Analyse
+- Neue Seite `/admin/analyse` (Case Pflicht 6), in der Kopfzeile als „Analyse“. Filter: Zeitraum (7/14/30 Tage, Gesamt = Standard, Von/Bis), Kanal, Kampagne.
+- Kacheln: Anfragen (± Vorperiode, „N in Prüfung“), Qualifiziert (Quote der bewerteten), „Meiste Anfragen“ (umbenannt von „Stärkste Plattform“, weil es die Menge misst),
+  Kampagnen mit Namen (+ N ohne Kampagne).
+- **Kern:** Vergleichstabelle Kanal → Kampagnen mit Anfragen, mit Ergebnis, qualifiziert, nicht qualifiziert, nicht erreicht und Quote (qualifiziert ÷ mit Ergebnis);
+  unter 5 bewerteten grau mit „wenig Daten“. Fußnote: ohne Werbekosten keine Kosten pro Anfrage.
+- `lib/analyse.ts`: Tage nach Berliner Zeit (auch über die Zeitumstellung getestet), Kanal über `lib/channel.ts` (Google-/Meta-Klick ohne UTM richtig zugeordnet).
+  Gezählt wird pro Anfrage; Prüffälle und nicht verarbeitete Eingänge noch nicht.
+- Tests: 165. Lokal mit Beispieldaten geprüft. **Nicht geprüft:** gegen Supabase. Diagramme folgen (optional) in Schritt 8.
+
 ### 2026-10-19 – Dashboard-Redesign, Schritt 6: Prüfliste
 - `/admin/review` im Planeco-Design (`components/dashboard/ReviewView.tsx`, `ReviewCase.tsx`): links die neue Eingabe mit Herkunft, rechts die Kandidaten mit
   „Telefon/Mail/Name gleich/anders“, abweichende Werte hervorgehoben, Verlauf, Zuständig; Namenswahl nur bei abweichendem Namen.

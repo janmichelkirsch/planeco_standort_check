@@ -13,4 +13,5 @@ Zusätzlich lässt die Datenbank per RLS nur eingeloggte Nutzer lesen (`supabase
   Über die Datenbankfunktionen aus `004` mit dem Session-Client; Aufruf aus Client Components, Rückgabe statt Redirect, danach `refresh()`.
 - `review/page.tsx` – Prüfliste `/admin/review` im Planeco-Design (`components/dashboard/ReviewView.tsx`): Eingänge mit `needs_review`, je Fall die möglichen Kontakte (neu berechnet) mit Begründung, Kontaktdaten und Verlauf.
 - `review/actions.ts` – Server Action `resolveReview`: „Diesem Kontakt zuordnen“ (Name behalten oder übernehmen) bzw. „Neuen Kontakt anlegen“ über `resolve_intake_review` mit dem Session-Client. Rückmeldung per `?result=…`, „Bereits bearbeitet“ bei gleichzeitigem Klick.
+- `analyse/page.tsx` – Analyse `/admin/analyse` (siehe [`analyse/README.md`](analyse/README.md)).
 - `export/route.ts` – `GET /admin/export`: alle Anfragen als CSV, neueste zuerst, eine Zeile pro Anfrage plus Eingänge in Prüfung / nicht verarbeitet (Spalte „Verarbeitung“). Ohne Login `401`.

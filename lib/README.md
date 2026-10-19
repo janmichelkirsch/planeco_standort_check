@@ -24,6 +24,8 @@ Logik und Anbindung externer Dienste, ohne UI.
 - `dashboard-forms.ts` – Formulare des Dashboards prüfen (UUIDs, erlaubte Werte, nur geänderte Felder), Rücksprung-URL nur aus geprüften Werten, Rückmeldungen;
   Prüfungen für die Actions aus Client Components (`checkOwnerId`, `checkName`, `checkSubmissionPatch`) und `ActionResult`.
 - `dashboard-data.ts` – Laden für Dashboard und Export über den Session-Client (RLS), seitenweise à 1000.
+- `analyse.ts` – Auswertung ohne Datenbank: Tag nach Berliner Zeit, Zeilen aus Anfragen, Zeitraum/Kanal/Kampagne filtern, Vorperiode, Zählen,
+  Quote (qualifiziert ÷ mit Ergebnis, „wenig Daten“ unter 5), Vergleichstabelle Kanal → Kampagne, Kacheln, Filter-Optionen.
 - `channel.ts` – Herkunft einer Anfrage: Kanal (UTM, sonst `gclid` → Google Ads, `fbclid` → Meta, sonst Verweis/Direkt), Kampagne („Kampagne unbekannt“ bei Klick ohne UTM), Klick-ID, Verweis-Host.
 - `review.ts` – Prüfliste ohne Datenbank: Prüffall aus dem Eingang bauen (inkl. Herkunft), Verlauf und bekannte Mails/Telefone je Kandidat, Formular der Entscheidung prüfen (UUIDs, Aktion, Namenswahl), Fehlercodes → Rückmeldung.
 - `review-data.ts` – lädt Prüffälle, Kandidaten (`intake_candidates`), deren Verlauf und Kontaktdaten über den Session-Client.

@@ -8,7 +8,8 @@ Interaktive Teile (Menüs, Popups, sofortiges Speichern) sind Client Components 
   `Avatar` (Farbe nach Position im Team), `UnassignedPill`, `Progress`, `FeedbackLine`, `MailStatusBadge` (Tooltip mit Zeitpunkt/Fehler), `Tag`, `cardClass`, `linkCls`.
 - `Popover.tsx` – `Popover` (im Portal, schließt bei Klick daneben, Escape, Scrollen, beim Verstecken der Seite durch `<Activity>`),
   `Menu` (Pfeiltasten, Untermenüs) und `useAnchor()` für Öffnen/Schließen mit Fokus zurück.
-- `Shell.tsx` – Kopfzeile: Logo, Bereiche (`NavLinks.tsx`, aktiv nach Pfad), „Eingeloggt als …“, CSV-Export, Abmelden.
+- `analyse/` – Analyse-Seite (Kacheln, Vergleichstabelle Kanal → Kampagne), siehe [`analyse/README.md`](analyse/README.md).
+- `Shell.tsx` – Kopfzeile: Logo, Bereiche Inbox/Analyse (`NavLinks.tsx`, aktiv nach Pfad), „Eingeloggt als …“, CSV-Export, Abmelden.
 - `InboxView.tsx` – Inhalt der Inbox ohne Laden (Seite lädt, lokale Vorschau setzt Beispieldaten ein): Begrüßung, Hinweise, Reiter, Liste.
 - `Greeting.tsx` – Datum und Gruß in deutscher Zeit, „N Kontakte ohne Zuständigen · N offene Anfragen bei dir“ als Links in die Reiter.
 - `Notices.tsx` – Hinweis-Pills: Prüffälle → Prüfliste; nicht verarbeitete Eingänge + offene Adresssuchen → Popup mit „Alles erneut verarbeiten“.

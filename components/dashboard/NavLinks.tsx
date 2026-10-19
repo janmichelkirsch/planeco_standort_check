@@ -2,9 +2,12 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Inbox } from "@/components/icons";
+import { Chart, Inbox } from "@/components/icons";
 
-const NAV = [{ href: "/admin", label: "Inbox", Icon: Inbox, match: (p: string) => p === "/admin" || p.startsWith("/admin/review") }];
+const NAV = [
+  { href: "/admin", label: "Inbox", Icon: Inbox, match: (p: string) => p === "/admin" || p.startsWith("/admin/review") },
+  { href: "/admin/analyse", label: "Analyse", Icon: Chart, match: (p: string) => p.startsWith("/admin/analyse") },
+];
 
 /** Bereiche in der Kopfzeile. Aktiv nach Pfad (die Prüfliste gehört zur Inbox). */
 export function NavLinks() {

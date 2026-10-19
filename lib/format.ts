@@ -17,6 +17,11 @@ export const SUBMISSION_STATUS_LABEL = { open: "offen", contacted: "kontaktiert"
 
 export const OUTCOME_LABEL = { qualified: "qualifiziert", not_qualified: "nicht qualifiziert", unreachable: "nicht erreicht" } as const;
 
+/** Großgeschrieben für Badges und Auswahlfelder im Dashboard. */
+export const SUBMISSION_STATUS_TITLE = { open: "Offen", contacted: "Kontaktiert", completed: "Abgeschlossen" } as const;
+
+export const OUTCOME_TITLE = { qualified: "Qualifiziert", not_qualified: "Nicht qualifiziert", unreachable: "Nicht erreicht" } as const;
+
 export const MATCH_STATUS_LABEL = {
   auto_matched: "automatisch zugeordnet",
   manually_matched: "manuell zugeordnet",

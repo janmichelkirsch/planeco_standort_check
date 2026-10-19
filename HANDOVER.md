@@ -4,6 +4,14 @@ Laufendes Log für alle, die am Projekt arbeiten (Menschen und Agents). Neueste 
 
 ## Änderungslog
 
+### 2026-10-19 – Dashboard-Redesign, Schritt 1: Grundlagen
+- Branch `feat/dashboard-redesign` (von `feat/contact-data-model`). Plan liegt bei Michel (`~/Downloads/plan_dashboard_redesign.md`, nicht im Repo).
+- `app/globals.css`: Dashboard-Farben aus dem Figma-Entwurf (`coral-soft/strong/ink`, `ok`, `warn`, `danger-soft/line`, `shadow-card`), Formular unverändert.
+- `components/icons.tsx`: 20 Icons fürs Dashboard ergänzt. `components/dashboard/ui.tsx` (Knöpfe, Badges, Avatar, Fortschritt, Meldungen, Mailstatus),
+  `components/dashboard/Popover.tsx` (Popover, Menü mit Tastatur). `lib/format.ts`: großgeschriebene Labels für Status/Ergebnis.
+- Noch nicht eingebunden; das Dashboard sieht unverändert aus. Optik lokal in einer Vorschau mit Beispieldaten geprüft (nicht im Repo).
+- **Erkenntnis:** Tailwind 4 erzeugt keine Klassen für Dateien, die Git ignoriert (auch `.git/info/exclude`). Die lokale Vorschau nutzt daher nur Komponenten aus `components/`.
+
 ### 2026-10-17 – Schritt 9 vorbereitet (nicht ausgeführt)
 - `supabase/005_drop_leads.sql` liegt bereit, **nicht ausgeführt**. Kein Code liest oder schreibt `leads` mehr (geprüft per Suche).
 - `main` hat sich seit dem Abzweigen nicht bewegt, der Merge geht ohne Konflikte (Fast-Forward).

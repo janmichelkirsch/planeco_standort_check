@@ -3,11 +3,13 @@ import {
   addDays,
   berlinDay,
   compareTable,
+  cumulative,
   dayRange,
   filterOptions,
   filterRows,
   formatRate,
   kpis,
+  perDay,
   previousPeriod,
   qualifiedRate,
   tally,
@@ -121,5 +123,13 @@ describe("filterOptions", () => {
     const rows = [row({ channel: "Meta", campaign: "norden" }), row({ channel: "Google Ads", campaign: "hamburg" }), row({ channel: "Meta", campaign: "norden" })];
     expect(filterOptions(rows, "")).toEqual({ channels: ["Meta", "Google Ads"], campaigns: ["norden", "hamburg"] });
     expect(filterOptions(rows, "Google Ads").campaigns).toEqual(["hamburg"]);
+  });
+});
+
+describe("perDay / cumulative", () => {
+  it("zählt je Tag, auch Tage ohne Anfrage", () => {
+    const days = ["2026-10-14", "2026-10-15", "2026-10-16"];
+    expect(perDay([row({ day: "2026-10-14" }), row({ day: "2026-10-16" }), row({ day: "2026-10-16" }), row({ day: "2026-10-20" })], days)).toEqual([1, 0, 2]);
+    expect(cumulative([1, 0, 2])).toEqual([1, 1, 3]);
   });
 });

@@ -3,9 +3,12 @@
 import { useState } from "react";
 import { Chart } from "@/components/icons";
 import { CompareTable } from "@/components/dashboard/analyse/CompareTable";
+import { Insights } from "@/components/dashboard/analyse/Insights";
 import { Kpis } from "@/components/dashboard/analyse/Kpis";
+import { Segmented } from "@/components/dashboard/analyse/Segmented";
+import { Trend } from "@/components/dashboard/analyse/Trend";
 import { Select, cardClass } from "@/components/dashboard/ui";
-import { addDays, compareTable, dayRange, filterOptions, filterRows, kpis, previousPeriod, type AnalyseRow } from "@/lib/analyse";
+import { addDays, compareTable, dayRange, filterOptions, filterRows, kpis, perDay, previousPeriod, type AnalyseRow } from "@/lib/analyse";
 
 const PRESETS = [
   { id: "7", label: "7 Tage", days: 7 },
@@ -33,6 +36,7 @@ export function Analyse({ rows, today, pendingReview }: { rows: AnalyseRow[]; to
   const items = filterRows(rows, filter);
   const isAll = activePreset === "all";
   const options = filterOptions(rows, channel);
+  const days = dayRange(from, to);
 
   return (
     <div>
@@ -96,40 +100,17 @@ export function Analyse({ rows, today, pendingReview }: { rows: AnalyseRow[]; to
         </div>
       ) : (
         <div className="mt-6 space-y-6">
-          <Kpis k={kpis(items, isAll ? null : previousPeriod(rows, filter))} days={dayRange(from, to).length} pendingReview={pendingReview} />
+          <Kpis
+            k={kpis(items, isAll ? null : previousPeriod(rows, filter))}
+            days={days.length}
+            pendingReview={pendingReview}
+            spark={{ total: perDay(items, days), qualified: perDay(items.filter((r) => r.outcome === "qualified"), days) }}
+          />
           <CompareTable table={compareTable(items)} />
+          <Trend rows={items} days={days} />
+          <Insights rows={items} />
         </div>
       )}
-    </div>
-  );
-}
-
-function Segmented<T extends string>({
-  label,
-  value,
-  onChange,
-  options,
-}: {
-  label: string;
-  value: T | undefined;
-  onChange: (v: T) => void;
-  options: { id: T; label: string }[];
-}) {
-  return (
-    <div role="group" aria-label={label} className="inline-flex h-11 gap-0.5 rounded-xl bg-sage-deep p-1">
-      {options.map((o) => (
-        <button
-          key={o.id}
-          type="button"
-          aria-pressed={o.id === value}
-          onClick={() => onChange(o.id)}
-          className={`rounded-lg px-3.5 text-[13px] font-semibold whitespace-nowrap transition-colors focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-forest ${
-            o.id === value ? "bg-white text-forest shadow-card" : "text-forest-soft hover:text-forest"
-          }`}
-        >
-          {o.label}
-        </button>
-      ))}
     </div>
   );
 }

@@ -166,3 +166,18 @@ export function filterOptions(rows: AnalyseRow[], channel: string) {
     campaigns: count(rows.filter((r) => !channel || r.channel === channel).map((r) => r.campaign)),
   };
 }
+
+/* ---------- Verlauf ---------- */
+
+/** Anzahl je Tag in `days` (gleiche Reihenfolge). */
+export function perDay(rows: Pick<AnalyseRow, "day">[], days: string[]): number[] {
+  const counts = new Map<string, number>();
+  for (const r of rows) counts.set(r.day, (counts.get(r.day) ?? 0) + 1);
+  return days.map((d) => counts.get(d) ?? 0);
+}
+
+/** Laufende Summe: [1, 0, 2] → [1, 1, 3]. */
+export function cumulative(values: number[]): number[] {
+  let sum = 0;
+  return values.map((v) => (sum += v));
+}

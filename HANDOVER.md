@@ -4,6 +4,12 @@ Laufendes Log für alle, die am Projekt arbeiten (Menschen und Agents). Neueste 
 
 ## Änderungslog
 
+### 2026-10-19 – Dashboard-Redesign, Schritt 8: Analyse-Diagramme
+- Unter der Vergleichstabelle: „Anfragen im Verlauf“ (gesamt / nach Kanal / nach Kampagne, alle / nur qualifizierte, täglich / kumuliert, Linien ausblendbar),
+  „Rückmeldung“ (Ring) und „Datenqualität“ (Adresse mit allen fünf Zuständen, Bestätigungsmail, Herkunft). Sparklines in den Kacheln.
+- SVG ohne Bibliothek aus dem Figma-Entwurf übernommen (`components/dashboard/analyse/charts.tsx`), dazu eine unsichtbare Tabelle für Screenreader.
+- Tests: 166. Lokal mit Beispieldaten geprüft (1440 px).
+
 ### 2026-10-19 – Dashboard-Redesign, Schritt 7: Analyse
 - Neue Seite `/admin/analyse` (Case Pflicht 6), in der Kopfzeile als „Analyse“. Filter: Zeitraum (7/14/30 Tage, Gesamt = Standard, Von/Bis), Kanal, Kampagne.
 - Kacheln: Anfragen (± Vorperiode, „N in Prüfung“), Qualifiziert (Quote der bewerteten), „Meiste Anfragen“ (umbenannt von „Stärkste Plattform“, weil es die Menge misst),

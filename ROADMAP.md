@@ -66,7 +66,7 @@ Ziel: einmal die ganze Strecke Formular → Supabase → Vercel funktionierend s
 - 🔄 Login und Dashboard im Planeco-Design (Branch `feat/dashboard-redesign`)
   - ✅ Inbox, Kontaktliste, Anfragekarte (sofort speichern), Prüfliste
   - ✅ Analyse: Kacheln und Vergleichstabelle Kanal → Kampagne mit Quote
-  - ⬜ Analyse-Diagramme
+  - ✅ Analyse-Diagramme (Verlauf, Rückmeldung, Datenqualität)
   - ⬜ Login-Seite
 
 ## Backlog

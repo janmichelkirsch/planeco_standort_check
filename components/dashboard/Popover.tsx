@@ -29,7 +29,11 @@ export function Popover({
   useLayoutEffect(() => {
     const r = anchor.getBoundingClientRect();
     const width = ref.current?.offsetWidth ?? 0;
-    setPos({ top: r.bottom + 6, left: Math.max(12, Math.min(r.left, window.innerWidth - width - 12)) });
+    const height = ref.current?.offsetHeight ?? 0;
+    // Unten kein Platz (letzte Zeilen der Liste) → über dem Auslöser öffnen.
+    const below = r.bottom + 6;
+    const top = below + height > window.innerHeight - 12 && r.top - height - 6 > 12 ? r.top - height - 6 : below;
+    setPos({ top, left: Math.max(12, Math.min(r.left, window.innerWidth - width - 12)) });
   }, [anchor]);
 
   // Cache Components halten verlassene Seiten versteckt am Leben (<Activity>); ein offenes Menü soll dabei zugehen.

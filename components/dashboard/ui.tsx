@@ -262,5 +262,9 @@ export function Tag({ children, className = "" }: { children: ReactNode; classNa
   );
 }
 
+/** Spalten der Kontaktliste (Kopf und Zeilen): Kontakt, Erreichbar, Zuständig, Fortschritt, Neueste Anfrage, Pfeil. */
+export const CONTACT_COLS =
+  "grid grid-cols-[minmax(0,1.6fr)_minmax(0,1.2fr)_minmax(0,1.5fr)_minmax(0,0.95fr)_minmax(0,0.9fr)_1.25rem] items-center gap-6";
+
 /** Weiße Karte mit Schatten, wie Liste, Prüffall und Analyse-Kacheln im Entwurf. */
 export const cardClass = "rounded-2xl bg-white shadow-card ring-1 ring-line-soft";

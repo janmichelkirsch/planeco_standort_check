@@ -4,6 +4,18 @@ Laufendes Log für alle, die am Projekt arbeiten (Menschen und Agents). Neueste 
 
 ## Änderungslog
 
+### 2026-10-19 – Dashboard-Redesign, Schritt 4: Kontaktliste
+- Neue Liste im Planeco-Design (`components/dashboard/ContactTable.tsx`, `ContactRow.tsx`): Spalten Kontakt, Erreichbar (Telefon formatiert + Mail der neuesten Anfrage),
+  Zuständig, Fortschritt (Symbol pro Anfrage), Neueste Anfrage; Sortier-Links wie bisher. Warn-Symbol bei Mailfehler oder Adresse nicht gefunden/nicht nachschlagbar.
+- Zuständig-Menü in der Zeile (mit Michel): genau eine Person; ohne Zuständigen „Ich übernehme“ (koralle) oder zuweisen, sonst ändern oder freigeben.
+  Kein „X“ am Chip (versehentliches Freigeben). Rückmeldung mit Namen, danach bleibt der Kontakt per `keep` sichtbar.
+- „Automatisch zugeordnet“ getrennt: Ketten-Symbol in der Zeile = Person wiedererkannt; im aufgeklappten Kontakt „Neue Anfragen dieser Person landen automatisch bei …“.
+  „Name bearbeiten“ behält den Speichern-Knopf (Texteingabe).
+- Die Anfragen im aufgeklappten Kontakt sind noch die alten Karten (folgt in Schritt 5). Entfernt: `ContactList.tsx`, `ContactActions.tsx`, `SortableHeader.tsx`.
+- **Gefunden und behoben:** Konstanten aus `"use client"`-Dateien kommen auf dem Server als Funktion an (Spalten-Raster fehlte im Kopf) → nach `ui.tsx`.
+  Menü in den letzten Zeilen ragte aus dem Bildschirm → öffnet dann nach oben. Meldung oben war beim Arbeiten weiter unten nicht sichtbar → bleibt beim Scrollen stehen.
+- Optik und Menüs lokal geprüft (1440 px, Fehlerfall ohne Datenbank). **Nicht geprüft:** Übernehmen/Zuweisen gegen Supabase.
+
 ### 2026-10-19 – Dashboard-Redesign, Schritt 3: Actions mit Rückgabewert
 - Neue Server Actions für Client Components (`app/admin/actions.ts`): `claimContactAction`, `setContactOwnerAction`, `renameContactAction`, `saveSubmissionAction`.
   Gleiche Datenbankfunktionen wie bisher, aber Ergebnis statt Redirect, danach `refresh()`. Eingaben werden geprüft (`lib/dashboard-forms.ts`).

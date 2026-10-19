@@ -1,7 +1,9 @@
-import { ContactList } from "@/components/ContactList";
+import { SubmissionCard } from "@/components/SubmissionCard";
+import { ContactTable } from "@/components/dashboard/ContactTable";
 import { EmptyState } from "@/components/dashboard/EmptyState";
 import { FeedbackProvider } from "@/components/dashboard/Feedback";
 import { Greeting } from "@/components/dashboard/Greeting";
+import { InboxProvider } from "@/components/dashboard/InboxContext";
 import { Notices } from "@/components/dashboard/Notices";
 import { Tabs } from "@/components/dashboard/Tabs";
 import { FeedbackLine, type Feedback } from "@/components/dashboard/ui";
@@ -46,30 +48,38 @@ export function InboxView({ now, displayName, me, members, submissions, intakes,
   const { needsReview, unprocessed } = summarizeIntakes(intakes, now);
 
   return (
-    <FeedbackProvider>
-      {message && (
-        <div className="mb-6">
-          <FeedbackLine feedback={message} />
-        </div>
-      )}
-      <div className="flex items-end justify-between gap-8">
-        <Greeting
-          now={now}
-          name={displayName}
-          unassigned={counts.unassigned}
-          myOpen={countMyOpen(submissions, me)}
-          hasData={groups.length > 0}
-        />
-        <Notices needsReview={needsReview} unprocessed={unprocessed} geocodeOpen={countOpenGeocoding(submissions, now)} />
-      </div>
-      <Tabs current={view} counts={counts} sort={sort} visible={visible.length} />
-      <div className="mt-4">
-        {visible.length === 0 ? (
-          <EmptyState view={view} noData={groups.length === 0} unassigned={counts.unassigned} />
-        ) : (
-          <ContactList groups={visible} members={members} sort={sort} view={view} openContactId={openContactId} />
+    <InboxProvider value={{ view, sort, me, members }}>
+      <FeedbackProvider>
+        {message && (
+          <div className="mb-6">
+            <FeedbackLine feedback={message} />
+          </div>
         )}
-      </div>
-    </FeedbackProvider>
+        <div className="flex items-end justify-between gap-8">
+          <Greeting
+            now={now}
+            name={displayName}
+            unassigned={counts.unassigned}
+            myOpen={countMyOpen(submissions, me)}
+            hasData={groups.length > 0}
+          />
+          <Notices needsReview={needsReview} unprocessed={unprocessed} geocodeOpen={countOpenGeocoding(submissions, now)} />
+        </div>
+        <Tabs current={view} counts={counts} sort={sort} visible={visible.length} />
+        <div className="mt-4">
+          {visible.length === 0 ? (
+            <EmptyState view={view} noData={groups.length === 0} unassigned={counts.unassigned} />
+          ) : (
+            <ContactTable
+              groups={visible}
+              sort={sort}
+              view={view}
+              openContactId={openContactId}
+              renderSubmission={(s, group) => <SubmissionCard submission={s} contact={group.contact} members={members} view={view} sort={sort} />}
+            />
+          )}
+        </div>
+      </FeedbackProvider>
+    </InboxProvider>
   );
 }

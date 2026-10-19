@@ -13,7 +13,8 @@ export function FeedbackProvider({ children }: { children: ReactNode }) {
   return (
     <FeedbackContext.Provider value={setFeedback}>
       {feedback && (
-        <div className="mb-6">
+        // Sticky: Aktionen passieren oft weit unten in der Liste – die Meldung bleibt trotzdem sichtbar.
+        <div className="sticky top-4 z-40 mb-6 rounded-xl shadow-card">
           <FeedbackLine feedback={feedback} onDismiss={() => setFeedback(null)} />
         </div>
       )}

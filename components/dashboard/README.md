@@ -14,4 +14,10 @@ Interaktive Teile (Menüs, Popups, sofortiges Speichern) sind Client Components 
 - `Notices.tsx` – Hinweis-Pills: Prüffälle → Prüfliste; nicht verarbeitete Eingänge + offene Adresssuchen → Popup mit „Alles erneut verarbeiten“.
 - `Tabs.tsx` – Reiter Offen / Nicht zugewiesen / Meine / Alle mit Anzahl (koralle, solange jemand nicht zugewiesen ist).
 - `EmptyState.tsx` – leere Liste je Reiter bzw. „Noch keine Anfragen“.
-- `Feedback.tsx` – `FeedbackProvider`/`useFeedback`: Meldung oben nach einer Aktion, schließbar.
+- `Feedback.tsx` – `FeedbackProvider`/`useFeedback`: Meldung oben nach einer Aktion (bleibt beim Scrollen sichtbar), schließbar.
+- `InboxContext.tsx` – `InboxProvider`/`useInbox` (Ansicht, Sortierung, ich, Team) und `useInboxAction` (Action ausführen, Rückmeldung, Kontakt per `keep`/`open` merken).
+- `ContactTable.tsx` – Kontaktliste: Kopf mit Sortier-Links (`SortHeader.tsx`), eine Zeile pro Kontakt; unter 1024 px scrollt sie in sich.
+- `ContactRow.tsx` – Zeile (Name, Hinweis-Symbol, „N Anfragen“ + Symbol „automatisch wiedererkannt“, Telefon/Mail, Zuständig, Fortschritt, neueste Anfrage),
+  aufklappbar; koralle Leiste ohne Zuständigen. Klicks auf Telefon, Mail und Menü klappen nicht auf.
+- `AssigneeMenu.tsx` – genau ein Zuständiger: ohne → „Ich übernehme“ / „Jemand anderem zuweisen“; mit → „Zuständig ändern“ / „Freigeben“. Kein „X“ am Chip.
+- `ContactBar.tsx` – im aufgeklappten Kontakt: „Neue Anfragen dieser Person landen automatisch bei …“ und „Name bearbeiten“.

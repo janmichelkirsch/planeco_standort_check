@@ -108,7 +108,7 @@ Laufendes Log für alle, die am Projekt arbeiten (Menschen und Agents). Neueste 
 - Tests: 133. Optik lokal mit Beispieldaten (1440 px). **Nicht geprüft:** gegen Supabase.
 
 ### 2026-10-19 – Dashboard-Redesign, Schritt 1: Grundlagen
-- Branch `feat/dashboard-redesign` (von `feat/contact-data-model`). Plan liegt bei Michel (`~/Downloads/plan_dashboard_redesign.md`, nicht im Repo).
+- Branch `feat/dashboard-redesign` (von `feat/contact-data-model`).
 - `app/globals.css`: Dashboard-Farben aus dem Figma-Entwurf (`coral-soft/strong/ink`, `ok`, `warn`, `danger-soft/line`, `shadow-card`), Formular unverändert.
 - `components/icons.tsx`: 20 Icons fürs Dashboard ergänzt. `components/dashboard/ui.tsx` (Knöpfe, Badges, Avatar, Fortschritt, Meldungen, Mailstatus),
   `components/dashboard/Popover.tsx` (Popover, Menü mit Tastatur). `lib/format.ts`: großgeschriebene Labels für Status/Ergebnis.

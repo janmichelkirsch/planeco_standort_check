@@ -4,6 +4,14 @@ Laufendes Log für alle, die am Projekt arbeiten (Menschen und Agents). Neueste 
 
 ## Änderungslog
 
+### 2026-10-19 – Nach dem Merge: Farben live, Analyse, Mail-Umbruch
+- **Gefunden:** Live fehlten alle neuen Dashboard-Farben (`ok`, `warn`, `coral-strong`, `shadow-card` …), lokal waren sie da. Das CSS auf Vercel hatte die neuen Klassen,
+  aber ein altes Tailwind-Theme aus `app/globals.css` – der Turbopack-Build-Cache hat eine alte Fassung übernommen. Folge u. a.: Datenqualität ohne Balken und Punkte.
+  Behoben mit `experimental.turbopackFileSystemCacheForBuild: false` (`next.config.ts`); Builds rechnen dadurch jedes Mal neu.
+- Analyse: Vergleichstabelle „Welche Kanäle und Kampagnen etwas taugen“ entfernt (mit Michel). „Rückmeldung“ rechnet Ring und Prozente nur über bewertete Anfragen,
+  passend zur Quote in der Mitte (vorher 100 % in der Mitte, 20 % in der Legende); „Noch kein Ergebnis“ steht getrennt darunter.
+- Danke-Seite (Handy): Die Mail-Adresse brach mitten im Wort um (`break-all`); jetzt rutscht sie als Ganzes in die nächste Zeile.
+
 ### 2026-10-19 – Dashboard-Redesign abgeschlossen (Branch `feat/dashboard-redesign`, nicht gepusht)
 - Umgesetzt nach dem mit Michel abgestimmten Plan (liegt bei ihm, nicht im Repo), Vorlage Figma Make „Formular im Planeko Design“, Version 3.
   Inbox (Begrüßung, Hinweise, Reiter, Kontaktliste mit Zuständig-Menü, Anfragekarte mit sofortigem Speichern), Prüfliste und Analyse im Planeco-Design.

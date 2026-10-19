@@ -77,7 +77,7 @@ export function MobileForm({ form: f }: { form: LeadFormState }) {
             </h1>
             <p className="mt-3 text-[15px] leading-relaxed text-forest-soft">
               Ihre Anfrage ist bei uns eingegangen. Unser Team meldet sich bei Ihnen unter{" "}
-              <span className="font-medium break-all text-forest">{lead.email}</span>.
+              <span className="font-medium break-words text-forest">{lead.email}</span>.
             </p>
             <div className="mt-7 flex items-center gap-3 rounded-2xl bg-white p-4">
               <Pin className="size-5 shrink-0 text-forest-soft" />

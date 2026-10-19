@@ -8,12 +8,7 @@ import {
   checkOwnerId,
   checkSubmissionPatch,
   dashboardResultForError,
-  parseClaimForm,
-  parseContactForm,
-  parseSubmissionForm,
-  returnUrl,
   type ActionResult,
-  type DashboardResult,
   type SubmissionPatch,
 } from "@/lib/dashboard-forms";
 import { isUuid } from "@/lib/dashboard";
@@ -63,73 +58,8 @@ function logRpcError(where: string, error: RpcError) {
   if (error) console.error(`[admin] ${where} fehlgeschlagen`, error.code, error.message);
 }
 
-/** „Übernehmen“: setzt den eigenen Namen als Zuständigen, nur wenn noch niemand zuständig ist. */
-export async function claimContact(formData: FormData) {
-  const { supabase, userId } = await requireSalesUser();
-  const request = parseClaimForm(formData);
-  if (!request) redirect(returnUrl(formData, "invalid"));
-
-  const { data: owner, error } = await supabase.rpc("claim_contact", { p_contact_id: request.contactId });
-  logRpcError("Übernehmen", error);
-  let result: DashboardResult = error ? dashboardResultForError(error.code) : "claimed";
-  if (!error) {
-    const { data: me } = await supabase.from("team_members").select("id").eq("auth_user_id", userId).maybeSingle();
-    if (owner !== me?.id) result = "claim_lost";
-  }
-  redirect(returnUrl(formData, result, request.contactId));
-}
-
-/** Zuständigen ändern/freigeben und Kontaktnamen korrigieren. */
-export async function updateContact(formData: FormData) {
-  const { supabase } = await requireSalesUser();
-  const changes = parseContactForm(formData);
-  if (!changes) redirect(returnUrl(formData, "invalid"));
-
-  let error: RpcError = null;
-  if (changes.owner !== undefined) {
-    ({ error } = await supabase.rpc("set_contact_owner", { p_contact_id: changes.contactId, p_owner_id: changes.owner }));
-    logRpcError("Zuständigen ändern", error);
-  }
-  if (!error && changes.name) {
-    ({ error } = await supabase.rpc("update_contact_name", {
-      p_contact_id: changes.contactId,
-      p_first_name: changes.name.first,
-      p_last_name: changes.name.last,
-    }));
-    logRpcError("Namen ändern", error);
-  }
-  const changed = changes.owner !== undefined || changes.name !== undefined;
-  redirect(returnUrl(formData, error ? dashboardResultForError(error.code) : changed ? "saved" : "unchanged", changes.contactId));
-}
-
-/** Status, Ergebnis und abweichenden Bearbeiter einer Anfrage speichern. */
-export async function updateSubmission(formData: FormData) {
-  const { supabase } = await requireSalesUser();
-  const changes = parseSubmissionForm(formData);
-  if (!changes) redirect(returnUrl(formData, "invalid"));
-
-  const calls: [string, string, Record<string, unknown>][] = [];
-  if (changes.status !== undefined) {
-    calls.push(["Status", "set_submission_status", { p_submission_id: changes.submissionId, p_status: changes.status }]);
-  }
-  if (changes.outcome !== undefined) {
-    calls.push(["Ergebnis", "set_submission_outcome", { p_submission_id: changes.submissionId, p_outcome: changes.outcome }]);
-  }
-  if (changes.override !== undefined) {
-    calls.push(["Bearbeiter", "set_submission_override", { p_submission_id: changes.submissionId, p_team_member_id: changes.override }]);
-  }
-
-  let error: RpcError = null;
-  for (const [label, fn, args] of calls) {
-    ({ error } = await supabase.rpc(fn, args));
-    logRpcError(label, error);
-    if (error) break;
-  }
-  redirect(returnUrl(formData, error ? dashboardResultForError(error.code) : calls.length ? "saved" : "unchanged", changes.contactId));
-}
-
-// ─── Dieselben Änderungen für Client Components: Rückgabe statt Redirect ─────
 // Die Prüfung im Browser ist Komfort; maßgeblich sind die Prüfungen hier und in den Datenbankfunktionen.
+// Rückgabe statt Redirect, danach `refresh()`, damit die Seite die neuen Daten zeigt.
 
 function failed(where: string, error: NonNullable<RpcError>): ActionResult {
   logRpcError(where, error);

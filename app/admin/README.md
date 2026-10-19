@@ -9,9 +9,8 @@ Zusätzlich lässt die Datenbank per RLS nur eingeloggte Nutzer lesen (`supabase
 - `page.tsx` – Kontaktorientierte Übersicht (`?view=open|unassigned|mine|all`, `?sort=latest|name|owner&dir=…`), Standard „Offen“, neueste zuerst.
   Hinweise auf Prüffälle/nicht verarbeitete Eingänge. Dynamische Teile (Login-Prüfung, Daten) liegen in `<Suspense>` (Cache Components).
 - `actions.ts` – Server Actions `logout`, `reprocessIntakesAction` („Erneut verarbeiten“: `process_intake` für `received`/`failed` und offene Adresssuchen, mit Secret Key nach Login-Prüfung; gibt ein Ergebnis zurück statt umzuleiten),
-  `claimContact`, `updateContact`, `updateSubmission` (über die Datenbankfunktionen aus `004` mit dem Session-Client; nur geänderte Felder; Rückmeldung per `?result=…&open=…`).
-  Für Client Components dieselben Änderungen mit Rückgabewert statt Redirect: `claimContactAction`, `setContactOwnerAction` (setzen/freigeben),
-  `renameContactAction`, `saveSubmissionAction` (Status, Ergebnis, Bearbeiter; nur übergebene Felder). Alle rufen `refresh()`.
+  `claimContactAction`, `setContactOwnerAction` (setzen/freigeben), `renameContactAction`, `saveSubmissionAction` (Status, Ergebnis, Bearbeiter; nur übergebene Felder).
+  Über die Datenbankfunktionen aus `004` mit dem Session-Client; Aufruf aus Client Components, Rückgabe statt Redirect, danach `refresh()`.
 - `review/page.tsx` – Prüfliste `/admin/review`: Eingänge mit `needs_review`, je Fall die möglichen Kontakte (neu berechnet) mit Begründung und Verlauf.
 - `review/actions.ts` – Server Action `resolveReview`: „Diesem Kontakt zuordnen“ (Name behalten oder übernehmen) bzw. „Neuen Kontakt anlegen“ über `resolve_intake_review` mit dem Session-Client. Rückmeldung per `?result=…`, „Bereits bearbeitet“ bei gleichzeitigem Klick.
 - `export/route.ts` – `GET /admin/export`: alle Anfragen als CSV, neueste zuerst, eine Zeile pro Anfrage plus Eingänge in Prüfung / nicht verarbeitet (Spalte „Verarbeitung“). Ohne Login `401`.

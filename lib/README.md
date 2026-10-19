@@ -24,6 +24,7 @@ Logik und Anbindung externer Dienste, ohne UI.
 - `dashboard-forms.ts` – Formulare des Dashboards prüfen (UUIDs, erlaubte Werte, nur geänderte Felder), Rücksprung-URL nur aus geprüften Werten, Rückmeldungen;
   Prüfungen für die Actions aus Client Components (`checkOwnerId`, `checkName`, `checkSubmissionPatch`) und `ActionResult`.
 - `dashboard-data.ts` – Laden für Dashboard und Export über den Session-Client (RLS), seitenweise à 1000.
+- `channel.ts` – Herkunft einer Anfrage: Kanal (UTM, sonst `gclid` → Google Ads, `fbclid` → Meta, sonst Verweis/Direkt), Kampagne („Kampagne unbekannt“ bei Klick ohne UTM), Klick-ID, Verweis-Host.
 - `review.ts` – Prüfliste ohne Datenbank: Prüffall aus dem Eingang bauen, Verlauf je Kandidat, Formular der Entscheidung prüfen (UUIDs, Aktion, Namenswahl), Fehlercodes → Rückmeldung.
 - `review-data.ts` – lädt Prüffälle und Kandidaten (`intake_candidates`) über den Session-Client.
 - `service-area.ts` – Einzugsgebiet: Liste der Bundesländer (alle 16), Status wird nur berechnet, nie gespeichert.

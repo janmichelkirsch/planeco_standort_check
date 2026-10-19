@@ -1,12 +1,11 @@
-import { SubmissionCard } from "@/components/SubmissionCard";
 import { ContactTable } from "@/components/dashboard/ContactTable";
 import { EmptyState } from "@/components/dashboard/EmptyState";
 import { FeedbackProvider } from "@/components/dashboard/Feedback";
 import { Greeting } from "@/components/dashboard/Greeting";
 import { InboxProvider } from "@/components/dashboard/InboxContext";
 import { Notices } from "@/components/dashboard/Notices";
+import { RequestCard } from "@/components/dashboard/RequestCard";
 import { Tabs } from "@/components/dashboard/Tabs";
-import { FeedbackLine, type Feedback } from "@/components/dashboard/ui";
 import {
   VIEWS,
   countMyOpen,
@@ -31,14 +30,13 @@ export type InboxData = {
   intakes: IntakeRef[];
   view: View;
   sort: Sort;
-  message: Feedback | null;
   /** Gerade bearbeiteter Kontakt: bleibt sichtbar und aufgeklappt, auch wenn er nicht mehr zum Reiter passt. */
   keepContactId: string | null;
   openContactId: string | null;
 };
 
 /** Inhalt der Inbox ohne Laden: Begrüßung, Hinweise, Reiter, Kontaktliste. Die Seite lädt, die lokale Vorschau setzt Beispieldaten ein. */
-export function InboxView({ now, displayName, me, members, submissions, intakes, view, sort, message, keepContactId, openContactId }: InboxData) {
+export function InboxView({ now, displayName, me, members, submissions, intakes, view, sort, keepContactId, openContactId }: InboxData) {
   const groups = groupByContact(submissions, members);
   const counts = Object.fromEntries(VIEWS.map((v) => [v, groups.filter((g) => matchesView(g, v, me)).length])) as Record<View, number>;
   const visible = sortGroups(
@@ -50,11 +48,6 @@ export function InboxView({ now, displayName, me, members, submissions, intakes,
   return (
     <InboxProvider value={{ view, sort, me, members }}>
       <FeedbackProvider>
-        {message && (
-          <div className="mb-6">
-            <FeedbackLine feedback={message} />
-          </div>
-        )}
         <div className="flex items-end justify-between gap-8">
           <Greeting
             now={now}
@@ -75,7 +68,8 @@ export function InboxView({ now, displayName, me, members, submissions, intakes,
               sort={sort}
               view={view}
               openContactId={openContactId}
-              renderSubmission={(s, group) => <SubmissionCard submission={s} contact={group.contact} members={members} view={view} sort={sort} />}
+              // Neueste zuerst; die Nummer zählt ab der ältesten („Anfrage 2 von 2“ = neueste).
+              renderSubmission={(s, group, i) => <RequestCard submission={s} index={group.total - i} total={group.total} />}
             />
           )}
         </div>

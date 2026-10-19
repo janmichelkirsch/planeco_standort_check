@@ -4,6 +4,16 @@ Laufendes Log für alle, die am Projekt arbeiten (Menschen und Agents). Neueste 
 
 ## Änderungslog
 
+### 2026-10-19 – Dashboard-Redesign, Schritt 5: Anfragekarte
+- `components/dashboard/RequestCard.tsx`: Anfrage im Planeco-Design. **Kein Speichern-Knopf** mehr (mit Michel): Status, Ergebnis und Bearbeiter speichern beim Ändern;
+  „Speichert … / Gespeichert / Nicht gespeichert“ in der Karte, bei Fehler springt das Feld zurück und oben erscheint eine Meldung.
+- Grundstück (`PlotInfo.tsx`) mit allen fünf Adress-Zuständen; „nur Ort ermittelt“ ohne Kartenlink (keine Koordinaten gespeichert), „Nachschlagen fehlgeschlagen“ mit Hinweis auf „Erneut verarbeiten“.
+- „Analytics“ (eingeklappt, Name mit Michel so belassen): Herkunft, Bestätigungsmail (Tooltip Zeitpunkt/Grund), Kontaktdaten formatiert, „eingegeben als …“.
+- `lib/channel.ts`: Kanal auch ohne UTM aus `gclid`/`fbclid` (Google-Autotagging), sonst Verweis/Direkt; „Kampagne unbekannt“ bei Klick ohne `utm_campaign`.
+- Entfernt: `SubmissionCard.tsx`, `DashboardParts.tsx`, `MailStatus.tsx`, die FormData-Actions `claimContact`/`updateContact`/`updateSubmission`, `returnUrl`, `parse*Form` samt Tests.
+  Das Dashboard braucht damit JavaScript (internes Werkzeug, mit Michel entschieden).
+- Tests: 155. Lokal geprüft: Fehlerfall beim Speichern, Adress-Zustände, Google-Klick ohne UTM. **Nicht geprüft:** erfolgreiches Speichern gegen Supabase.
+
 ### 2026-10-19 – Dashboard-Redesign, Schritt 4: Kontaktliste
 - Neue Liste im Planeco-Design (`components/dashboard/ContactTable.tsx`, `ContactRow.tsx`): Spalten Kontakt, Erreichbar (Telefon formatiert + Mail der neuesten Anfrage),
   Zuständig, Fortschritt (Symbol pro Anfrage), Neueste Anfrage; Sortier-Links wie bisher. Warn-Symbol bei Mailfehler oder Adresse nicht gefunden/nicht nachschlagbar.

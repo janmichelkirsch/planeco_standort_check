@@ -21,3 +21,7 @@ Interaktive Teile (Menüs, Popups, sofortiges Speichern) sind Client Components 
   aufklappbar; koralle Leiste ohne Zuständigen. Klicks auf Telefon, Mail und Menü klappen nicht auf.
 - `AssigneeMenu.tsx` – genau ein Zuständiger: ohne → „Ich übernehme“ / „Jemand anderem zuweisen“; mit → „Zuständig ändern“ / „Freigeben“. Kein „X“ am Chip.
 - `ContactBar.tsx` – im aufgeklappten Kontakt: „Neue Anfragen dieser Person landen automatisch bei …“ und „Name bearbeiten“.
+- `RequestCard.tsx` – eine Anfrage: „Anfrage i von n“ mit Zuordnungs-Symbol (neu / automatisch / manuell), Status, Ergebnis, Bearbeiter-Menü;
+  Grundstück; eingeklappt „Analytics“ (Herkunft, Bestätigungsmail, Kontaktdaten). Status/Ergebnis/Bearbeiter speichern sofort, bei Fehler springt das Feld zurück.
+- `PlotInfo.tsx` – Grundstück: Region, Einzugsgebiet, Zustand der Adresse (nur Ort / nicht gefunden / wird nachgeschlagen / fehlgeschlagen), Karte nur bei genauer Adresse.
+- `CampaignInfo.tsx` – Herkunft aus `lib/channel.ts`: Kanal, Kampagne, Klick-ID; ohne Kampagne „über {Host}“ / „direkt aufgerufen“.

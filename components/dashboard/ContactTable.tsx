@@ -13,7 +13,7 @@ type Props = {
   view: View;
   openContactId: string | null;
   /** Inhalt einer Anfrage im aufgeklappten Kontakt. */
-  renderSubmission: (submission: SubmissionRow, group: ContactGroup) => ReactNode;
+  renderSubmission: (submission: SubmissionRow, group: ContactGroup, index: number) => ReactNode;
 };
 
 /**
@@ -42,8 +42,8 @@ export function ContactTable({ groups, sort, view, openContactId, renderSubmissi
                   firstName={group.contact.first_name}
                   lastName={group.contact.last_name}
                 />
-                {group.submissions.map((s) => (
-                  <div key={s.id}>{renderSubmission(s, group)}</div>
+                {group.submissions.map((s, i) => (
+                  <div key={s.id}>{renderSubmission(s, group, i)}</div>
                 ))}
               </ContactRow>
             </li>

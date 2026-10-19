@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { parseResolveForm, resultForErrorCode, summarizeHistory, toReviewCase } from "@/lib/review";
+import { groupMethods, parseResolveForm, resultForErrorCode, summarizeHistory, toReviewCase } from "@/lib/review";
 
 const INTAKE = "11111111-2222-4333-8444-555555555555";
 const CONTACT = "aaaaaaaa-bbbb-4ccc-8ddd-eeeeeeeeeeee";
@@ -74,7 +74,8 @@ describe("toReviewCase", () => {
       ],
       summarizeHistory([{ contact_id: "c1", created_at: "2026-10-17T20:25:00Z", street: "Weidengrund", house_number: "48", postal_code: "33154", city: "Salzkotten" }]),
     );
-    expect(review).toMatchObject({ firstName: "Anna", address: "Weidengrund 48, 33154 Salzkotten", campaign: "test / branchtest" });
+    expect(review).toMatchObject({ firstName: "Anna", address: "Weidengrund 48, 33154 Salzkotten" });
+    expect(review.tracking).toEqual({ utm_source: "test", utm_medium: null, utm_campaign: "branchtest", gclid: null, fbclid: null, referrer: null });
     expect(review.candidates[0].history?.count).toBe(1);
   });
 });
@@ -82,5 +83,20 @@ describe("toReviewCase", () => {
 describe("resultForErrorCode", () => {
   it("ordnet die Fehlercodes aus SQL zu", () => {
     expect(["P0409", "P0401", "P0404", "P0422", undefined].map(resultForErrorCode)).toEqual(["conflict", "forbidden", "invalid", "invalid", "error"]);
+  });
+});
+
+describe("groupMethods", () => {
+  it("sammelt Mails und Telefone je Kontakt ohne Doppelungen", () => {
+    const m = groupMethods([
+      { contact_id: "c1", type: "phone", normalized_value: "+49402" },
+      { contact_id: "c1", type: "email", normalized_value: "b@x.de" },
+      { contact_id: "c1", type: "email", normalized_value: "a@x.de" },
+      { contact_id: "c1", type: "phone", normalized_value: "+49401" },
+      { contact_id: "c1", type: "phone", normalized_value: "+49401" },
+      { contact_id: "c2", type: "email", normalized_value: "c@x.de" },
+    ]);
+    expect(m.get("c1")).toEqual({ emails: ["a@x.de", "b@x.de"], phones: ["+49401", "+49402"] });
+    expect(m.get("c2")).toEqual({ emails: ["c@x.de"], phones: [] });
   });
 });

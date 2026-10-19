@@ -1,3 +1,5 @@
+import type { TrackingFields } from "@/lib/channel";
+
 /**
  * Prüfliste ohne Datenbank: Kandidaten mit Verlauf, Formular der Entscheidung, Rückmeldungen.
  * Spezifikation v3, §7.1. Die Daten lädt `lib/review-data.ts`.
@@ -17,6 +19,9 @@ export type Candidate = {
 
 export type CandidateHistory = { count: number; latestAt: string; latestAddress: string };
 
+/** Bekannte Mails und Telefonnummern eines Kandidaten (alle, nicht nur die passende). */
+export type CandidateMethods = { emails: string[]; phones: string[] };
+
 export type ReviewCase = {
   id: string;
   receivedAt: string;
@@ -25,9 +30,28 @@ export type ReviewCase = {
   email: string;
   phone: string;
   address: string;
-  campaign: string | null;
-  candidates: (Candidate & { history: CandidateHistory | null })[];
+  /** Herkunft aus dem Payload, für die Anzeige über `originOf` (gleich wie an der Anfrage). */
+  tracking: TrackingFields;
+  candidates: (Candidate & { history: CandidateHistory | null; methods: CandidateMethods })[];
 };
+
+type MethodRow = { contact_id: string; type: string; normalized_value: string };
+
+/** Mails und Telefonnummern je Kontakt, sortiert und ohne Doppelungen. */
+export function groupMethods(rows: MethodRow[]): Map<string, CandidateMethods> {
+  const result = new Map<string, CandidateMethods>();
+  for (const row of rows) {
+    const entry = result.get(row.contact_id) ?? { emails: [], phones: [] };
+    const list = row.type === "email" ? entry.emails : row.type === "phone" ? entry.phones : null;
+    if (list && !list.includes(row.normalized_value)) list.push(row.normalized_value);
+    result.set(row.contact_id, entry);
+  }
+  for (const entry of result.values()) {
+    entry.emails.sort();
+    entry.phones.sort();
+  }
+  return result;
+}
 
 type HistoryRow = { contact_id: string; created_at: string; street: string; house_number: string; postal_code: string; city: string };
 
@@ -60,9 +84,10 @@ export function toReviewCase(
   intake: { id: string; received_at: string; payload: Record<string, unknown>; normalized_email: string; normalized_phone: string },
   candidates: Candidate[],
   history: Map<string, CandidateHistory>,
+  methods: Map<string, CandidateMethods> = new Map(),
 ): ReviewCase {
   const p = intake.payload;
-  const campaign = [text(p, "utmSource"), text(p, "utmCampaign")].filter(Boolean).join(" / ");
+  const orNull = (key: string) => text(p, key) || null;
   return {
     id: intake.id,
     receivedAt: intake.received_at,
@@ -71,8 +96,19 @@ export function toReviewCase(
     email: intake.normalized_email,
     phone: intake.normalized_phone,
     address: `${text(p, "street")} ${text(p, "houseNumber")}, ${text(p, "postalCode")} ${text(p, "city")}`,
-    campaign: campaign || null,
-    candidates: candidates.map((c) => ({ ...c, history: history.get(c.contact_id) ?? null })),
+    tracking: {
+      utm_source: orNull("utmSource"),
+      utm_medium: orNull("utmMedium"),
+      utm_campaign: orNull("utmCampaign"),
+      gclid: orNull("gclid"),
+      fbclid: orNull("fbclid"),
+      referrer: orNull("referrer"),
+    },
+    candidates: candidates.map((c) => ({
+      ...c,
+      history: history.get(c.contact_id) ?? null,
+      methods: methods.get(c.contact_id) ?? { emails: [], phones: [] },
+    })),
   };
 }
 
@@ -113,7 +149,7 @@ export function parseResolveForm(form: FormLike): ResolveRequest | null {
 export const RESULT_MESSAGES = {
   attached: { tone: "ok", text: "Anfrage dem Kontakt zugeordnet." },
   created: { tone: "ok", text: "Neuer Kontakt angelegt. Er steht im Dashboard unter „Nicht zugewiesen“." },
-  conflict: { tone: "warn", text: "Diese Anfrage wurde gerade schon von jemand anderem bearbeitet." },
+  conflict: { tone: "warn", text: "Diese Anfrage wurde gerade schon von jemand anderem bearbeitet. Die Liste ist aktualisiert." },
   forbidden: { tone: "error", text: "Dein Login ist keinem Team-Mitglied zugeordnet. Bitte in team_members eintragen." },
   invalid: { tone: "error", text: "Die Auswahl war unvollständig. Bitte noch einmal versuchen." },
   error: { tone: "error", text: "Speichern fehlgeschlagen. Bitte noch einmal versuchen." },

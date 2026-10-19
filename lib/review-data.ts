@@ -1,6 +1,6 @@
 import "server-only";
 import type { SupabaseClient } from "@supabase/supabase-js";
-import { summarizeHistory, toReviewCase, type Candidate, type ReviewCase } from "@/lib/review";
+import { groupMethods, summarizeHistory, toReviewCase, type Candidate, type ReviewCase } from "@/lib/review";
 
 /**
  * Lädt die Prüffälle mit dem Session-Client. Kandidaten werden bei jedem Aufruf neu berechnet
@@ -33,5 +33,11 @@ export async function fetchReviewCases(supabase: SupabaseClient): Promise<Review
   if (historyError) throw historyError;
   const history = summarizeHistory(historyRows ?? []);
 
-  return intakes.map((intake, i) => toReviewCase(intake, candidatesByIntake[i], history));
+  const { data: methodRows, error: methodError } = contactIds.length
+    ? await supabase.from("contact_methods").select("contact_id, type, normalized_value").in("contact_id", contactIds)
+    : { data: [], error: null };
+  if (methodError) throw methodError;
+  const methods = groupMethods(methodRows ?? []);
+
+  return intakes.map((intake, i) => toReviewCase(intake, candidatesByIntake[i], history, methods));
 }

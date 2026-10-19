@@ -24,4 +24,7 @@ Interaktive Teile (Menüs, Popups, sofortiges Speichern) sind Client Components 
 - `RequestCard.tsx` – eine Anfrage: „Anfrage i von n“ mit Zuordnungs-Symbol (neu / automatisch / manuell), Status, Ergebnis, Bearbeiter-Menü;
   Grundstück; eingeklappt „Analytics“ (Herkunft, Bestätigungsmail, Kontaktdaten). Status/Ergebnis/Bearbeiter speichern sofort, bei Fehler springt das Feld zurück.
 - `PlotInfo.tsx` – Grundstück: Region, Einzugsgebiet, Zustand der Adresse (nur Ort / nicht gefunden / wird nachgeschlagen / fehlgeschlagen), Karte nur bei genauer Adresse.
+- `ReviewView.tsx` – Prüfliste ohne Laden: Rückmeldung aus `?result=`, Erklärung, Fälle, leerer Zustand.
+- `ReviewCase.tsx` – ein Prüffall: links die Eingabe, rechts die Kandidaten (Telefon/Mail/Name gleich oder anders, bekannte Nummern/Mails, Verlauf, Zuständig),
+  Namenswahl bei abweichendem Namen, „Diesem Kontakt zuordnen“ und „Neuen Kontakt anlegen“. Formulare mit Server Action, ohne JavaScript bedienbar.
 - `CampaignInfo.tsx` – Herkunft aus `lib/channel.ts`: Kanal, Kampagne, Klick-ID; ohne Kampagne „über {Host}“ / „direkt aufgerufen“.

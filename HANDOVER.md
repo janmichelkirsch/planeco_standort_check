@@ -4,6 +4,14 @@ Laufendes Log für alle, die am Projekt arbeiten (Menschen und Agents). Neueste 
 
 ## Änderungslog
 
+### 2026-10-19 – Dashboard-Redesign, Schritt 6: Prüfliste
+- `/admin/review` im Planeco-Design (`components/dashboard/ReviewView.tsx`, `ReviewCase.tsx`): links die neue Eingabe mit Herkunft, rechts die Kandidaten mit
+  „Telefon/Mail/Name gleich/anders“, abweichende Werte hervorgehoben, Verlauf, Zuständig; Namenswahl nur bei abweichendem Namen.
+- Neu: Die Kandidaten zeigen ihre bekannten Telefonnummern und Mails (aus `contact_methods`, wie im Entwurf), damit man die Abweichung sieht.
+- Gleichzeitig bearbeitet (`P0409`): gelbe Meldung „Diese Anfrage wurde gerade schon von jemand anderem bearbeitet. Die Liste ist aktualisiert.“ (mit Michel).
+- Herkunft der Prüffälle über `lib/channel.ts` (gleich wie an der Anfrage). Formulare bleiben Server Actions mit `?result=`. Entfernt: `ReviewCaseCard.tsx`.
+- Tests: 156. Optik lokal geprüft (ein, zwei, kein Kandidat; Meldungen). **Nicht geprüft:** Zuordnen gegen Supabase.
+
 ### 2026-10-19 – Dashboard-Redesign, Schritt 5: Anfragekarte
 - `components/dashboard/RequestCard.tsx`: Anfrage im Planeco-Design. **Kein Speichern-Knopf** mehr (mit Michel): Status, Ergebnis und Bearbeiter speichern beim Ändern;
   „Speichert … / Gespeichert / Nicht gespeichert“ in der Karte, bei Fehler springt das Feld zurück und oben erscheint eine Meldung.

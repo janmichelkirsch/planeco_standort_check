@@ -68,6 +68,7 @@ Ziel: einmal die ganze Strecke Formular → Supabase → Vercel funktionierend s
   - ✅ Analyse: Kacheln und Vergleichstabelle Kanal → Kampagne mit Quote
   - ✅ Analyse-Diagramme (Verlauf, Rückmeldung, Datenqualität)
   - ⬜ Login-Seite
+  - ⬜ Auf der Vercel-Vorschau gegen Supabase testen, dann zusammen mit `feat/contact-data-model` mergen
 
 ## Backlog
 

@@ -4,6 +4,27 @@ Laufendes Log für alle, die am Projekt arbeiten (Menschen und Agents). Neueste 
 
 ## Änderungslog
 
+### 2026-10-19 – Dashboard-Redesign abgeschlossen (Branch `feat/dashboard-redesign`, nicht gepusht)
+- Umgesetzt nach dem mit Michel abgestimmten Plan (liegt bei ihm, nicht im Repo), Vorlage Figma Make „Formular im Planeko Design“, Version 3.
+  Inbox (Begrüßung, Hinweise, Reiter, Kontaktliste mit Zuständig-Menü, Anfragekarte mit sofortigem Speichern), Prüfliste und Analyse im Planeco-Design.
+- Bewusste Entscheidungen (mit Michel): genau ein Zuständiger pro Kontakt + abweichender Bearbeiter pro Anfrage (kein „Team“ aus dem Entwurf);
+  „automatisch zugeordnet“ (Person wiedererkannt) getrennt von „neue Anfragen landen bei …“; kein Speichern-Knopf für Status/Ergebnis/Bearbeiter;
+  „Analytics“ bleibt der Name des eingeklappten Bereichs; „Meiste Anfragen“ statt „Stärkste Plattform“; nur Desktop (unter 1024 px scrollt die Tabelle in sich);
+  Hinweis „Login ohne Team-Mitglied“ entfällt; CSV-Export bleibt serverseitig.
+- Selbst entschieden: kein „X“ am Zuständigen-Chip (Freigeben nur im Menü); „Name bearbeiten“ behält den Speichern-Knopf; Prüfliste zeigt die bekannten
+  Nummern/Mails der Kandidaten; Meldungen bleiben beim Scrollen sichtbar; Menüs öffnen am unteren Rand nach oben.
+- Geprüft: Lint, 166 Tests, Build; Optik und Bedienung lokal mit Beispieldaten in einer temporären Vorschau (1440 px und 1024 px), inkl. Fehlerfällen ohne Datenbank.
+  Die Vorschau ist wieder gelöscht.
+- **Nicht geprüft:** alles gegen Supabase – Übernehmen/Zuweisen/Freigeben, Speichern von Status/Ergebnis/Bearbeiter, Namen ändern, Zuordnen in der Prüfliste,
+  „Erneut verarbeiten“, Laden der Kandidaten-Kontaktdaten, Analyse mit echten Daten. Nächster Schritt: Branch pushen und auf der Vercel-Vorschau testen (gleiche DB wie Live).
+- **Für die Notizen zur Abgabe:** Damit die Analyse Kampagnennamen zeigt, müssen die Anzeigen UTM-Parameter mitgeben – Meta unter „URL-Parameter“
+  (z. B. `utm_source=meta&utm_medium=paid_social&utm_campaign={{campaign.name}}`), Google Ads im „Suffix der finalen URL“
+  (z. B. `utm_source=google&utm_medium=cpc&utm_campaign={campaignid}`; Google setzt nur die ID ein). Ohne UTM zählt der Klick über `gclid`/`fbclid`
+  trotzdem zum richtigen Kanal („Kampagne unbekannt“). Ohne Werbekosten gibt es keine Kosten pro Anfrage, „taugt etwas“ = Quote qualifiziert.
+
+### 2026-10-19 – Fix: Kopfzeile bei 1024 px
+- „Standort-Check“ und „Eingeloggt als …“ brachen bei 1024 px um; jetzt ohne Umbruch.
+
 ### 2026-10-19 – Dashboard-Redesign, Schritt 8: Analyse-Diagramme
 - Unter der Vergleichstabelle: „Anfragen im Verlauf“ (gesamt / nach Kanal / nach Kampagne, alle / nur qualifizierte, täglich / kumuliert, Linien ausblendbar),
   „Rückmeldung“ (Ring) und „Datenqualität“ (Adresse mit allen fünf Zuständen, Bestätigungsmail, Herkunft). Sparklines in den Kacheln.
@@ -270,6 +291,11 @@ Laufendes Log für alle, die am Projekt arbeiten (Menschen und Agents). Neueste 
 - Lokal getestet: Suche, Übernahme in Felder, Validierungsfehler, Fehlerfall ohne Supabase-Keys.
 
 ## Offene Punkte / Probleme
+
+- **Dashboard-Redesign nicht gegen Supabase getestet** (Branch `feat/dashboard-redesign`, liegt auf `feat/contact-data-model`, das selbst noch nicht auf `main` ist).
+- **Dashboard braucht JavaScript** (Menüs, sofortiges Speichern). Die Prüfliste funktioniert weiter ohne.
+- **Login-Seite** ist noch nicht im Planeco-Design.
+- Analyse rechnet im Browser mit allen Anfragen; bei vielen tausend Anfragen besser serverseitig zählen (View/RPC).
 
 - **Zustellbarkeit:** Absender ist eine Freemail-Adresse (iCloud), Brevo warnt: kein eigenes DKIM, DMARC nicht erfüllbar.
   Mails können im Spam landen oder abgelehnt werden. Für den Livegang: eigene Domain mit SPF/DKIM/DMARC.

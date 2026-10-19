@@ -17,8 +17,6 @@ Das neue Dashboard im Planeco-Design liegt in [`dashboard/`](dashboard/README.md
 - `SubmissionCard.tsx` – eine Anfrage: Grundstück (Gemeinde/Kreis/Bundesland, Einzugsgebiet, Karte, Hinweis zum Nachschlagen), genutzte Nummer/Mail, Kampagne, Mailstatus;
   Formular für Status, Ergebnis und abweichenden Bearbeiter.
 - `DashboardParts.tsx` – kleine Bausteine: `Badge`, `Item`, `ReturnFields` (Ansicht/Sortierung nach dem Speichern), Klassen für Auswahl und Knöpfe.
-- `DashboardTabs.tsx` – Reiter Offen / Nicht zugewiesen / Meine / Alle mit Anzahl Kontakte.
-- `IntakeNotices.tsx` – Hinweise auf Prüffälle (Link „Jetzt prüfen“) und nicht verarbeitete Eingänge, Knopf „Erneut verarbeiten“ (Server Action).
 - `ReviewCaseCard.tsx` – ein Prüffall: Eingabe, Kandidaten mit „Telefon/Mail/Name gleich/anders“, Zuständigem und bisherigen Anfragen, Namenswahl bei abweichendem Namen, Knöpfe zuordnen / neu anlegen.
 - `SortableHeader.tsx` – klickbare Spaltenüberschrift im Dashboard: setzt `?view=…&sort=…&dir=…`, zweiter Klick dreht die Richtung um.
 - `icons.tsx` – Linien-Icons aus dem Figma-Entwurf (Formular: Pfeile, Lupe, Pin, Häkchen, Warnung, Stift, Spinner; Dashboard: Telefon, Mail, Sortierung, Menüs, Personen, Diagramm …).

@@ -48,7 +48,7 @@ async function ReviewContent({ searchParams }: { searchParams: SearchParams }) {
 
 export default function ReviewPage({ searchParams }: { searchParams: SearchParams }) {
   return (
-    <main className="mx-auto w-full max-w-4xl px-4 py-8">
+    <div className="max-w-4xl">
       <Link href="/admin" className="text-sm underline">
         ← Zurück zum Dashboard
       </Link>
@@ -56,6 +56,6 @@ export default function ReviewPage({ searchParams }: { searchParams: SearchParam
       <Suspense fallback={<p className="text-sm text-zinc-500">Lade …</p>}>
         <ReviewContent searchParams={searchParams} />
       </Suspense>
-    </main>
+    </div>
   );
 }

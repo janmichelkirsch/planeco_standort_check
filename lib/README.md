@@ -18,6 +18,7 @@ Logik und Anbindung externer Dienste, ohne UI.
 - `mail/` – Mailversand (Brevo, Vorlagen), siehe `mail/README.md`.
 - `supabase/` – Supabase-Clients, getrennt nach Zweck (siehe `supabase/README.md`).
 - `auth.ts` – `requireSalesUser()`: prüft den Login serverseitig und leitet sonst zu `/login` um. Liefert Client, E-Mail und Auth-ID.
+- `sales-context.ts` – `getSalesContext()`: Login + Team-Mitglieder einmal pro Anfrage (React `cache`), geteilt von Layout und Seite; liefert `me`, Anzeigenamen und Position im Team.
 - `dashboard.ts` – Dashboard-Logik ohne Datenbank: Anfragen nach Kontakt bündeln (Fortschritt, „auch …“, Auto-Match), Ansichten filtern, sortieren, URL-Parameter (Whitelist), Eingänge zusammenfassen.
 - `dashboard-forms.ts` – Formulare des Dashboards prüfen (UUIDs, erlaubte Werte, nur geänderte Felder), Rücksprung-URL nur aus geprüften Werten, Rückmeldungen.
 - `dashboard-data.ts` – Laden für Dashboard und Export über den Session-Client (RLS), seitenweise à 1000.
@@ -26,5 +27,5 @@ Logik und Anbindung externer Dienste, ohne UI.
 - `service-area.ts` – Einzugsgebiet: Liste der Bundesländer (alle 16), Status wird nur berechnet, nie gespeichert.
 - `export-rows.ts` – Spalten und Zeilen des CSV-Exports: eine Zeile pro Anfrage plus Eingänge in Prüfung / nicht verarbeitet.
 - `phone-format.ts` – E.164 lesbar formatieren (`+49 170 5551234`).
-- `format.ts` – Anzeige-Formate: Zeitstempel in deutscher Zeit (Europe/Berlin), Labels für Adressquelle, Mail, Status, Ergebnis, Zuordnung, Verarbeitung.
+- `format.ts` – Anzeige-Formate: Zeitstempel und ausgeschriebenes Datum in deutscher Zeit (Europe/Berlin), Gruß nach Uhrzeit, Labels für Adressquelle, Mail, Status, Ergebnis, Zuordnung, Verarbeitung.
 - `csv.ts` – CSV allgemein: Semikolon, UTF-8 mit BOM (Umlaute in Excel), Schutz gegen Formel-Injection (`'` vor = + - @).

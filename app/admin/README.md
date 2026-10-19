@@ -5,9 +5,10 @@ Internes Dashboard für das Sales-Team (`/admin`). Nur mit Login erreichbar.
 Schutz in zwei Schichten: `proxy.ts` leitet ohne Login zu `/login` um, `lib/auth.ts` prüft beim Laden der Daten erneut.
 Zusätzlich lässt die Datenbank per RLS nur eingeloggte Nutzer lesen (`supabase/004_contact_model.sql`).
 
+- `layout.tsx` – Rahmen für alle Seiten unter `/admin`: Kopfzeile (`components/dashboard/Shell.tsx`, Login in `<Suspense>`) und Inhaltsbreite.
 - `page.tsx` – Kontaktorientierte Übersicht (`?view=open|unassigned|mine|all`, `?sort=latest|name|owner&dir=…`), Standard „Offen“, neueste zuerst.
   Hinweise auf Prüffälle/nicht verarbeitete Eingänge. Dynamische Teile (Login-Prüfung, Daten) liegen in `<Suspense>` (Cache Components).
-- `actions.ts` – Server Actions `logout`, `reprocessIntakes` („Erneut verarbeiten“: `process_intake` für `received`/`failed`, mit Secret Key nach Login-Prüfung),
+- `actions.ts` – Server Actions `logout`, `reprocessIntakesAction` („Erneut verarbeiten“: `process_intake` für `received`/`failed` und offene Adresssuchen, mit Secret Key nach Login-Prüfung; gibt ein Ergebnis zurück statt umzuleiten),
   `claimContact`, `updateContact`, `updateSubmission` (über die Datenbankfunktionen aus `004` mit dem Session-Client; nur geänderte Felder; Rückmeldung per `?result=…&open=…`).
 - `review/page.tsx` – Prüfliste `/admin/review`: Eingänge mit `needs_review`, je Fall die möglichen Kontakte (neu berechnet) mit Begründung und Verlauf.
 - `review/actions.ts` – Server Action `resolveReview`: „Diesem Kontakt zuordnen“ (Name behalten oder übernehmen) bzw. „Neuen Kontakt anlegen“ über `resolve_intake_review` mit dem Session-Client. Rückmeldung per `?result=…`, „Bereits bearbeitet“ bei gleichzeitigem Klick.

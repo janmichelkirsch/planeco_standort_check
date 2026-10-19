@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
+  countMyOpen,
   countOpenGeocoding,
   groupByContact,
   matchesView,
@@ -216,5 +217,21 @@ describe("serviceAreaStatus", () => {
 
   it("lässt sich einschränken", () => {
     expect(serviceAreaStatus("Bayern", ["Hamburg", "Schleswig-Holstein"])).toBe("outside");
+  });
+});
+
+describe("countMyOpen", () => {
+  it("zählt offene Anfragen, die ich als Zuständiger oder per Override bearbeite", () => {
+    const mine = contact("c-mine", "A", "emily");
+    const other = contact("c-other", "B", "bjoern");
+    const rows = [
+      sub(mine), // zählt
+      sub(mine, { status: "completed", completed_at: "2026-10-17T10:00:00Z" }), // erledigt
+      sub(mine, { assigned_to_override: "bjoern" }), // bei Björn
+      sub(other, { assigned_to_override: "emily" }), // per Override bei mir
+      sub(other),
+    ];
+    expect(countMyOpen(rows, "emily")).toBe(2);
+    expect(countMyOpen(rows, null)).toBe(0);
   });
 });

@@ -195,3 +195,9 @@ export function countOpenGeocoding(
     (s) => s.geocode_status === "failed" || (s.geocode_status === "pending" && now.getTime() - Date.parse(s.created_at) > staleAfterMs),
   ).length;
 }
+
+/** Offene Anfragen, die ich tatsächlich bearbeite (als Zuständiger ohne Override oder per Override). Für „N offene Anfragen bei dir“. */
+export function countMyOpen(submissions: Pick<SubmissionRow, "status" | "assigned_to_override" | "contact">[], me: string | null): number {
+  if (me === null) return 0;
+  return submissions.filter((s) => isPending(s) && effectiveAssignee(s) === me).length;
+}

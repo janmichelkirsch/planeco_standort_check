@@ -98,3 +98,6 @@ export function dashboardResultForError(code: string | undefined): DashboardResu
   if (code === "P0404" || code === "P0422") return "invalid";
   return "error";
 }
+
+/** Rückgabe der Server Actions, die aus Client Components aufgerufen werden (kein Redirect). */
+export type ActionResult = { ok: boolean; result: DashboardResult };

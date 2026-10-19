@@ -32,8 +32,15 @@ export function Popover({
     setPos({ top: r.bottom + 6, left: Math.max(12, Math.min(r.left, window.innerWidth - width - 12)) });
   }, [anchor]);
 
-  // Cache Components halten verlassene Seiten versteckt am Leben (<Activity>). Ein offenes Menü soll dabei zugehen.
-  useLayoutEffect(() => () => onClose(false), [onClose]);
+  // Cache Components halten verlassene Seiten versteckt am Leben (<Activity>); ein offenes Menü soll dabei zugehen.
+  // Verzögert, weil StrictMode Effekte im Dev-Modus sofort ab- und wieder aufbaut – das darf das Menü nicht schließen.
+  const hideTimer = useRef<number | undefined>(undefined);
+  useLayoutEffect(() => {
+    window.clearTimeout(hideTimer.current);
+    return () => {
+      hideTimer.current = window.setTimeout(() => onClose(false), 0);
+    };
+  }, [onClose]);
 
   useEffect(() => {
     const down = (e: MouseEvent) => {

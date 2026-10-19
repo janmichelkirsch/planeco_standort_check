@@ -4,6 +4,16 @@ Laufendes Log für alle, die am Projekt arbeiten (Menschen und Agents). Neueste 
 
 ## Änderungslog
 
+### 2026-10-19 – Dashboard-Redesign, Schritt 2: Rahmen
+- `app/admin/layout.tsx`: Kopfzeile im Planeco-Design für alle `/admin`-Seiten (Logo, Inbox, „Eingeloggt als {Name aus team_members}“, CSV, Abmelden).
+  Login und Team einmal pro Anfrage über `lib/sales-context.ts` (React `cache`).
+- Begrüßung mit Datum/Gruß in Berliner Zeit und Links „N Kontakte ohne Zuständigen“ / „N offene Anfragen bei dir“ (`countMyOpen`).
+- Hinweis-Pills: „N Anfragen warten auf Prüfung“ → Prüfliste; „N nicht verarbeitet“ (Eingänge + Adresssuchen) → Popup mit Zusammenfassung und
+  „Alles erneut verarbeiten“ (`reprocessIntakesAction`, gibt Ergebnis zurück). Reiter und leere Zustände neu. Die Kontaktliste ist noch die alte.
+- Entfernt: `IntakeNotices.tsx`, `DashboardTabs.tsx`, die alte Action `reprocessIntakes`. Hinweis „Login ohne Team-Mitglied“ entfällt (mit Michel), wird nur geloggt.
+- **Gefunden und behoben:** Popover schloss sich im Dev-Modus sofort (StrictMode baut Effekte ab und auf); Schließen beim Verstecken der Seite jetzt verzögert.
+- Tests: 133. Optik lokal mit Beispieldaten (1440 px). **Nicht geprüft:** gegen Supabase.
+
 ### 2026-10-19 – Dashboard-Redesign, Schritt 1: Grundlagen
 - Branch `feat/dashboard-redesign` (von `feat/contact-data-model`). Plan liegt bei Michel (`~/Downloads/plan_dashboard_redesign.md`, nicht im Repo).
 - `app/globals.css`: Dashboard-Farben aus dem Figma-Entwurf (`coral-soft/strong/ink`, `ok`, `warn`, `danger-soft/line`, `shadow-card`), Formular unverändert.

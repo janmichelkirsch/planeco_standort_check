@@ -41,3 +41,27 @@ export const GEOCODE_STATUS_LABEL: Record<string, string> = {
   not_found: "Adresse nicht gefunden – Gemeinde/Bundesland unbekannt",
   failed: "Nachschlagen fehlgeschlagen – wird erneut versucht",
 };
+
+const berlinLongDate = new Intl.DateTimeFormat("de-DE", {
+  timeZone: "Europe/Berlin",
+  weekday: "long",
+  day: "numeric",
+  month: "long",
+  year: "numeric",
+});
+
+/** Datum in deutscher Zeit ausgeschrieben, z. B. "Montag, 19. Oktober 2026". */
+export function formatBerlinLongDate(date: Date): string {
+  return berlinLongDate.format(date);
+}
+
+const berlinHour = new Intl.DateTimeFormat("de-DE", { timeZone: "Europe/Berlin", hour: "numeric", hourCycle: "h23" });
+
+/** Gruß nach deutscher Uhrzeit: bis 11 Uhr „Guten Morgen“, bis 18 Uhr „Guten Tag“, danach „Guten Abend“. */
+export function greetingFor(date: Date): string {
+  // format() liefert "07 Uhr", daher nur den Stunden-Teil lesen.
+  const hour = Number(berlinHour.formatToParts(date).find((p) => p.type === "hour")?.value);
+  if (hour < 11) return "Guten Morgen";
+  if (hour < 18) return "Guten Tag";
+  return "Guten Abend";
+}

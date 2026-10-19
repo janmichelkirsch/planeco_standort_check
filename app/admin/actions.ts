@@ -9,6 +9,7 @@ import {
   parseContactForm,
   parseSubmissionForm,
   returnUrl,
+  type ActionResult,
   type DashboardResult,
 } from "@/lib/dashboard-forms";
 import { geocodePending } from "@/lib/geocode";
@@ -30,19 +31,21 @@ export async function logout() {
  * und schlägt Adressen nach, bei denen Photon nicht erreichbar war.
  * Nur mit Login. Die Zuordnung selbst darf nur der Server (`process_intake` ist für eingeloggte Nutzer gesperrt),
  * daher hier mit dem Secret Key. Doppelte Verarbeitung ist ausgeschlossen (Sperre in `process_intake`).
+ * Aufruf aus dem Dashboard per JavaScript; Rückgabe statt Redirect.
  */
-export async function reprocessIntakes() {
+export async function reprocessIntakesAction(): Promise<ActionResult> {
   await requireSalesUser();
   const { data, error } = await getSupabaseAdmin().from("incoming_submissions").select("id").in("status", ["received", "failed"]);
   if (error) {
     console.error("[admin] Offene Eingänge konnten nicht geladen werden", error);
-    return;
+    return { ok: false, result: "error" };
   }
   for (const { id } of data) {
     await processIntake(id);
   }
   await geocodePending();
   refresh();
+  return { ok: true, result: "reprocessed" };
 }
 
 // ─── Bearbeiten im Dashboard (Spezifikation v3, §8) ──────────────────────────

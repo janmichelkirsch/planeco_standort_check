@@ -4,6 +4,16 @@ Laufendes Log für alle, die am Projekt arbeiten (Menschen und Agents). Neueste 
 
 ## Änderungslog
 
+### 2026-10-19 – Projekt abgeschlossen
+- PR #1 (`feat/dashboard-redesign` inkl. `feat/contact-data-model`) auf `main` gemerged und live. Live-Test: Testanfrage über die Live-URL kam in
+  `incoming_submissions` an (`processed`), in `leads` nichts Neues seit dem 17.10. Danach `005_drop_leads.sql` in Supabase ausgeführt – `leads` ist gelöscht.
+  Ein Zurückschalten auf Deployments vor dem Merge geht damit nicht mehr (die alte Version braucht `leads`).
+- Danach direkt auf `main`: Turbopack-Build-Cache aus (alte Farben live), Vergleichstabelle entfernt, Ring „Rückmeldung“ über bewertete Anfragen, Fußnote entfernt,
+  Mail-Umbruch auf der Danke-Seite.
+- ROADMAP, Spezifikation und READMEs auf Endstand gebracht; „Offene Punkte“ aufgeräumt (erledigte entfernt, Rest bewusst offen).
+  Neu in der ROADMAP: „Nächste Schritte“ in drei Phasen (Go-live Readiness → Dashboard/Analytics → Standortanalyse/Automatisierung), mit Michel abgestimmt.
+- **Live:** Formular https://planeco-standort-check-two.vercel.app · Dashboard https://planeco-standort-check-two.vercel.app/admin
+
 ### 2026-10-19 – Nach dem Merge: Farben live, Analyse, Mail-Umbruch
 - **Gefunden:** Live fehlten alle neuen Dashboard-Farben (`ok`, `warn`, `coral-strong`, `shadow-card` …), lokal waren sie da. Das CSS auf Vercel hatte die neuen Klassen,
   aber ein altes Tailwind-Theme aus `app/globals.css` – der Turbopack-Build-Cache hat eine alte Fassung übernommen. Folge u. a.: Datenqualität ohne Balken und Punkte.
@@ -300,44 +310,45 @@ Laufendes Log für alle, die am Projekt arbeiten (Menschen und Agents). Neueste 
 
 ## Offene Punkte / Probleme
 
-- **Dashboard-Redesign nicht gegen Supabase getestet** (Branch `feat/dashboard-redesign`, liegt auf `feat/contact-data-model`, das selbst noch nicht auf `main` ist).
-- **Dashboard braucht JavaScript** (Menüs, sofortiges Speichern). Die Prüfliste funktioniert weiter ohne.
-- **Login-Seite** ist noch nicht im Planeco-Design.
-- Analyse rechnet im Browser mit allen Anfragen; bei vielen tausend Anfragen besser serverseitig zählen (View/RPC).
+Bewusst offen beim Projektabschluss (19.10.2026). Nach Thema, wichtigste zuerst.
 
-- **Zustellbarkeit:** Absender ist eine Freemail-Adresse (iCloud), Brevo warnt: kein eigenes DKIM, DMARC nicht erfüllbar.
-  Mails können im Spam landen oder abgelehnt werden. Für den Livegang: eigene Domain mit SPF/DKIM/DMARC.
-- **Brevo-Key läuft ab** nach 1 Jahr oder 90 Tagen ohne Nutzung. Folge: Mails `failed`, sichtbar im Dashboard.
-- **Kein automatischer Retry** für fehlgeschlagene Mails. Idee: „Erneut senden“-Button im Dashboard oder Cron, der `failed`/alte `pending` nachholt.
-- **Textversion der Mail** enthält Namen roh. Manche Mailprogramme machen URLs in Text klickbar.
-  Idee: Namen mit `<`, `>` oder `://` schon im Formular ablehnen.
-- **Jeder kann eine fremde E-Mail eintragen** und so eine Bestätigung an Dritte auslösen (Hinweis in der Mail: „nicht gestellt? ignorieren“). Gegenmittel später: Rate-Limit, Captcha.
-- Ohne SQL `003` zeigt das Dashboard keinen sinnvollen Mailstatus, und das Speichern des Status scheitert (nur geloggt, Anfrage bleibt gespeichert).
+**Vor einem echten Livegang**
+- **Datenbank-Region London statt Frankfurt.** Region lässt sich bei Supabase nicht umstellen; Umzug = neues Projekt + Export/Import + neue Keys in Vercel.
+- **Zustellbarkeit der Mails:** Absender ist eine Freemail-Adresse (iCloud), kein eigenes DKIM, DMARC nicht erfüllbar. Mails können im Spam landen.
+  Lösung: eigene Domain mit SPF/DKIM/DMARC. `MAIL_FROM_NAME` in Vercel und der Test in Gmail/Outlook stehen noch aus.
+- **Datenschutz:** Link zeigt auf planecobuilding.de statt auf die echte Datenschutzerklärung; keine Checkbox/kein Hinweis im Formular.
+  Aufbewahrung und Löschanfragen sind nicht geregelt (Spezifikation §13).
+- **Spam / Missbrauch:** Kein Rate-Limit, kein Honeypot, kein Captcha. Jeder kann eine fremde Mail eintragen und so eine Bestätigung an Dritte auslösen.
 
-- **Photon schlägt oft nur die Straße vor** (z. B. „Osterstraße 88 Hamburg“ → Straße ohne Nr., erster Treffer sogar „Heußweg“). Das Nr.-Feld fängt das ab, der Prüfhinweis bleibt wichtig.
+**Betrieb**
+- **Kein automatischer Retry** für fehlgeschlagene Mails („Erneut verarbeiten“ holt nur Zuordnung und Adresssuche nach). Idee: „Erneut senden“ oder Cron.
+- **Brevo-Key läuft ab** nach 1 Jahr oder 90 Tagen ohne Nutzung → Mails `failed`, sichtbar im Dashboard.
+- **Kein Backup** außer Supabase-Free-Standard (keine Point-in-Time-Recovery).
+- Ohne `SUPABASE_PUBLISHABLE_KEY` liefern `/login` und `/admin` einen 500er. Bei neuen Umgebungen daran denken.
+- Builds laufen ohne Turbopack-Cache (`next.config.ts`), weil der Cache auf Vercel ein altes Tailwind-Theme behalten hat. Etwas langsamer, dafür verlässlich.
+
+**Rechte und Login**
+- **Jeder Supabase-Auth-Nutzer sieht alle Anfragen.** Sicher nur, solange die Selbstregistrierung aus ist. Rollen fehlen.
+- Kein Passwort-Reset, kein eigenes Rate-Limit auf den Login (Supabase hat ein Basis-Limit). Login-Seite nicht im Planeco-Design.
+
+**Dashboard**
+- **Braucht JavaScript** (Menüs, sofortiges Speichern); die Prüfliste geht auch ohne. Nur für Desktop gebaut (unter 1024 px scrollt die Liste in sich).
+- Gruppieren, Filtern und die Analyse rechnen in TypeScript über alle Anfragen; bei vielen tausend Anfragen besser serverseitig (View/RPC).
+- Falsche Zuordnungen lassen sich nicht nachträglich verschieben, keine freie Kontaktsuche in der Prüfliste, keine Notizen/Historie (Backlog, Spezifikation §12).
+- Kosten pro Anfrage fehlen (keine Werbekosten im System); „taugt etwas“ = Quote qualifiziert. Kampagnennamen nur, wenn die Anzeigen UTM-Parameter mitgeben.
+
+**Adressen (Photon)**
+- **Photon findet nicht jede Adresse** und schlägt oft nur die Straße vor; „Am Mühlenteich 7, Groß Grönau“ liefert falsche Straßen. Felder bleiben editierbar, „Manuell eingeben“ als Ausweg.
+- **Mehrdeutige Adressen** („Hauptstraße 14“ mehrfach in Dresden); das Label zeigt den Ortsteil. Die Case-Beispiele haben teils PLZ, die nicht zur Straße passen.
+- Photon ist ein Fair-Use-Dienst ohne SLA. Ausfall blockiert nie das Absenden; die Adresse wird dann später nachgeschlagen.
+
+**CSV-Export**
+- Werte mit `= + - @` am Anfang bekommen ein `'` (Formel-Schutz), betrifft auch `+49…`-Nummern.
+- Für deutsches Excel nicht optimal: Koordinaten mit Punkt, Datum mit zweistelligem Jahr. Ideen: Dezimalkomma, `19.10.2026 16:47`.
+
+**Formular**
 - Bis die Bildschirmbreite feststeht, zeigt die Startseite kurz nur die Hintergrundfläche (kein Server-Rendering des Formulars).
-- Der lokale Dev-Server einer anderen Session (Port 3000) lieferte veraltetes CSS. Zum Prüfen wurde ein Produktions-Build auf Port 3101 genutzt.
-
-- Ohne `SUPABASE_PUBLISHABLE_KEY` liefern `/login` und `/admin` einen 500er (Proxy bricht ab). Bei neuen Umgebungen daran denken.
-- **Jeder Supabase-Auth-Nutzer sieht alle Anfragen.** Das ist nur sicher, solange die Selbstregistrierung aus ist. Rollen fehlen noch.
-- **Tabelle zeigt max. 1000 Zeilen** (Hinweis wird angezeigt), der Export lädt alle seitenweise.
-- **CSV:** Werte mit = + - @ am Anfang bekommen ein `'` (Formel-Schutz), betrifft auch `+49…`-Telefonnummern.
-  Telefonnummern ohne Leerzeichen mit führender 0 könnte Excel als Zahl lesen (0 fällt weg). Löst sich mit E.164-Normalisierung.
-- **CSV-Formate für deutsches Excel noch nicht optimal:** Koordinaten mit Punkt (`51.672678`) liest deutsches Excel ggf. als Text/Datum,
-  Datum mit zweistelligem Jahr (`17.10.26, 16:47`). Ideen: Dezimalkomma, `17.10.2026 16:47`.
-- Kein Passwort-Reset, kein Rate-Limit auf Login (Supabase hat ein eigenes Basis-Limit).
-
-- **Zeitzone:** `created_at` wird in UTC gespeichert (korrekt). Dashboard und CSV-Export müssen in Europe/Berlin anzeigen.
-
-- **Datenbank-Region London statt Frankfurt.** Bewusst für den Test so belassen. Region lässt sich bei Supabase nicht umstellen,
-  ein Umzug heißt neues Projekt + Export/Import + neue Keys in Vercel. Vor dem Livegang erledigen, solange wenige Daten drin sind.
-- **Photon findet nicht jede Adresse.** „Am Mühlenteich 7, Groß Grönau“ (Beispiel #5) liefert nur ähnliche, *falsche* Straßen im selben Ort.
-  Risiko: Nutzer klickt einen falschen Vorschlag. Ideen: Hinweis „Bitte Vorschlag prüfen“, Straßenname-Abgleich, manuelle Eingabe prominenter.
-- **Mehrdeutige Adressen:** „Hauptstraße 14“ existiert mehrfach in Dresden, mit unterschiedlichen PLZ. Die PLZ 01067 aus Beispiel #1 taucht in den Photon-Treffern nicht auf.
-  Darum zeigt das Label den Ortsteil. Die Felder bleiben editierbar.
-- Photon ist ein öffentlicher Fair-Use-Dienst ohne SLA. Bei Ausfall bleibt die manuelle Eingabe (getestet über Fehleranzeige).
-- Telefonnummern werden nur grob geprüft, die E.164-Normalisierung folgt mit dem neuen Datenmodell.
-- Kein Schutz vor Doppelklick/Doppel-Submit (Button ist während des Sendens deaktiviert, sonst nichts).
+- Nicht geprüft: echtes Android, Screenreader.
 
 ## Feature Requests / Ideen
 

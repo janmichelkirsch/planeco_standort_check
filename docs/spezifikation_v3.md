@@ -1,9 +1,9 @@
 # Planeco Standort-Check – Datenmodell Kontakt ↔ Anfrage
 
-**Spezifikation v3 · Stand 17. Oktober 2026 · Branch `feat/contact-data-model`**
+**Spezifikation v3 · Stand 17. Oktober 2026 · umgesetzt und live seit 19. Oktober 2026 (`main`)**
 
 Baut auf v2 auf (`planeco_sales_dashboard_mvp_spezifikation_v2.md`, nicht im Repo) und passt sie an den Case und den
-bestehenden Code an. **v3 ist maßgeblich.** Nichts davon ist umgesetzt.
+bestehenden Code an. **v3 ist maßgeblich.** Umgesetzt in den Schritten §11; Abweichungen beim Umsetzen stehen im `HANDOVER.md`.
 
 > **Leseregel:** **VERBINDLICH** = mit Michel entschieden. **EMPFEHLUNG** = technische Ausgestaltung, darf beim Umsetzen
 > angepasst werden (Abweichung im HANDOVER notieren). **BACKLOG** = nicht vorziehen. **OFFEN** = nicht raten, nachfragen.

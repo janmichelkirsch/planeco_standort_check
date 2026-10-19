@@ -17,14 +17,14 @@ export function ShellHeader({ user }: { user: ShellUser | null }) {
         <div className="flex items-center gap-5">
           <Logo className="h-6" />
           <span aria-hidden="true" className="h-6 w-px bg-line-soft" />
-          <p className="text-[15px] font-semibold tracking-tight">Standort-Check</p>
+          <p className="text-[15px] font-semibold tracking-tight whitespace-nowrap">Standort-Check</p>
         </div>
 
         <NavLinks />
 
         <div className="ml-auto flex items-center gap-2">
           {user && (
-            <span className="mr-3 flex items-center gap-2 text-sm text-forest-soft">
+            <span className="mr-3 flex items-center gap-2 text-sm whitespace-nowrap text-forest-soft">
               <Avatar name={user.displayName} index={user.index} />
               <span>
                 Eingeloggt als <span className="font-medium text-forest">{user.displayName}</span>

@@ -85,9 +85,6 @@ export function tally(rows: Pick<AnalyseRow, "outcome">[]): Tally {
   return t;
 }
 
-/** Unter so vielen bewerteten Anfragen ist eine Quote kaum aussagekräftig („wenig Daten“). */
-export const LOW_DATA = 5;
-
 /** Qualifiziert ÷ Anfragen mit Ergebnis; `null`, solange nichts bewertet ist. */
 export function qualifiedRate(t: Tally): number | null {
   return t.rated === 0 ? null : t.qualified / t.rated;
@@ -95,7 +92,7 @@ export function qualifiedRate(t: Tally): number | null {
 
 export const formatRate = (rate: number | null) => (rate === null ? "–" : `${Math.round(rate * 100)} %`);
 
-/* ---------- Vergleichstabelle ---------- */
+/* ---------- Kanal → Kampagnen (für „Meiste Anfragen“) ---------- */
 
 export type CampaignLine = { campaign: string; tally: Tally };
 export type ChannelLine = { channel: string; tally: Tally; campaigns: CampaignLine[] };

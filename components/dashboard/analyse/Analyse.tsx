@@ -2,13 +2,12 @@
 
 import { useState } from "react";
 import { Chart } from "@/components/icons";
-import { CompareTable } from "@/components/dashboard/analyse/CompareTable";
 import { Insights } from "@/components/dashboard/analyse/Insights";
 import { Kpis } from "@/components/dashboard/analyse/Kpis";
 import { Segmented } from "@/components/dashboard/analyse/Segmented";
 import { Trend } from "@/components/dashboard/analyse/Trend";
 import { Select, cardClass } from "@/components/dashboard/ui";
-import { addDays, compareTable, dayRange, filterOptions, filterRows, kpis, perDay, previousPeriod, type AnalyseRow } from "@/lib/analyse";
+import { addDays, dayRange, filterOptions, filterRows, kpis, perDay, previousPeriod, type AnalyseRow } from "@/lib/analyse";
 
 const PRESETS = [
   { id: "7", label: "7 Tage", days: 7 },
@@ -106,7 +105,6 @@ export function Analyse({ rows, today, pendingReview }: { rows: AnalyseRow[]; to
             pendingReview={pendingReview}
             spark={{ total: perDay(items, days), qualified: perDay(items.filter((r) => r.outcome === "qualified"), days) }}
           />
-          <CompareTable table={compareTable(items)} />
           <Trend rows={items} days={days} />
           <Insights rows={items} />
         </div>

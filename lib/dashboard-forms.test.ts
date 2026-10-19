@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { parseClaimForm, parseContactForm, parseSubmissionForm, returnUrl } from "@/lib/dashboard-forms";
+import { checkName, checkOwnerId, checkSubmissionPatch, parseClaimForm, parseContactForm, parseSubmissionForm, returnUrl } from "@/lib/dashboard-forms";
 
 const C = "aaaaaaaa-bbbb-4ccc-8ddd-eeeeeeeeeeee";
 const S = "11111111-2222-4333-8444-555555555555";
@@ -74,5 +74,44 @@ describe("parseSubmissionForm", () => {
     ["Override keine UUID", { override: "Emily" }],
   ])("lehnt ab: %s", (_, change) => {
     expect(parseSubmissionForm(form({ ...base, ...change }))).toBeNull();
+  });
+});
+
+describe("checkOwnerId", () => {
+  it("null gibt frei, eine UUID setzt, alles andere ist ungültig", () => {
+    expect(checkOwnerId(null)).toBeNull();
+    expect(checkOwnerId(EMILY)).toBe(EMILY);
+    expect(checkOwnerId("")).toBeUndefined();
+    expect(checkOwnerId("emily")).toBeUndefined();
+    expect(checkOwnerId(undefined)).toBeUndefined();
+  });
+});
+
+describe("checkName", () => {
+  it("trimmt und verlangt beide Teile mit höchstens 200 Zeichen", () => {
+    expect(checkName(" Tom ", "Ahrens")).toEqual({ first: "Tom", last: "Ahrens" });
+    expect(checkName("Tom", "  ")).toBeNull();
+    expect(checkName("x".repeat(201), "Ahrens")).toBeNull();
+    expect(checkName(1, "Ahrens")).toBeNull();
+  });
+});
+
+describe("checkSubmissionPatch", () => {
+  it("übernimmt nur übergebene, gültige Felder", () => {
+    expect(checkSubmissionPatch({ status: "completed" })).toEqual({ status: "completed" });
+    expect(checkSubmissionPatch({ outcome: null })).toEqual({ outcome: null });
+    expect(checkSubmissionPatch({ outcome: "qualified", override: EMILY })).toEqual({ outcome: "qualified", override: EMILY });
+    expect(checkSubmissionPatch({ override: null })).toEqual({ override: null });
+  });
+
+  it.each([
+    ["leer", {}],
+    ["kein Objekt", "status"],
+    ["unbekannter Status", { status: "done" }],
+    ["unbekanntes Ergebnis", { outcome: "great" }],
+    ["Bearbeiter keine UUID", { override: "emily" }],
+    ["leerer Bearbeiter", { override: "" }],
+  ])("lehnt ab: %s", (_, input) => {
+    expect(checkSubmissionPatch(input)).toBeNull();
   });
 });

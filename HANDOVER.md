@@ -4,6 +4,14 @@ Laufendes Log für alle, die am Projekt arbeiten (Menschen und Agents). Neueste 
 
 ## Änderungslog
 
+### 2026-10-19 – Dashboard-Redesign, Schritt 3: Actions mit Rückgabewert
+- Neue Server Actions für Client Components (`app/admin/actions.ts`): `claimContactAction`, `setContactOwnerAction`, `renameContactAction`, `saveSubmissionAction`.
+  Gleiche Datenbankfunktionen wie bisher, aber Ergebnis statt Redirect, danach `refresh()`. Eingaben werden geprüft (`lib/dashboard-forms.ts`).
+- `?keep=<Kontakt>&open=<Kontakt>`: Der gerade bearbeitete Kontakt bleibt sichtbar und aufgeklappt, auch wenn er nicht mehr zum Reiter passt (wie im Figma-Entwurf).
+  Reiterwechsel und Sortieren erzeugen URLs ohne `keep`.
+- `plotState` (fünf Adress-Zustände) und `hasIssue` (Warn-Symbol) für die neue Liste. Noch nicht in der Oberfläche; die alten Formulare laufen weiter.
+- Tests: 152. **Nicht geprüft:** gegen Supabase.
+
 ### 2026-10-19 – Dashboard-Redesign, Schritt 2: Rahmen
 - `app/admin/layout.tsx`: Kopfzeile im Planeco-Design für alle `/admin`-Seiten (Logo, Inbox, „Eingeloggt als {Name aus team_members}“, CSV, Abmelden).
   Login und Team einmal pro Anfrage über `lib/sales-context.ts` (React `cache`).

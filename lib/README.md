@@ -19,8 +19,10 @@ Logik und Anbindung externer Dienste, ohne UI.
 - `supabase/` – Supabase-Clients, getrennt nach Zweck (siehe `supabase/README.md`).
 - `auth.ts` – `requireSalesUser()`: prüft den Login serverseitig und leitet sonst zu `/login` um. Liefert Client, E-Mail und Auth-ID.
 - `sales-context.ts` – `getSalesContext()`: Login + Team-Mitglieder einmal pro Anfrage (React `cache`), geteilt von Layout und Seite; liefert `me`, Anzeigenamen und Position im Team.
-- `dashboard.ts` – Dashboard-Logik ohne Datenbank: Anfragen nach Kontakt bündeln (Fortschritt, „auch …“, Auto-Match), Ansichten filtern, sortieren, URL-Parameter (Whitelist), Eingänge zusammenfassen.
-- `dashboard-forms.ts` – Formulare des Dashboards prüfen (UUIDs, erlaubte Werte, nur geänderte Felder), Rücksprung-URL nur aus geprüften Werten, Rückmeldungen.
+- `dashboard.ts` – Dashboard-Logik ohne Datenbank: Anfragen nach Kontakt bündeln (Fortschritt, „auch …“, Auto-Match), Ansichten filtern, sortieren, URL-Parameter (Whitelist), Eingänge zusammenfassen,
+  gemerkter Kontakt (`keep`/`open`, `inboxUrl`), Adress-Zustand (`plotState`: genau / nur Ort / nicht gefunden / ausstehend / fehlgeschlagen), Hinweis-Symbol (`hasIssue`).
+- `dashboard-forms.ts` – Formulare des Dashboards prüfen (UUIDs, erlaubte Werte, nur geänderte Felder), Rücksprung-URL nur aus geprüften Werten, Rückmeldungen;
+  Prüfungen für die Actions aus Client Components (`checkOwnerId`, `checkName`, `checkSubmissionPatch`) und `ActionResult`.
 - `dashboard-data.ts` – Laden für Dashboard und Export über den Session-Client (RLS), seitenweise à 1000.
 - `review.ts` – Prüfliste ohne Datenbank: Prüffall aus dem Eingang bauen, Verlauf je Kandidat, Formular der Entscheidung prüfen (UUIDs, Aktion, Namenswahl), Fehlercodes → Rückmeldung.
 - `review-data.ts` – lädt Prüffälle und Kandidaten (`intake_candidates`) über den Session-Client.

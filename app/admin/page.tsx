@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import { InboxView } from "@/components/dashboard/InboxView";
-import { parseDashboardParams } from "@/lib/dashboard";
+import { parseDashboardParams, parseFocusParams } from "@/lib/dashboard";
 import { fetchOpenIntakes, fetchSubmissions } from "@/lib/dashboard-data";
 import { DASHBOARD_RESULTS, type DashboardResult } from "@/lib/dashboard-forms";
 import { getSalesContext } from "@/lib/sales-context";
@@ -11,12 +11,14 @@ type SearchParams = Promise<{
   dir?: string | string[];
   result?: string | string[];
   open?: string | string[];
+  keep?: string | string[];
 }>;
 
 async function AdminContent({ searchParams }: { searchParams: SearchParams }) {
   const { supabase, me, members, displayName } = await getSalesContext();
   const params = await searchParams;
   const { view, sort } = parseDashboardParams(params);
+  const { keep, open } = parseFocusParams(params);
   const result = typeof params.result === "string" && params.result in DASHBOARD_RESULTS ? DASHBOARD_RESULTS[params.result as DashboardResult] : null;
 
   let submissions, intakes;
@@ -38,7 +40,8 @@ async function AdminContent({ searchParams }: { searchParams: SearchParams }) {
       view={view}
       sort={sort}
       message={result && { tone: result.tone, text: result.text }}
-      openContactId={typeof params.open === "string" ? params.open : null}
+      keepContactId={keep}
+      openContactId={open}
     />
   );
 }

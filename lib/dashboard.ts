@@ -201,3 +201,44 @@ export function countMyOpen(submissions: Pick<SubmissionRow, "status" | "assigne
   if (me === null) return 0;
   return submissions.filter((s) => isPending(s) && effectiveAssignee(s) === me).length;
 }
+
+export const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+export const isUuid = (value: unknown): value is string => typeof value === "string" && UUID.test(value);
+
+/**
+ * Kontakt, an dem gerade gearbeitet wurde: `keep` bleibt in der Liste, auch wenn er nicht mehr zum Reiter passt
+ * (z. B. letzte Anfrage abgeschlossen), `open` ist aufgeklappt. Nur gültige IDs, sonst `null`.
+ */
+export function parseFocusParams(params: { keep?: string | string[]; open?: string | string[] }) {
+  return { keep: isUuid(params.keep) ? params.keep : null, open: isUuid(params.open) ? params.open : null };
+}
+
+/** URL der Inbox mit Ansicht, Sortierung und optional einem Kontakt, der sichtbar und aufgeklappt bleibt. */
+export function inboxUrl(view: View, sort: Sort, contactId?: string): string {
+  const params = new URLSearchParams({ view, sort: sort.column, dir: sort.direction });
+  if (contactId && isUuid(contactId)) {
+    params.set("keep", contactId);
+    params.set("open", contactId);
+  }
+  return `/admin?${params}`;
+}
+
+export type PlotState = "exact" | "town_only" | "not_found" | "pending" | "failed";
+
+/**
+ * Wie gut die Adresse bekannt ist (Spezifikation v3, §5.3):
+ * - `exact`: aus dem Vorschlag oder nachgeschlagen, mit Koordinaten (Kartenlink)
+ * - `town_only`: nachgeschlagen, aber nur der Ort gefunden – bewusst ohne Koordinaten
+ * - `not_found`, `pending` (noch nicht nachgeschlagen), `failed` (Photon nicht erreichbar)
+ */
+export function plotState(s: Pick<SubmissionRow, "geocode_status" | "latitude" | "longitude">): PlotState {
+  if (s.geocode_status === "pending" || s.geocode_status === "failed" || s.geocode_status === "not_found") return s.geocode_status;
+  return s.latitude !== null && s.longitude !== null ? "exact" : "town_only";
+}
+
+/** Anfrage mit Hinweis (Warn-Symbol in der Zeile): Mail nicht zugestellt oder Adresse nicht gefunden / nicht nachschlagbar. */
+export function hasIssue(s: Pick<SubmissionRow, "geocode_status" | "latitude" | "longitude" | "intake">): boolean {
+  const plot = plotState(s);
+  return s.intake.confirmation_status === "failed" || plot === "not_found" || plot === "failed";
+}

@@ -30,15 +30,17 @@ export type InboxData = {
   view: View;
   sort: Sort;
   message: Feedback | null;
+  /** Gerade bearbeiteter Kontakt: bleibt sichtbar und aufgeklappt, auch wenn er nicht mehr zum Reiter passt. */
+  keepContactId: string | null;
   openContactId: string | null;
 };
 
 /** Inhalt der Inbox ohne Laden: Begrüßung, Hinweise, Reiter, Kontaktliste. Die Seite lädt, die lokale Vorschau setzt Beispieldaten ein. */
-export function InboxView({ now, displayName, me, members, submissions, intakes, view, sort, message, openContactId }: InboxData) {
+export function InboxView({ now, displayName, me, members, submissions, intakes, view, sort, message, keepContactId, openContactId }: InboxData) {
   const groups = groupByContact(submissions, members);
   const counts = Object.fromEntries(VIEWS.map((v) => [v, groups.filter((g) => matchesView(g, v, me)).length])) as Record<View, number>;
   const visible = sortGroups(
-    groups.filter((g) => matchesView(g, view, me)),
+    groups.filter((g) => matchesView(g, view, me) || g.contact.id === keepContactId),
     sort,
   );
   const { needsReview, unprocessed } = summarizeIntakes(intakes, now);

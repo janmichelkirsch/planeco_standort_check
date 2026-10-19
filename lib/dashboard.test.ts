@@ -3,8 +3,12 @@ import {
   countMyOpen,
   countOpenGeocoding,
   groupByContact,
+  hasIssue,
+  inboxUrl,
   matchesView,
   parseDashboardParams,
+  parseFocusParams,
+  plotState,
   sortGroups,
   summarizeIntakes,
   type ContactRef,
@@ -233,5 +237,46 @@ describe("countMyOpen", () => {
     ];
     expect(countMyOpen(rows, "emily")).toBe(2);
     expect(countMyOpen(rows, null)).toBe(0);
+  });
+});
+
+const UUID_C = "aaaaaaaa-bbbb-4ccc-8ddd-eeeeeeeeeeee";
+
+describe("parseFocusParams / inboxUrl", () => {
+  it("nimmt nur gültige IDs", () => {
+    expect(parseFocusParams({ keep: UUID_C, open: UUID_C })).toEqual({ keep: UUID_C, open: UUID_C });
+    expect(parseFocusParams({ keep: "x", open: ["a", "b"] })).toEqual({ keep: null, open: null });
+  });
+
+  it("baut die Rücksprung-URL mit gemerktem Kontakt", () => {
+    expect(inboxUrl("mine", { column: "name", direction: "asc" }, UUID_C)).toBe(`/admin?view=mine&sort=name&dir=asc&keep=${UUID_C}&open=${UUID_C}`);
+    expect(inboxUrl("open", { column: "latest", direction: "desc" }, "../x")).toBe("/admin?view=open&sort=latest&dir=desc");
+  });
+});
+
+describe("plotState / hasIssue", () => {
+  const at = { latitude: 53.5, longitude: 10 };
+  const none = { latitude: null, longitude: null };
+  const sent = { confirmation_status: "sent" as const, confirmation_sent_at: null, confirmation_error: null };
+
+  it.each([
+    [{ geocode_status: "suggestion", ...at }, "exact"],
+    [{ geocode_status: "geocoded", ...at }, "exact"],
+    [{ geocode_status: "geocoded", ...none }, "town_only"],
+    [{ geocode_status: "suggestion", ...none }, "town_only"],
+    [{ geocode_status: "not_found", ...none }, "not_found"],
+    [{ geocode_status: "pending", ...none }, "pending"],
+    [{ geocode_status: "failed", ...none }, "failed"],
+  ])("%o → %s", (row, state) => {
+    expect(plotState(row)).toBe(state);
+  });
+
+  it("Hinweis bei Mailfehler, nicht gefundener oder nicht nachschlagbarer Adresse", () => {
+    expect(hasIssue({ geocode_status: "suggestion", ...at, intake: sent })).toBe(false);
+    expect(hasIssue({ geocode_status: "pending", ...none, intake: sent })).toBe(false);
+    expect(hasIssue({ geocode_status: "geocoded", ...none, intake: sent })).toBe(false);
+    expect(hasIssue({ geocode_status: "not_found", ...none, intake: sent })).toBe(true);
+    expect(hasIssue({ geocode_status: "failed", ...none, intake: sent })).toBe(true);
+    expect(hasIssue({ geocode_status: "suggestion", ...at, intake: { ...sent, confirmation_status: "failed" } })).toBe(true);
   });
 });

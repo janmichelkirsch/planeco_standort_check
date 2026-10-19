@@ -1,11 +1,13 @@
 import { after } from "next/server";
+import { processIntake, storeIntake } from "@/lib/intake";
+import { toIntakeRow } from "@/lib/intake-row";
 import { leadSchema, toFieldErrors } from "@/lib/lead-schema";
 import { sendConfirmation } from "@/lib/mail/send-confirmation";
-import { getSupabaseAdmin } from "@/lib/supabase/admin";
 
 /**
- * Nimmt eine Standort-Check-Anfrage entgegen: prüfen → speichern → Antwort → Bestätigungsmail.
- * Die Mail läuft per after() erst nach der Antwort, der Nutzer wartet also nicht auf Brevo.
+ * Nimmt eine Standort-Check-Anfrage entgegen (Spezifikation v3, §5.2):
+ * prüfen → normalisieren → Eingang speichern → Antwort → danach Bestätigungsmail und Zuordnung zum Kontakt.
+ * Beides läuft per after() erst nach der Antwort und unabhängig voneinander; ein Fehler darin ändert die Antwort nie.
  */
 export async function POST(request: Request) {
   let body: unknown;
@@ -22,31 +24,22 @@ export async function POST(request: Request) {
   }
 
   const lead = parsed.data;
+  // Das Schema prüft die Nummer bereits; hier nur, falls beide Prüfungen je auseinanderlaufen.
+  const row = toIntakeRow(lead, () => crypto.randomUUID());
+  if (!row) {
+    return Response.json(
+      { ok: false, error: "Eingaben unvollständig", fieldErrors: { phone: "Bitte prüfen Sie die Telefonnummer." } },
+      { status: 422 },
+    );
+  }
+
   try {
-    const { data, error } = await getSupabaseAdmin()
-      .from("leads")
-      .insert({
-        street: lead.street,
-        house_number: lead.houseNumber,
-        postal_code: lead.postalCode,
-        city: lead.city,
-        address_source: lead.addressSource,
-        state: lead.state,
-        latitude: lead.latitude,
-        longitude: lead.longitude,
-        first_name: lead.firstName,
-        last_name: lead.lastName,
-        email: lead.email,
-        phone: lead.phone || null,
-      })
-      .select("id")
-      .single();
-
-    if (error) throw error;
-
-    const leadId: string = data.id;
-    after(() => sendConfirmation(leadId, lead));
-    return Response.json({ ok: true, id: leadId }, { status: 201 });
+    const { id, created } = await storeIntake(row);
+    // Wiederholter Versuch desselben Absendens: keine zweite Mail. Die Zuordnung ist idempotent und holt
+    // einen zuvor abgebrochenen Eingang nach.
+    if (created) after(() => sendConfirmation(id, lead));
+    after(() => processIntake(id));
+    return Response.json({ ok: true, id }, { status: created ? 201 : 200 });
   } catch (error) {
     console.error("[api/lead] Speichern fehlgeschlagen", error);
     return Response.json({ ok: false, error: "Speichern fehlgeschlagen" }, { status: 500 });

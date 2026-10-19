@@ -32,4 +32,4 @@ Grundstücksadresse und Kontaktdaten an, das Sales-Team arbeitet die Anfragen in
 - Validierung immer serverseitig (`lib/lead-schema.ts`), das Formular nutzt dasselbe Schema.
 - Keine Secrets im Repo. `.env.local` lokal, Werte in Vercel. `SUPABASE_SECRET_KEY` nur serverseitig (`server-only`).
 - Lesen im Dashboard immer über `lib/supabase/session.ts` (RLS greift), nie mit dem Secret Key.
-- Commit-Messages im Conventional-Commits-Format (`feat:`, `fix:`, `docs:` …). Vor jedem Commit `npm run lint` und `npm run build`.
+- Commit-Messages im Conventional-Commits-Format (`feat:`, `fix:`, `docs:` …). Vor jedem Commit `npm run lint`, `npm test` und `npm run build`.

@@ -1,22 +1,34 @@
-import { leadsToCsv } from "@/lib/csv";
-import { fetchAllLeads, parseSort } from "@/lib/leads";
+import { toCsv } from "@/lib/csv";
+import { fetchSubmissions, fetchTeamMembers, fetchUnresolvedIntakes } from "@/lib/dashboard-data";
+import { EXPORT_COLUMNS, intakeToRow, submissionToRow } from "@/lib/export-rows";
 import { getSupabaseSession } from "@/lib/supabase/session";
 
-/** GET /admin/export – alle Anfragen als CSV, in der gerade gewählten Sortierung. Nur mit Login. */
-export async function GET(request: Request) {
+/**
+ * GET /admin/export – alle Anfragen als CSV, neueste zuerst. Nur mit Login.
+ * Enthält auch Eingänge in Prüfung oder ohne Verarbeitung (Spalte „Verarbeitung“), damit keine Anfrage fehlt.
+ */
+export async function GET() {
   const supabase = await getSupabaseSession();
   const { data, error: authError } = await supabase.auth.getClaims();
   if (authError || !data?.claims) {
     return new Response("Nicht angemeldet", { status: 401 });
   }
 
-  const params = new URL(request.url).searchParams;
-  const sort = parseSort({ sort: params.get("sort") ?? undefined, dir: params.get("dir") ?? undefined });
-
   try {
-    const leads = await fetchAllLeads(supabase, sort);
+    const [submissions, members, intakes] = await Promise.all([
+      fetchSubmissions(supabase),
+      fetchTeamMembers(supabase),
+      fetchUnresolvedIntakes(supabase),
+    ]);
+    const rows = [
+      ...submissions.map((s) => ({ at: s.created_at, row: submissionToRow(s, members) })),
+      ...intakes.map((i) => ({ at: i.received_at, row: intakeToRow(i) })),
+    ]
+      .sort((a, b) => b.at.localeCompare(a.at))
+      .map((r) => r.row);
+
     const date = new Intl.DateTimeFormat("sv-SE", { timeZone: "Europe/Berlin" }).format(new Date());
-    return new Response(leadsToCsv(leads), {
+    return new Response(toCsv(EXPORT_COLUMNS, rows), {
       headers: {
         "Content-Type": "text/csv; charset=utf-8",
         "Content-Disposition": `attachment; filename="standort-check-anfragen-${date}.csv"`,

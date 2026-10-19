@@ -8,6 +8,10 @@ const PHOTON_URL = "https://photon.komoot.io/api/";
 const GERMANY_BBOX = "5.87,47.27,15.04,55.06";
 const RESULT_LIMIT = 5;
 
+// Photon liefert für die Stadtstaaten kein Bundesland (geprüft 17.10.2026: Hamburg, Berlin → `state` fehlt).
+// Ohne Ergänzung stünde dort im Dashboard „Gebiet unbekannt“.
+const CITY_STATES: Record<string, string> = { Hamburg: "Hamburg", Berlin: "Berlin", Bremen: "Bremen", Bremerhaven: "Bremen" };
+
 export type AddressSuggestion = {
   id: string;
   label: string;
@@ -18,6 +22,10 @@ export type AddressSuggestion = {
   /** Ortsteil, falls von der Stadt verschieden – hilft bei mehrfach vorkommenden Straßen. */
   district: string | null;
   state: string | null;
+  /** Landkreis bzw. kreisfreie Stadt. */
+  county: string | null;
+  /** Gemeinde laut Photon (unabhängig vom bearbeitbaren Feld „Ort“). */
+  municipality: string | null;
   latitude: number;
   longitude: number;
 };
@@ -34,6 +42,7 @@ type PhotonFeature = {
     postcode?: string;
     city?: string;
     district?: string;
+    county?: string;
     state?: string;
     countrycode?: string;
   };
@@ -66,7 +75,9 @@ export function toSuggestion(feature: PhotonFeature): AddressSuggestion | null {
     postalCode,
     city,
     district,
-    state: p.state ?? null,
+    state: p.state ?? CITY_STATES[city] ?? null,
+    county: p.county ?? null,
+    municipality: p.city ?? null,
     latitude,
     longitude,
   };

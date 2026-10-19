@@ -5,6 +5,7 @@ import type { FormEvent, ReactNode } from "react";
 import { AddressFields } from "@/components/AddressFields";
 import { AddressSearch } from "@/components/AddressSearch";
 import { Field } from "@/components/Field";
+import { PhoneField } from "@/components/PhoneField";
 import { Logo, PrivacyNote, STEPS, SubmitButton, SubmitErrorBanner, formatAddress } from "@/components/FormParts";
 import { ArrowLeft, CheckCircle } from "@/components/icons";
 import type { LeadFormState } from "@/lib/use-lead-form";
@@ -129,15 +130,12 @@ export function DesktopForm({ form: f }: { form: LeadFormState }) {
                     disabled={submitting}
                     className="sm:col-span-2"
                   />
-                  <Field
-                    id="phone"
-                    label="Telefon"
-                    type="tel"
-                    autoComplete="tel"
-                    placeholder="+49 40 123456"
+                  <PhoneField
+                    placeholder="040 123456"
                     hint="Für eine schnelle Rückfrage zu Ihrem Grundstück."
                     value={lead.phone}
-                    onChange={f.updateField("phone")}
+                    country={lead.phoneCountry}
+                    onChange={f.updatePhone}
                     error={errors.phone}
                     disabled={submitting}
                     className="sm:col-span-2"

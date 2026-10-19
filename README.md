@@ -11,6 +11,7 @@ die Anfrage wird in Supabase gespeichert.
 | `components/` | UI-Komponenten des Formulars |
 | `lib/` | Logik und Anbindung externer Dienste (Photon, Supabase, Validierung) |
 | `supabase/` | SQL für die Datenbank |
+| `docs/` | Spezifikationen (z. B. Datenmodell v3) |
 
 `proxy.ts` im Hauptordner schützt `/admin` (Login-Pflicht) und erneuert die Session.
 
@@ -23,3 +24,5 @@ cp .env.example .env.local   # Werte eintragen
 npm install
 npm run dev
 ```
+
+Tests: `npm test` (Vitest, Unit-Tests in `lib/`) · Datenbank-Tests: `supabase/tests/run.sh`

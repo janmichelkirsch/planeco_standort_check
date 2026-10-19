@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, type FormEvent } from "react";
 import { AddressFields } from "@/components/AddressFields";
 import { AddressSearch } from "@/components/AddressSearch";
 import { Field } from "@/components/Field";
+import { PhoneField } from "@/components/PhoneField";
 import { Logo, PrivacyNote, STEPS, SubmitButton, SubmitErrorBanner, formatAddress } from "@/components/FormParts";
 import { ArrowLeft, ArrowRight, CheckCircle, Pencil, Pin } from "@/components/icons";
 import { PROPERTY_FIELDS } from "@/lib/lead-schema";
@@ -195,17 +196,13 @@ export function MobileForm({ form: f }: { form: LeadFormState }) {
                     error={errors.email}
                     disabled={submitting}
                   />
-                  <Field
-                    id="phone"
-                    label="Telefon"
-                    type="tel"
-                    inputMode="tel"
-                    autoComplete="tel"
+                  <PhoneField
                     enterKeyHint="send"
-                    placeholder="+49 40 123456"
+                    placeholder="040 123456"
                     hint="Für eine schnelle Rückfrage zu Ihrem Grundstück."
                     value={lead.phone}
-                    onChange={f.updateField("phone")}
+                    country={lead.phoneCountry}
+                    onChange={f.updatePhone}
                     error={errors.phone}
                     disabled={submitting}
                   />

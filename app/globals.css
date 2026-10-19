@@ -17,6 +17,23 @@
   --color-line: #869791;
   --color-line-soft: #dde3da;
   --color-danger: #b42318;
+
+  /*
+   * Dashboard-Erweiterung aus demselben Entwurf, für WCAG-AA-Kontrast abgestimmt
+   * (Weiß auf Marken-Koralle hat nur ~2,8:1, daher die dunkleren Stufen für Text und Knöpfe).
+   */
+  --color-coral-soft: #fbe9e1;
+  --color-coral-strong: #b4532f;
+  --color-coral-ink: #9a4527;
+  --color-ok: #2f6b4f;
+  --color-ok-soft: #e3efe5;
+  --color-warn: #8a5300;
+  --color-warn-soft: #fbf0d8;
+  --color-warn-line: #ecd29c;
+  --color-danger-soft: #fdecea;
+  --color-danger-line: #f3c4be;
+
+  --shadow-card: 0 1px 2px rgba(34, 64, 59, 0.06), 0 12px 32px -24px rgba(34, 64, 59, 0.35);
 }
 
 /* Bewusst kein Dark Mode: Das Formular folgt dem hellen Planeco-Design. */

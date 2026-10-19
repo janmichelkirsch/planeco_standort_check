@@ -1,58 +1,51 @@
 import { Suspense } from "react";
-import { logout } from "@/app/admin/actions";
-import { LeadsTable } from "@/components/LeadsTable";
-import { requireSalesUser } from "@/lib/auth";
-import { fetchLeadsPage, parseSort, type SortColumn, type SortDirection } from "@/lib/leads";
+import { InboxView } from "@/components/dashboard/InboxView";
+import { parseDashboardParams, parseFocusParams } from "@/lib/dashboard";
+import { fetchOpenIntakes, fetchSubmissions } from "@/lib/dashboard-data";
+import { getSalesContext } from "@/lib/sales-context";
 
-type SearchParams = Promise<{ sort?: string | string[]; dir?: string | string[] }>;
-type SessionClient = Awaited<ReturnType<typeof requireSalesUser>>["supabase"];
-
-/** Lädt die Anfragen und fängt Fehler ab, damit die Seite eine Meldung statt eines Absturzes zeigt. */
-async function loadLeads(supabase: SessionClient, sort: { column: SortColumn; direction: SortDirection }) {
-  try {
-    const { rows, hasMore } = await fetchLeadsPage(supabase, sort);
-    return { ok: true as const, rows, hasMore };
-  } catch (error) {
-    console.error("[admin] Anfragen konnten nicht geladen werden", error);
-    return { ok: false as const };
-  }
-}
+type SearchParams = Promise<{
+  view?: string | string[];
+  sort?: string | string[];
+  dir?: string | string[];
+  open?: string | string[];
+  keep?: string | string[];
+}>;
 
 async function AdminContent({ searchParams }: { searchParams: SearchParams }) {
-  const { supabase, email } = await requireSalesUser();
-  const sort = parseSort(await searchParams);
-  const result = await loadLeads(supabase, sort);
+  const { supabase, me, members, displayName } = await getSalesContext();
+  const params = await searchParams;
+  const { view, sort } = parseDashboardParams(params);
+  const { keep, open } = parseFocusParams(params);
+
+  let submissions, intakes;
+  try {
+    [submissions, intakes] = await Promise.all([fetchSubmissions(supabase), fetchOpenIntakes(supabase)]);
+  } catch (error) {
+    console.error("[admin] Dashboard-Daten konnten nicht geladen werden", error);
+    return <p className="text-danger">Anfragen konnten nicht geladen werden. Bitte Seite neu laden.</p>;
+  }
 
   return (
-    <div className="flex flex-col gap-4">
-      <div className="flex items-center justify-between gap-4">
-        <p className="text-sm text-zinc-600">Eingeloggt als {email}</p>
-        {/* Normaler Link statt <Link>, damit der Browser die Datei herunterlädt. */}
-        <a href={`/admin/export?sort=${sort.column}&dir=${sort.direction}`} className="rounded bg-zinc-900 px-3 py-2 text-sm font-semibold text-white">
-          CSV exportieren
-        </a>
-        <form action={logout}>
-          <button type="submit" className="text-sm underline">
-            Abmelden
-          </button>
-        </form>
-      </div>
-      {result.ok ? (
-        <LeadsTable rows={result.rows} hasMore={result.hasMore} sort={sort} />
-      ) : (
-        <p className="text-red-700">Anfragen konnten nicht geladen werden. Bitte Seite neu laden.</p>
-      )}
-    </div>
+    <InboxView
+      now={new Date()}
+      displayName={displayName}
+      me={me}
+      members={members}
+      submissions={submissions}
+      intakes={intakes}
+      view={view}
+      sort={sort}
+      keepContactId={keep}
+      openContactId={open}
+    />
   );
 }
 
 export default function AdminPage({ searchParams }: { searchParams: SearchParams }) {
   return (
-    <main className="mx-auto w-full max-w-6xl px-4 py-8">
-      <h1 className="mb-4 text-2xl font-bold">Standort-Check – Anfragen</h1>
-      <Suspense fallback={<p className="text-sm text-zinc-500">Lade …</p>}>
-        <AdminContent searchParams={searchParams} />
-      </Suspense>
-    </main>
+    <Suspense fallback={<p className="text-sm text-forest-soft">Lade …</p>}>
+      <AdminContent searchParams={searchParams} />
+    </Suspense>
   );
 }

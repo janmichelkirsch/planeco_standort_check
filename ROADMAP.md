@@ -33,26 +33,46 @@ Ziel: einmal die ganze Strecke Formular → Supabase → Vercel funktionierend s
 
 ## Iteration 2 – Pflichtteil vervollständigen
 
-- ⬜ Datenmodell normalisieren (Kontakt ↔ Anfrage), vorher gemeinsam besprechen
+- 🔄 Datenmodell normalisieren (Kontakt ↔ Anfrage): Spezifikation [`docs/spezifikation_v3.md`](docs/spezifikation_v3.md) abgestimmt, Umsetzung auf Branch `feat/contact-data-model` (Schritte §11)
+  - ✅ Schritt 1: SQL `004` (Tabellen, Trigger, Funktionen, RLS) + lokale Tests (`supabase/tests/run.sh`)
+  - ✅ `004` in Supabase ausgeführt, Team Members Emily, Björn, Michel angelegt
+  - ✅ Schritt 2: Normalisierung (`libphonenumber-js`) + Schema um Tracking, Vorwahl-Land, `clientRequestId`; Vitest eingerichtet
+  - ✅ Schritt 3: Formular (Vorwahl-Dropdown mit Formatierung beim Tippen, Tracking aus der URL, `clientRequestId`, Kreis/Gemeinde aus Photon)
+  - ✅ Schritt 4: API schreibt in `incoming_submissions`, `after()` mit Mail + `process_intake`
+  - ✅ Branch gepusht, auf der Vercel-Vorschau getestet: neuer Kontakt, Auto-Match, Prüffall, Mail jeweils `sent`, Tracking übernommen
+  - ✅ Schritt 6: Dashboard auf neues Modell (Kontakte mit aufklappbaren Anfragen, Reiter, Hinweise, „Erneut verarbeiten“, CSV-Export)
+  - ✅ Schritt 7: Prüfliste `/admin/review` (nur vorgeschlagene Kandidaten, Name behalten/übernehmen, neuer Kontakt)
+  - ✅ Schritt 8: Bearbeiten (Übernehmen, Zuständig ändern/freigeben, Status, Ergebnis, Bearbeiter, Kontaktname)
+  - ✅ Schritt 5: Geocoding manueller Adressen (nur gleiche PLZ, sonst nur Ort; Stadtstaaten-Bundesland ergänzt)
+  - ⬜ Schritt 9: Gesamtprüfung durch Michel, dann Merge auf `main`, danach `005_drop_leads.sql`
 - ⬜ Normalisierung Telefon (E.164) und E-Mail
-- ⬜ Dubletten-Matching über Telefon und E-Mail, Merge-Strategie vorher besprechen
+- ⬜ Dubletten-Matching über Telefon und E-Mail (Regeln: Spezifikation §7, Prüfliste für Teiltreffer)
 - ⬜ Kampagnen-Tracking: UTM-Parameter, gclid, fbclid, Referrer, Landingpage
 - ✅ Bestätigungsmail über Brevo (erst speichern, dann per `after()` senden, Mailstatus im Dashboard)
 - ✅ SQL `003` ausführen, Brevo-Variablen in Vercel, Live-Test der Mail
 - ✅ Mails im Planeco-Design (gemeinsames Layout mit Signatur, Logo, Fußzeile)
 - ⬜ `MAIL_FROM_NAME` in Vercel ändern, Live-Test der neuen Mail in Gmail und Outlook
-- ⬜ Dashboard an neues Datenmodell anpassen (Dubletten-Hinweis, Kampagne)
-- ⬜ Status und Zuständigkeit pro Lead (doppelte Bearbeitung vermeiden)
+- ✅ Dashboard an neues Datenmodell anpassen (Dubletten-Hinweis, Kampagne)
+- ✅ Status, Ergebnis (`outcome`) und Zuständigkeit pro Anfrage (doppelte Bearbeitung vermeiden)
 - ⬜ Datenschutz-Checkbox / Hinweis
 
 ## Iteration 3 – Erweiterung und Robustheit
 
-- ⬜ Anreicherung: Gemeinde, Bundesland, Koordinaten auch für manuell eingegebene Adressen
-- ⬜ Einzugsgebiet-Markierung (vermutlich über Bundesland/Gemeinde, konfigurierbar)
-- ⬜ Schutz vor doppeltem Absenden (Idempotenz-Key)
+- ✅ Anreicherung: Gemeinde, Bundesland, Koordinaten auch für manuell eingegebene Adressen
+- ✅ Einzugsgebiet-Markierung: alle 16 Bundesländer, als Liste im Code einschränkbar
+- ⬜ Schutz vor doppeltem Absenden (`client_request_id`, Teil des neuen Datenmodells)
 - ⬜ Spam-Schutz (Honeypot, ggf. Rate-Limit)
-- ⬜ Automatische Tests (Vitest) für Photon-Mapping und Schema
-- ⬜ Login und Dashboard im Planeco-Design
+- ✅ Automatische Tests (Vitest): Schema, Normalisierung, Telefonfeld, Tracking, Photon-Mapping
+- 🔄 Login und Dashboard im Planeco-Design (Branch `feat/dashboard-redesign`)
+  - ✅ Inbox, Kontaktliste, Anfragekarte (sofort speichern), Prüfliste
+  - ✅ Analyse: Kacheln und Vergleichstabelle Kanal → Kampagne mit Quote
+  - ✅ Analyse-Diagramme (Verlauf, Rückmeldung, Datenqualität)
+  - ⬜ Login-Seite
+  - ⬜ Auf der Vercel-Vorschau gegen Supabase testen, dann zusammen mit `feat/contact-data-model` mergen
+
+## Backlog
+
+- ⬜ Freie Kontaktsuche in der Prüfliste (Zuordnen zu nicht vorgeschlagenem Kontakt)
 
 ## Vor dem Livegang
 

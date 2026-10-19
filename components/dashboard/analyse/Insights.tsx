@@ -43,11 +43,6 @@ export function Insights({ rows }: { rows: AnalyseRow[] }) {
             </li>
           </ul>
         </div>
-        <p className="mt-5 border-t border-line-soft pt-4 text-[13px] text-forest-soft">
-          {t.rated === 0
-            ? "Noch keine Anfrage bewertet."
-            : `Quote = qualifiziert ÷ Anfragen mit Ergebnis (${t.rated} von ${t.total} Anfragen bewertet). Ohne Werbekosten gibt es keine Kosten pro Anfrage.`}
-        </p>
       </Card>
 
       <Card title="Datenqualität" hint="Wie verlässlich die Angaben hinter den Zahlen sind">

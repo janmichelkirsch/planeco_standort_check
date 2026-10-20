@@ -128,7 +128,7 @@ Laufendes Log für alle, die am Projekt arbeiten (Menschen und Agents). Neueste 
   Nichts → `not_found`. Photon-Fehler → `failed`, Hinweis im Dashboard mit „Erneut verarbeiten“.
 - Live gegen Photon geprüft mit den Case-Adressen: „Hauptstraße 14, 01067 Dresden“ (echte PLZ wäre 01097) → nur Ort Dresden/Sachsen;
   „Osterstraße 88, 22765 Hamburg“ (echte PLZ 20259) → nur Ort Hamburg; „Am Mühlenteich 7, 23627 Groß Grönau“ → nur Ort (Straße fehlt in OSM);
-  „Weidengrund 48, 33154 Salzkotten“ → genau; Fantasieadresse → nicht gefunden.
+  eine echte Adresse mit passender PLZ → genau; Fantasieadresse → nicht gefunden.
 - **Gefunden und behoben (bestand schon vorher):** Photon liefert für Hamburg und Berlin kein Bundesland. Auch Vorschläge aus dem Formular hätten dort
   „Gebiet unbekannt“ gezeigt. `lib/photon.ts` ergänzt das Bundesland bei Stadtstaaten (Hamburg, Berlin, Bremen, Bremerhaven).
   **Hinweis:** Die Case-Beispiele haben teils PLZ, die nicht zur Straße passen – im Interview erwähnenswert.
@@ -264,7 +264,7 @@ Laufendes Log für alle, die am Projekt arbeiten (Menschen und Agents). Neueste 
 - `/api/lead` speichert zuerst, antwortet, und verschickt die Mail danach per `after()`. Mailfehler ändern die Antwort nie.
 - `supabase/003_confirmation_mail.sql`: `confirmation_status` (`pending`/`sent`/`failed`), `confirmation_sent_at`, `confirmation_error`.
 - Dashboard: Spalte „Mail“ (sortierbar, Grund als Tooltip). CSV: Status, Zeitpunkt, Fehler.
-- Absender: `michelkirsch@icloud.com` (in Brevo verifiziert). Brevo-API-Key mit Rechten **nur** für Transactional Email.
+- Absender: private iCloud-Adresse (in Brevo verifiziert). Brevo-API-Key mit Rechten **nur** für Transactional Email.
 
 ### 2026-10-17 – Formular im Planeco-Design
 - Quelle: Figma-Make-Export „Formular im Planeko Design“ (lag unter `~/Downloads`, nicht im Repo). Übernommen: Tokens, Poppins, Icons, `Field`, Mobile-/Desktop-Layout, Texte, Logo, Bild.

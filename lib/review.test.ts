@@ -56,9 +56,9 @@ describe("toReviewCase", () => {
       {
         id: INTAKE,
         received_at: "2026-10-17T20:26:13Z",
-        payload: { firstName: "Anna", lastName: "Kirsch", street: "Weidengrund", houseNumber: "48", postalCode: "33154", city: "Salzkotten", utmSource: "test", utmCampaign: "branchtest" },
+        payload: { firstName: "Anna", lastName: "Kirsch", street: "Musterweg", houseNumber: "12", postalCode: "20095", city: "Hamburg", utmSource: "test", utmCampaign: "branchtest" },
         normalized_email: "anna@example.com",
-        normalized_phone: "+491798290490",
+        normalized_phone: "+4917099999999",
       },
       [
         {
@@ -72,9 +72,9 @@ describe("toReviewCase", () => {
           name_match: false,
         },
       ],
-      summarizeHistory([{ contact_id: "c1", created_at: "2026-10-17T20:25:00Z", street: "Weidengrund", house_number: "48", postal_code: "33154", city: "Salzkotten" }]),
+      summarizeHistory([{ contact_id: "c1", created_at: "2026-10-17T20:25:00Z", street: "Musterweg", house_number: "12", postal_code: "20095", city: "Hamburg" }]),
     );
-    expect(review).toMatchObject({ firstName: "Anna", address: "Weidengrund 48, 33154 Salzkotten" });
+    expect(review).toMatchObject({ firstName: "Anna", address: "Musterweg 12, 20095 Hamburg" });
     expect(review.tracking).toEqual({ utm_source: "test", utm_medium: null, utm_campaign: "branchtest", gclid: null, fbclid: null, referrer: null });
     expect(review.candidates[0].history?.count).toBe(1);
   });
